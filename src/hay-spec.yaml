@@ -1,0 +1,3312 @@
+---  # This should be the very first line
+
+title: Hay Description Specification
+version: 0.90.0
+status: draft
+publisher: Lode
+
+description: >
+  A structured data model for describing hay in a standardized, machine-readable format.
+  Developed to improve clarity, consistency, and efficiency in how hay is characterized,
+  traded, and analyzed-whether in domestic or international markets.
+
+introduction: >
+  Hay is a foundational agricultural commodity, essential to the nutrition of dairy and beef cattle,
+  horses, goats, camels, sheep, and other animals. In the United States, hay ranks among the leading
+  cash crops by annual sales value, alongside corn, wheat, and soybeans. Yet unlike those crops, hay
+  is traded entirely on an over-the-counter basis-through peer-to-peer negotiation, dealers, or brokers-
+  without common product definitions or standardized digital tools.
+
+  The hay market does not inherently require centralized exchanges to function well. But it does suffer
+  from two critical deficiencies:
+    1. Buyers and sellers struggle to find one another efficiently.
+    2. There is limited electronic facilitation of trading, particularly in matching, documentation, and decision support.
+
+  These limitations stem in part from the lack of shared standards. Without consistent product descriptions
+  or data conventions, hay listings and negotiations rely on informal descriptions, resulting in persistent
+  mismatches in perceptions of quality, weak price signals, and high friction in trade. This hinders regional
+  and global commerce, limits market transparency, and slows investment in modern tools for production,
+  logistics, testing, and quality control.
+
+  Efforts to standardize hay go back more than a century. As recently as the late 19th century, centralized hay
+  markets operated in cities such as Boston, Chicago, and San Francisco. Since then, producer groups, academic
+  institutions, extension agencies, and the U.S. Department of Agriculture have all proposed grading systems.
+  But none has achieved enduring, widespread adoption.
+
+  Several developments now offer new opportunities for progress:
+    - Hay exports are growing, especially alfalfa, which now trades across borders under increasingly formalized standards.
+    - Testing technologies have matured, including laboratory-based wet chemistry and NIR spectroscopy.
+    - Digital tools and platforms are emerging, enabling traceability from field to bale.
+    - Online infrastructure allows global coordination, opening the door for community-led standards and interoperability.
+
+  This document proposes a formal product definition for hay-a structured data model that captures economically
+  salient characteristics in a consistent format. Such a definition supports better listings, search, comparison,
+  and traceability. Over time, it may also surface replacements in market behavior that inform the development of accepted grading practices.
+
+  This specification is published by Lode, a platform for improving transparency and connectivity in agricultural
+  commodities markets. To participate or provide feedback, contact us at [insert email address] or visit lode.global.
+
+  This is a working draft subject to field testing and stakeholder refinement.
+
+  Planned additions include:
+    - A reference dataset of forage varieties, with identifiers and metadata.
+    - A registry of forage analysis laboratories supporting the specified testing methods and protocols.
+
+field_naming_conventions:
+  summary: >
+    All field names in this specification follow these conventions:
+  rules:
+    - All lowercase letters (a-z)
+    - Words separated by a single underscore (_)
+    - No spaces, hyphens, slashes, or special characters
+    - Scientific abbreviations normalized to lowercase (e.g., ph, ppm, tdn)
+    - Numerical qualifiers separated by underscores (e.g., 1x, 3x)
+    - Units of measure placed at the end, separated by underscores (e.g., mcal_lb, percent_dm)
+    - No trailing or double underscores
+  example: digestible_energy_1x_mcal_lb
+
+# ----------------------------------------------------------------------------------
+# Cross-field consistency guidance
+#
+# Some sections in this specification include YAML comments labeled as
+# "Cross-field consistency guidance." These comments offer examples of expected
+# relationships between values across different fields within the same section.
+#
+# These are not validation rules--they are heuristics intended to support:
+#   - Improved data quality
+#   - Better interoperability between systems
+#   - Enhanced user interfaces and data entry support tools
+#
+# For example:
+#   - If `organoleptic_factor_moldy` is true, then `organoleptic_factor_odor` is often `Moldy`
+#   - If `foreign_material_weeds` is true, buyers may infer that `certified weed free` is likely false
+#
+# These comments are placed near the relevant fields for convenience and
+# should be interpreted as advisory, not normative.
+# ----------------------------------------------------------------------------------
+
+sections:
+  - id: traceability
+    title: Traceability
+    description: >
+      This section captures whether the hay can be traced to a clearly defined production lot and
+      whether formal identifiers exist that facilitate lot-level tracking, recall, or certification.
+      Traceability is increasingly important in high-value or regulated markets, as it supports inventory
+      segregation, quality assurance, documentation of origin, and post-sale issue resolution.
+
+    fields:
+      - id: hay_single_lot_traceable
+        data_type: boolean
+        valid_values: [true, false]
+        definition: >
+          Affirms whether the hay being described originates from a single, defined lot, harvested under
+          uniform agronomic and environmental conditions. A lot is defined as "forage taken from the same
+          farm, field, and cut under uniform conditions within a 48-hour time period," as described in
+          Ball et al. (2001).
+
+          This designation supports clarity in nutritional representation, quality assessment, and logistical consistency.
+        notes:
+          - "This field represents a binary value: `true` if traceable to a single, defined lot; `false` otherwise."
+          - "Common use in export markets and quality certification workflows."
+        references:
+          - title: Forage Quality Terminology and Guidelines
+            url: https://fyi.extension.wisc.edu/forage/files/2017/04/FQ.pdf
+            author: Ball et al. (2001)
+
+      - id: lot_identifier_internal
+        data_type: string
+        valid_values: free-text, max 100 characters
+        definition: >
+          This field allows the seller to assign an internal identifier to the lot from which the hay originated.
+          It may reflect farm, field, cutting, or date conventions relevant to the seller's operation.
+          Systems should enforce a character limit of 100 to ensure consistency and compatibility.
+
+          Internal lot identifiers do not need to conform to any industry standard but should be unique
+          within the seller's system. They may be used for inventory management, customer reference,
+          and traceability across quality or testing modules.
+
+      - id: lot_identifier_external
+        data_type: component
+        definition: >
+          A structured block consisting of two related fields: an externally issued lot identifier and
+          the name of the organization or program that issued it. Used for regulatory or certification purposes.
+
+        components:
+          - id: lot_identifier_external.value
+            data_type: string
+            valid_values: free-text, max 100 characters
+            definition: >
+              This field records the externally issued lot identifier assigned to the hay or forage lot by a
+              regulatory, certifying, or export authority. Its meaning depends on the associated
+              lot_identifier_external.issuer field, which specifies the issuing organization.
+
+              External lot identifiers may appear on documents such as:
+                - Organic certificates (e.g., USDA NOP Lot #12345)
+                - Phytosanitary inspection reports
+                - Export documents or permits
+                - Weed-free forage program tags or declarations
+
+              The value may include letters, numbers, or a combination thereof. Systems should enforce a
+              maximum of 100 characters and preserve the identifier exactly as provided by the issuing body,
+              including any dashes, slashes, or formatting symbols.
+
+              This field enhances traceability and may support validation workflows, especially in regulated
+              or export-focused markets.
+
+          - id: lot_identifier_external.issuer
+            data_type: enum
+            valid_values:
+              - USDA
+              - CFIA
+              - State agriculture department
+              - Export certification agency
+              - Organic certifier
+              - Weed-free program
+              - Other
+            definition: >
+              Identifies the organization or program that issued the external lot identifier.
+
+              Common issuers include:
+                - USDA - e.g., for organic certification or phytosanitary control
+                - CFIA - Canadian Food Inspection Agency
+                - State agriculture department - e.g., for weed-free programs or grading systems
+                - Export certification agency - country-of-destination compliance
+                - Organic certifier - under USDA NOP or equivalent programs
+                - Weed-free program - e.g., NAISMA-affiliated
+                - Other - custom or less common issuers
+
+              This structure allows systems and reviewers to assess the origin and regulatory weight of
+              the identifier and may support future API integrations or document uploads.
+
+      - id: lot_mapping_field_to_bale_supported
+        data_type: boolean
+        valid_values: [true, false]
+        definition: >
+          Indicates whether the seller maintains a system (digital or physical) for mapping specific
+          bales or sub-lots to field-level characteristics, such as GPS coordinates, yield zones, or
+          harvest time blocks.
+
+          Such mapping enables greater traceability, enhances data resolution for quality control,
+          and may support integration with field data platforms or precision agriculture systems.
+
+          This capability is optional but increasingly valuable in transparent or regulated feed markets.
+
+    guidance: >
+      Traceability fields should be completed to the extent feasible. While not all buyers require formal lot tracking,
+      inclusion of traceability data - especially internal and external identifiers - can streamline certification
+      workflows, support inventory segregation, and build buyer confidence.
+
+      Systems should validate consistency between hay_single_lot_traceable and identifier fields and may allow
+      optional linking to field- or bale-level metadata for advanced users.
+
+  - id: stand
+    title: Stand Composition and Agronomic Characteristics
+    description: >
+      This section describes the planted forage stand-the biological and agronomic foundation of the hay crop.
+      It includes the intended composition of plant varieties, their representation in the harvested hay, and
+      related agronomic details such as establishment method, density, and maturity at harvest.
+
+      These fields support transparency around crop planning, species selection, and cultural practices,
+      helping buyers assess the identity, uniformity, and development stage of the forage. The section also
+      captures information relevant to quality, palatability, and intended use, and it helps agricultural
+      professionals interpret how the hay's characteristics relate to field management decisions.
+
+    fields:
+      - id: stand_mixture_intended
+        data_type: boolean
+        valid_values: [true, false]
+        definition: >
+          This field expresses whether the grower intended to plant a mixed stand (polyculture)
+          or a pure stand (monoculture) of forage species.
+
+          A value of `true` indicates the intention to grow a mix of species or varieties;
+          a value of `false` indicates a monoculture was intended.
+
+          This field captures grower intent and does not reflect the final outcome, which may differ
+          due to environmental or agronomic factors. For example, a grower may plant an alfalfa/timothy
+          mix, but only the timothy survives to harvest. This field would still be `true`.
+
+          This field pairs with `forage_species_type`, which records the actual species composition
+          of the forage at harvest, and with the `hay_variety_instances` group, which captures the
+          grower's target and achieved representation of each variety.
+
+      - id: forage_species_type
+        data_type: enum
+        valid_values:
+          - grass
+          - legume
+          - grass/legume mix
+          - other
+        definition: >
+          This field describes the biological classification of the forage species present in the hay at harvest.
+          It reflects the actual or observed composition, rather than the grower's original intention.
+
+          - `grass`: The hay consists primarily of grasses, such as bermudagrass or orchardgrass.
+          - `legume`: The hay consists primarily of legumes, such as alfalfa or clover.
+          - `grass/legume mix`: Both grasses and legumes are present in significant proportion.
+          - `other`: The forage does not fit into the above categories (e.g., brassicas, forbs, or specialty hays).
+
+          This field supports downstream applications such as nutritional analysis, ration formulation, and marketing.
+          It is best determined based on post-harvest visual inspection or lab analysis, and complements
+          `stand_mixture_intended`.
+
+      - id: forage_variety_count
+        data_type: int
+        valid_values: positive integer (0 or greater)
+        definition: >
+          This field reports how many distinct forage varieties were identified in the actual harvested crop.
+          It supports both marketing claims (e.g., "two-variety blend") and technical purposes, such as determining
+          how many instances of a `forage_variety_component` block will be included in a structured message.
+
+          This field reflects actual harvest outcome, not grower intent. By contrast, `stand_mixture_intended`
+          expresses whether the grower intended a mixed or pure sward. These two fields together help distinguish
+          between intent and result.
+
+          In a pure crop, this field should take a value of `1`. In a mixed crop, this field should take a value of
+          `2` or more. If no species or varieties can be positively identified, the value should be `0`, and the
+          `forage_species_type` should be set to `unknown`.
+
+          System validations may check for consistency across `stand_mixture_intended`, `forage_variety_count`,
+          and any listed `forage_variety_component` entries.
+
+      - id: forage_variety_components
+        data_type: list
+        item_type: component
+        definition: >
+          This block describes each intentionally planted forage variety in the hay sward.
+          Pure (monoculture) hay includes one instance; mixed (polyculture) hay includes two or more.
+
+          Each entry should reflect the grower's intention, variety name, and estimated contribution to
+          the harvested crop. This supports both agronomic analysis and marketplace transparency.
+
+          Use this block in combination with `forage_variety_count` and `stand_mixture_intended` to
+          document crop composition and stand complexity.
+
+        components:
+          - id: forage_variety
+            data_type: enum
+            valid_values: reference list of forage species, subspecies, or named varieties
+            definition: >
+              Enter the full name of the forage variety, such as `Tifton 85 bermudagrass` or `Vernal alfalfa`.
+              When possible, include binomial nomenclature, common name, and GMO status if known or relevant.
+
+              Standardizing variety names supports better market searchability, agronomic traceability,
+              and nutrient expectation setting.
+
+          - id: variety_representation_target
+            data_type: int
+            valid_values: whole number ratio (non-negative)
+            definition: >
+              Captures the intended proportion of a given forage variety in the seed mix or planting strategy.
+              Use whole-number ratios to reflect seeding intent. For example, if the mix was designed to be
+              3 parts orchardgrass and 1 part alfalfa, enter `3` for orchardgrass and `1` for alfalfa.
+
+              This is not a percentage and does not need to sum to 100 - it expresses relative ratios.
+              Systems can calculate proportional percentages from totals.
+
+              Helps buyers and agronomists understand the seeding strategy, even when outcomes differ due
+              to growing conditions or stand establishment issues.
+
+          - id: variety_representation_result
+            data_type: int
+            valid_values: integer percentage (0-100)
+            definition: >
+              Captures the observed contribution of this variety in the finished hay.
+              Enter a whole number percentage (e.g., `65` for 65%), based on visual inspection,
+              lab results, or grower knowledge.
+
+              This value reflects real-world outcome and may differ from `variety_representation_target`
+              due to environmental or agronomic factors.
+
+              Total values across all components should sum to approximately 100%, with minor discrepancies
+              acceptable for estimated inputs.
+
+      - id: stand_maturity_at_harvest
+        data_type: enum
+        conditional_enums:
+          grass:
+            applies_to: grass-dominant stands
+            values:
+              - vegetative
+              - early head
+              - mid head
+              - full head
+              - post-head
+          legume:
+            applies_to: legume-dominant stands (e.g., alfalfa or clover)
+            values:
+              - vegetative
+              - bud
+              - early bloom
+              - full bloom
+              - post-bloom
+        definition: >
+          Records the predominant maturity stage of the forage stand at the time of harvest.
+          Maturity at harvest strongly influences forage quality, including digestibility, fiber content,
+          and crude protein.
+
+          Use the appropriate maturity scale depending on the crop's dominant species type:
+
+            - **Grass scale**: Used for species like bermudagrass, orchardgrass, or timothy.
+            - **Alfalfa (legume) scale**: Used for alfalfa or clover-dominant stands.
+
+          Selection of the correct maturity stage helps buyers and nutritionists anticipate hay characteristics
+          and plan optimal livestock feeding strategies.
+
+      - id: stand_establishment_method
+        data_type: enum
+        valid_values:
+          - drilled
+          - broadcast
+          - no-till
+          - sod-seeded
+          - unknown
+        definition: >
+          Indicates the method used to establish the forage stand.
+          Establishment method can affect plant density, weed suppression, and long-term stand performance.
+
+      - id: stand_establishment_date
+        data_type: datetime
+        valid_values: YYYYMMDD format (allow 00 for unknown day or month)
+        definition: >
+          Records the date on which the forage stand was planted or sown.
+
+          If the exact day is unknown, use `00` in the day field.
+          If both day and month are unknown, use `00` in both (e.g., `20240000`).
+
+          Example:
+            - `20240400` -> planted in April 2024 (day unknown)
+            - `20240000` -> planted sometime in 2024 (month and day unknown)
+
+      - id: stand_density
+        data_type: enum
+        valid_values:
+          - sparse
+          - moderate
+          - dense
+          - unknown
+        definition: >
+          Qualitatively assesses the density of the forage stand at the time of harvest.
+          Higher density can indicate better competition with weeds and improved yield.
+
+      - id: source_stand_age
+        data_type: int
+        valid_values: non-negative integer (0 or greater)
+        definition: >
+          Records the number of years the current forage stand has been in place at the time of harvest.
+          It reflects how long the same root system and plant population have been producing harvestable
+          hay from the same field without replanting or reseeding.
+
+          Newly established stands may offer better vigor and fewer weeds, while older stands may show
+          declining productivity, species composition shifts, or increased weed pressure.
+
+          Enter `0` if this is the first year of the stand's establishment. This field is especially important
+          for perennial forages such as alfalfa, bermudagrass, or orchardgrass.
+
+  - id: location
+    title: Field Location and Growing Environment
+    description: >
+      This section describes the field location and environmental characteristics where the hay was produced.
+      Geographic factors play a significant role in hay quality, influencing aspects such as nutrient content,
+      texture, and palatability. Elevation, climate classification, and irrigation infrastructure all shape
+      growing conditions and harvesting outcomes.
+
+      These fields support traceability, enable regional comparisons, and help buyers assess how site-specific
+      factors may affect hay performance for their intended use.
+
+    fields:
+      - id: hay_origin_country_code
+        data_type: string
+        valid_values: ISO 3166-1 alpha-2 country code (2-character string)
+        definition: >
+          Specifies the country in which the hay was produced, using the standardized ISO 3166-1 alpha-2 code set.
+          Examples include `US` for the United States, `CA` for Canada, and `MX` for Mexico.
+
+          Using this internationally recognized format allows for consistent and automated identification of
+          national origin across systems and jurisdictions. This field supports traceability, compliance with
+          import/export requirements, and transparency for buyers concerned with geographic sourcing.
+
+          System interfaces may implement dropdown menus or auto-complete fields linked to an official
+          ISO 3166-1 code list to minimize input errors.
+
+        references:
+          - title: ISO 3166-1 country codes
+            url: https://www.iso.org/iso-3166-country-codes.html
+            publisher: ISO
+
+      - id: hay_origin_subdivision_code
+        data_type: string
+        valid_values: ISO 3166-2 subdivision code (e.g., US-TX, CA-ON)
+        definition: >
+          Specifies the first-level administrative region associated with the hay's origin, using the ISO 3166-2 code format.
+          The full code typically includes the country code followed by a hyphen and a subdivision identifier
+          (e.g., `US-TX` for Texas, United States).
+
+          Consistent use of ISO 3166-2 subdivision codes allows for clear geographic traceability and regional
+          classification across jurisdictions. This field can be used for compliance tracking, climate zone mapping,
+          and regional market analysis.
+
+          System interfaces may present filtered subdivision options once a country code is selected to reduce
+          user input errors and improve usability.
+
+        references:
+          - title: ISO 3166-2 subdivision codes
+            url: https://www.iso.org/iso-3166-country-codes.html
+            publisher: ISO
+
+      - id: hay_origin_county
+        data_type: string
+        valid_values: free-text string, max 100 characters
+        definition: >
+          Records the county, parish, district, or other subnational jurisdiction in which the hay was grown.
+          It provides more granular geographic detail than country or subdivision codes and may be important for
+          local traceability, extension service classification, or compliance with region-specific programs.
+
+          Because standardized naming varies across countries and regions, this field is implemented as a free-text entry.
+          However, systems may optionally use a lookup table or restrict input to known county names within the
+          selected subdivision and country.
+
+          This field complements `hay_origin_country_code` and `hay_origin_subdivision_code` to form a complete
+          geographic trace of the product's source.
+
+          Maximum character length: 100
+
+      - id: hay_origin_postal_code
+        data_type: string
+        valid_values: postal or ZIP code, max 20 characters
+        definition: >
+          Captures the postal code (or ZIP code) for the location where the hay was grown.
+          It offers a standardized method for identifying origin at a highly localized level and may support
+          integration with mapping, logistics, or regional compliance systems.
+
+          Postal codes vary in format by country (e.g., `90210` in the U.S., `K1A 0B1` in Canada, `75008` in France).
+          This field accepts any format valid in the associated `hay_origin_country_code`, up to 20 characters
+          in total length.
+
+          Implementing systems may optionally validate against country-specific postal code replacements or offer
+          auto-complete features based on the selected country and subdivision.
+
+          This field complements `hay_origin_country_code`, `hay_origin_subdivision_code`, and `hay_origin_county`
+          for full geographic traceability.
+
+      - id: source_field_elevation
+        data_type: int
+        valid_values: positive or negative integer (interpreted via associated units field)
+        definition: >
+          Captures the elevation of the field in which the hay was grown.
+
+          Elevation can influence temperature, growing degree days, and forage composition. Higher elevations
+          often correlate with lower lignin levels-resulting in softer, more palatable hay-making elevation
+          an indirect but meaningful indicator of potential forage quality.
+
+          Enter a numeric value corresponding to the elevation of the field's center point, rounded to the
+          nearest whole number. Use a negative integer if elevation is below sea level.
+
+          This field must be interpreted in conjunction with `source_field_elevation_units`, which indicates
+          whether the value is measured in `meters` or `feet`.
+
+          Elevation data may be obtained from GPS tools, topographic maps, or online elevation services based
+          on coordinates or postal code.
+
+      - id: source_field_elevation_units
+        data_type: enum
+        valid_values:
+          - meters
+          - feet
+        definition: >
+          Specifies the unit of measurement used in the `source_field_elevation` field.
+          Accurate unit identification is essential for interpreting elevation values correctly and
+          ensuring consistent data across systems.
+
+          - `meters`: Elevation is expressed in meters above or below sea level.
+          - `feet`: Elevation is expressed in feet above or below sea level.
+
+          When implementing this standard in software systems, consider validating elevation values
+          for plausibility within the chosen unit. For example, elevations exceeding 9,000 meters or
+          30,000 feet may require review.
+
+          This field enables flexibility for global users who may record elevation data in different
+          systems of measurement, while ensuring clarity for comparison and analysis.
+
+      - id: source_field_climate_class
+        data_type: string
+        valid_values: Koppen-Geiger climate classification code (e.g., Cfa, BSk, Dfb)
+        definition: >
+          Records the generalized climate classification for the field where the hay was grown,
+          using the Koppen-Geiger climate classification system.
+
+          Examples include:
+            - `Cfa` - Humid subtropical (e.g., Southeastern United States)
+            - `BSk` - Cold semi-arid (e.g., High Plains)
+            - `Dfb` - Humid continental, warm summer (e.g., Northern Midwest)
+
+          Including this classification provides context about growing conditions such as temperature range,
+          precipitation replacements, and seasonal variation. These factors can influence forage species selection,
+          nutrient density, and cutting intervals.
+
+          System implementations may allow the user to select from a predefined list or map climate zones
+          automatically based on location data. Values must conform to the standard Koppen-Geiger codes,
+          typically in 2-3 letter formats.
+
+        references:
+          - title: Koppen Climate Classification (Wikipedia)
+            url: https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification
+            publisher: Wikipedia
+
+      - id: source_field_area
+        data_type: float
+        valid_values: positive decimal number
+        definition: >
+          Captures the size of the field or parcel from which the hay was harvested.
+
+          Field area is relevant for assessing yield per acre/hectare, validating production claims,
+          and understanding the scale of the operation.
+
+          Values should be entered as positive decimal numbers. Round to the nearest `0.1` unit unless
+          greater precision is available or required. For example, a field approximately twenty-two and a
+          half acres would be recorded as `22.5`.
+
+          The appropriate unit of measure must be declared in the associated `source_field_area_units` field.
+          If multiple fields contributed to the lot, enter the combined area. System interfaces may offer
+          auto-calculation based on linked parcel data.
+
+      - id: source_field_area_units
+        data_type: enum
+        valid_values:
+          - acres
+          - hectares
+        definition: >
+          Specifies the unit of measurement used in the `source_field_area` field.
+          Standardizing units ensures clarity in reporting and comparability across listings and geographies.
+
+          - `acres`: Commonly used in the United States and a few other countries. One acre equals 43,560 square feet
+            or approximately 0.405 hectares.
+          - `hectares`: The standard metric unit of land area, equal to 10,000 square meters or approximately 2.471 acres.
+
+          Users should select the unit most appropriate for their region or reporting needs.
+          System implementations may convert between units internally but should always preserve the original unit
+          used for input and display.
+
+      - id: irrigation_status
+        data_type: enum
+        valid_values:
+          - rainfed only
+          - irrigation available
+          - irrigation required
+        definition: >
+          Describes the general irrigation context in which the hay was grown:
+
+            - `rainfed only`: Crop is typically grown without any irrigation; relies solely on rainfall.
+            - `irrigation available`: Irrigation systems are available to supplement rainfall, but are not always necessary.
+            - `irrigation required`: Reliable irrigation is essential for growing this hay crop in the region or operation.
+
+          This field offers buyers insight into crop reliability, regional water dependency, and resilience under dry conditions.
+
+      - id: irrigation_method_available
+        data_type: enum
+        valid_values:
+          - none
+          - flood
+          - sprinkler
+          - pivot
+          - drip
+        definition: >
+          Indicates the primary irrigation method available to the producer:
+
+            - `none`: No irrigation equipment or systems are available.
+            - `flood`: Water is distributed by gravity over the field.
+            - `sprinkler`: Water is applied using static or movable sprinkler systems.
+            - `pivot`: A rotating center-pivot system is used to apply water in a circular replacement.
+            - `drip`: Water is delivered directly to the root zone through emitters or tubing.
+
+          This field complements `irrigation_status` by describing technical capacity rather than agronomic necessity.
+
+        validation_guidance: >
+          These two fields describe related but distinct aspects of water management:
+
+            - `irrigation_status` expresses the agronomic need or reliance on irrigation.
+            - `irrigation_method_available` identifies what system or method is available, if any.
+
+          Suggested validation rules:
+            - If `irrigation_status` is `rainfed only`, then `irrigation_method_available` should be `none`.
+            - If `irrigation_status` is `irrigation required`, then `irrigation_method_available` must not be `none`.
+            - If `irrigation_status` is `irrigation available`, then `irrigation_method_available` must not be `none`.
+
+      - id: irrigation_method_used
+        data_type: enum
+        valid_values:
+          - none
+          - flood
+          - sprinkler
+          - pivot
+          - drip
+          - unknown
+        definition: >
+          Records the primary irrigation method actually used during the most recent production cycle of the hay crop:
+
+            - `none`: No irrigation was applied; the crop was fully rainfed.
+            - `flood`: Irrigation water was distributed by gravity flow across the soil surface.
+            - `sprinkler`: Irrigation was applied using stationary or movable sprinklers.
+            - `pivot`: A center-pivot system was used to irrigate the crop.
+            - `drip`: Water was delivered directly to the root zone using drip lines or emitters.
+            - `unknown`: The grower or seller does not know or did not report the irrigation method used.
+
+          This field complements `irrigation_method_available` by indicating which method was actually deployed.
+          It helps assess water inputs, agronomic practices, and environmental conditions influencing the crop's growth and final quality.
+
+  - id: soil
+    title: Soil and Field Management
+    description: >
+      This section captures how the grower prepares and maintains the soil to support a healthy forage stand.
+      It includes information about fertilizer applications, soil amendments, and general nutrient management.
+
+      These practices influence crop yield, plant vigor, and nutritional quality of the harvested hay.
+      They also help downstream users assess environmental practices, sustainability, and alignment with
+      production goals (e.g., high-protein dairy forage vs. lower-input grazing hay).
+
+      Where applicable, fields differentiate between nutrient application to legume vs. grass crops-
+      acknowledging, for example, that nitrogen is often unnecessary for legumes due to biological nitrogen fixation.
+
+    fields:
+      - id: soil_test_date
+        data_type: datetime
+        valid_values: YYYYMMDD format (supports zero placeholders)
+        definition: >
+          Records the date of the most recent soil test used to guide nutrient and pH management decisions
+          for the current hay crop.
+
+          Soil testing helps optimize fertilizer and lime application, supports environmental stewardship,
+          and informs yield and quality expectations.
+
+          - Use `YYYYMMDD` for known full date
+          - Use `YYYYMM00` if day is unknown
+          - Use `YYYY0000` if both month and day are unknown
+          - Use `00000000` if no soil test was conducted
+
+          This field enhances transparency and may support future traceability or certification requirements.
+
+      - id: soil_test_ph
+        data_type: float
+        valid_values: range from 4.5 to 8.5
+        definition: >
+          Records the pH of the soil based on the most recent test.
+
+          Soil pH affects nutrient availability, microbial activity, and crop performance.
+          Most forage crops grow best in soils with a pH between 6.0 and 7.5, though legumes like
+          alfalfa perform best when pH is above 6.5.
+
+          If this field is used, the value should reflect a recent, lab-confirmed test.
+          Systems may prompt for this field only if `soil_tested_recently = true`.
+
+          Buyers and agronomists may use this value to evaluate crop suitability, field management,
+          and potential nutrient deficiencies or toxicities.
+
+      - id: lime_applied
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether agricultural lime or another pH-adjusting amendment was applied to the field
+          prior to or during the hay crop cycle.
+
+          - `true`: Lime was applied
+          - `false`: No lime was applied
+          - `unknown`: The seller is unsure or has not tested the soil
+
+          Liming helps correct soil acidity and is particularly important for legumes like alfalfa,
+          which require near-neutral pH for optimal growth.
+
+          Disclosing lime application supports transparency in soil fertility management and helps buyers
+          understand underlying factors that may affect nutrient uptake and crop quality.
+
+      - id: lime_application_date
+        data_type: datetime
+        valid_values: YYYYMMDD format (supports zero placeholders)
+        definition: >
+          Records the date on which lime was last applied to the field.
+
+          Lime affects soil pH gradually, so knowing the timing helps interpret its likely influence
+          on the crop's root environment and nutrient uptake.
+
+          - Use the most recent date if lime was applied more than once
+          - Use `YYYYMM00` or `YYYY0000` if the exact day or month is unknown
+
+          Systems may prompt for this field only if `lime_applied = true`.
+
+          This information supports traceability, fertility planning, and nutrient interaction modeling.
+
+# Fertilizer application dates
+      - id: date_fertilized_nitrogen
+        data_type: datetime
+        valid_values: YYYYMMDD format (supports zero placeholders)
+        definition: >
+          Captures the most recent application date of nitrogen fertilizer for the hay crop.
+
+          Nitrogen fertilization is a key factor influencing crude protein levels, growth rate, and overall forage yield.
+
+          - Use `YYYYMMDD` for full date
+          - Use `YYYYMM00` if day is unknown
+          - Use `YYYY0000` if month and day are unknown
+          - Use `00000000` if no nitrogen was applied
+
+          Timely disclosure of nitrogen use helps buyers assess nitrate risk and understand expected nutrient content.
+
+      - id: date_fertilized_potassium
+        data_type: datetime
+        valid_values: YYYYMMDD format (supports zero placeholders)
+        definition: >
+          Indicates the most recent application date of potassium fertilizer.
+
+          Potassium supports plant water regulation, stress tolerance, and disease resistance - all of which influence
+          forage quality and yield.
+
+          - Use `YYYYMMDD` for full date
+          - Use `YYYYMM00` if day is unknown
+          - Use `YYYY0000` if month and day are unknown
+          - Use `00000000` if no potassium was applied
+
+          Disclosing potassium use assists in evaluating stand health and potential forage longevity.
+
+      - id: date_fertilized_phosphorus
+        data_type: datetime
+        valid_values: YYYYMMDD format (supports zero placeholders)
+        definition: >
+          Documents the most recent application date of phosphorus fertilizer.
+
+          Phosphorus promotes root development, stand establishment, and early plant growth - critical for long-term
+          forage productivity.
+
+          - Use `YYYYMMDD` for full date
+          - Use `YYYYMM00` if day is unknown
+          - Use `YYYY0000` if month and day are unknown
+          - Use `00000000` if no phosphorus was applied
+
+          Understanding phosphorus usage helps evaluate early season vigor and nutrient management strategy.
+
+# Fertilizer application amounts
+      - id: amount_fertilized_nitrogen
+        data_type: int
+        valid_values: non-negative integer
+        definition: >
+          Captures the quantity of nitrogen applied during the most recent fertilization event.
+
+          - Use whole numbers only.
+          - Enter `0` if no nitrogen was applied.
+
+          This field must be interpreted in conjunction with `amount_fertilized_units`, which defines the unit of measure.
+          Nitrogen influences plant growth, crude protein levels, and overall yield.
+
+      - id: amount_fertilized_potassium
+        data_type: int
+        valid_values: non-negative integer
+        definition: >
+          Specifies the quantity of potassium applied during the most recent fertilization event.
+
+          - Use whole numbers only.
+          - Enter `0` if no potassium was applied.
+
+          Potassium enhances plant tolerance to drought and disease, supports stem strength, and improves forage quality.
+          The applicable unit is defined in `amount_fertilized_units`.
+
+      - id: amount_fertilized_phosphorus
+        data_type: int
+        valid_values: non-negative integer
+        definition: >
+          Indicates the quantity of phosphorus applied during the most recent fertilization event.
+
+          - Use whole numbers only.
+          - Enter `0` if no phosphorus was applied.
+
+          Phosphorus is vital for root development, energy transfer, and early-season growth in forage crops.
+          This field should be interpreted in conjunction with `amount_fertilized_units`.
+
+      - id: amount_fertilized_units
+        data_type: enum
+        valid_values:
+          - kilograms per hectare
+          - pounds per acre
+        definition: >
+          Specifies the unit of measure for the fertilizer quantity fields:
+
+            - `amount_fertilized_nitrogen`
+            - `amount_fertilized_potassium`
+            - `amount_fertilized_phosphorus`
+
+          Choose only one unit system per entry, based on local or regulatory preference.
+          For example, most U.S. producers will use `pounds per acre`, while metric-based countries will use
+          `kilograms per hectare`.
+
+          Consistency in unit selection is required for accurate comparison and analysis.
+
+# Organic soil amendments
+      - id: organic_amendments_applied
+        data_type: list
+        item_type: component
+        definition: >
+          A list of organic amendments applied to the soil. Each entry represents a separate application
+          of compost, manure, crop residue, or similar material.
+
+          This information supports evaluation of nutrient management practices, sustainability, and
+          long-term soil health strategies.
+
+        components:
+          - id: amendment_type
+            data_type: enum
+            valid_values:
+              - compost
+              - manure
+              - cover crop residue
+              - biochar
+              - other
+            definition: >
+              Identifies the type of organic material applied to the soil.
+
+              Use `other` if the amendment does not fit the listed categories and consider providing a
+              supplemental explanation if needed.
+
+          - id: amendment_amount
+            data_type: int
+            valid_values: whole number (non-negative)
+            definition: >
+              Records the quantity of the amendment applied, rounded to the nearest whole number.
+
+              The unit of measure is defined separately in `amendment_amount_units`.
+
+          - id: amendment_amount_units
+            data_type: enum
+            valid_values:
+              - tons per acre
+              - tons per hectare
+              - cubic yards per acre
+            definition: >
+              Defines the unit of measure used for reporting the amendment amount.
+
+              Choose the most appropriate based on how the amendment was applied or recorded.
+
+          - id: amendment_application_date
+            data_type: datetime
+            valid_values: YYYYMMDD format (supports zero placeholders)
+            definition: >
+              Captures the date the amendment was applied.
+
+              This timing can influence nutrient availability, microbial activity, and the amendment's
+              overall impact on the crop.
+
+              Use `00000000` if the date is unknown.
+              Use `YYYYMM00` or `YYYY0000` for partial dates where day or month is unknown.
+
+  - id: intended_use
+    title: Intended Use and Market Context
+    description: >
+      This section captures the grower's intended livestock audience, production philosophy (including certifications),
+      and other contextual factors relevant to how the hay is positioned in the market.
+
+      These fields help buyers assess suitability for their specific animals, comply with regulatory or programmatic
+      requirements (e.g., organic or weed-free sourcing), and identify potential constraints (e.g., GMO import restrictions).
+
+    fields:
+      - id: intended_forage_use
+        data_type: enum
+        valid_values:
+          - Dairy
+          - Beef
+          - Horse
+          - Goat
+          - Sheep
+          - Deer
+          - Camel
+          - Rabbit
+          - Guinea pig
+          - Tortoise
+          - Zoo/Wildlife
+          - Landscape
+          - Other
+        definition: >
+          Identifies the primary intended animal class or application for which the hay or forage is marketed.
+
+          Improves alignment between buyer needs and product suitability by signaling expected quality standards,
+          palatability, and feed safety requirements.
+
+          Valid values include:
+            - `Dairy` - High-energy, high-protein, low-fiber forage suitable for lactating dairy cows
+            - `Beef` - For growing, breeding, or finishing beef cattle with varied quality tolerance
+            - `Horse` - Typically dust-free, low NSC forage with consistent texture and color
+            - `Goat` - Moderate- to high-protein forage, tolerates stemmier material
+            - `Sheep` - Requires attention to copper and energy levels; typically higher quality than beef forage
+            - `Deer` - Highly digestible forage for farmed or captive cervids
+            - `Camel` - Includes llamas, alpacas, and camels; suitable for coarser forage
+            - `Rabbit` - High-fiber, low-calcium forage; typically small-stem grass hay
+            - `Guinea pig` - Similar to rabbit requirements; may need stricter control on mold and texture
+            - `Tortoise` - Drier, low-protein hays (e.g., timothy or orchardgrass)
+            - `Zoo/Wildlife` - Regulated or specialized forage for zoological or rescue settings
+            - `Landscape` - Erosion control, bedding, weed suppression, or decorative mulch
+            - `Other` - Any unlisted use, including emerging or nontraditional forage markets
+
+          Whether this field is implemented as single- or multi-select should be determined by the platform.
+
+      - id: intended_use_case
+        data_type: enum
+        valid_values:
+          - maintenance
+          - growth
+          - lactation
+          - work
+          - general purpose
+          - unknown
+        definition: >
+          Captures the functional purpose for which the hay was intended - such as maintaining body condition,
+          supporting growth, or producing milk.
+
+          - `maintenance`: Intended for animals not in production (e.g., dry cows, idle horses).
+          - `growth`: Designed to support young or growing animals.
+          - `lactation`: Targeted for milk-producing animals with high energy/protein demand.
+          - `work`: For animals performing physical labor (e.g., working horses).
+          - `general purpose`: No specific function; applicable to various use cases.
+          - `unknown`: Intention not known or disclosed.
+
+          This metadata helps buyers evaluate whether the hay aligns with their nutritional goals
+          and may inform expected quality ranges.
+
+      - id: gmo_presence_status
+        data_type: enum
+        valid_values:
+          - GMO
+          - non-GMO certified
+          - non-GMO (uncertified)
+          - unknown
+        definition: >
+          Describes whether the hay was produced from a genetically modified crop and whether any
+          non-GMO designation is formally certified.
+
+          - `GMO`: Hay was produced from a genetically modified crop (e.g., Roundup Ready alfalfa).
+          - `non-GMO certified`: Hay was produced from a non-GMO crop and has been certified by a recognized
+            non-GMO verification program.
+          - `non-GMO (uncertified)`: The producer affirms that the hay is non-GMO but without formal certification.
+          - `unknown`: GMO status of the source crop is not known or not disclosed.
+
+          This field is important for export, specialty feed, and organic markets, where GMO crops may be
+          restricted or excluded by regulation or buyer preference.
+
+          Examples of accepted non-GMO certification programs include:
+            - Non-GMO Project Verified
+            - USDA Organic (prohibits GMO use)
+            - Certified Naturally Grown (if includes GMO-free attestation)
+            - EU Organic Certification (Regulation (EU) 2018/848)
+
+          Notable regulatory contexts:
+            - **European Union**: Requires GMO labeling above 0.9% content for feed products
+            - **Mexico**: Imposes GMO corn restrictions with broader trade implications for GMO-related products
+
+          Accurate classification enhances transparency, supports marketing claims, and ensures regulatory compliance.
+
+      - id: production_certification_status
+        data_type: enum (multi-select)
+        valid_values:
+          - certified organic
+          - certified non-GMO
+          - certified weed free
+          - transitional organic
+          - none
+          - unknown
+        definition: >
+          Captures the production-related certifications or designations that apply to the hay.
+
+          These certifications provide assurance to buyers about how the hay was grown and handled and
+          may influence eligibility for certain markets or regulatory programs.
+
+          - `certified organic`: Certified under a recognized organic program (e.g., USDA NOP, EU Organic)
+          - `certified non-GMO`: Certified free of genetically modified organisms
+          - `certified weed free`: Certified noxious weed-free (often required for public land or export)
+          - `transitional organic`: Produced using organic-compliant methods but not yet fully certified
+          - `none`: No applicable production-related certifications
+          - `unknown`: Certification status is not known or not disclosed
+
+          Multiple values may be selected for products that hold more than one certification
+          (e.g., both `certified organic` and `certified weed free`).
+
+          System implementations should allow multi-select input and validate accordingly.
+
+      - id: distribution_channel
+        data_type: enum
+        valid_values:
+          - local
+          - regional
+          - national
+          - export
+          - unknown
+        definition: >
+          Captures the primary distribution context or market scope for which the hay was prepared.
+
+          This field may infer associated quality expectations, packaging format, and logistical considerations.
+
+          - `local`: Intended for use within the immediate community or county
+          - `regional`: Distributed across a multi-county or state/province area
+          - `national`: Distributed across the entire country
+          - `export`: Intended for international sale or shipping
+          - `unknown`: Not disclosed or not applicable
+
+          This field may support regulatory compliance (e.g., export documentation),
+          freight planning, or market segmentation analysis.
+
+      - id: export_eligibility_documentation
+        data_type: enum (multi-select)
+        valid_values:
+          - phytosanitary certificate
+          - fumigation certificate
+          - certificate of origin
+          - weed-free declaration
+          - none
+          - unknown
+        definition: >
+          Identifies the export-related documentation available for the hay.
+
+          Such documentation may be required by importing countries, states, or agencies to ensure
+          compliance with quarantine laws, invasive species control, or import regulations.
+
+          Valid options include:
+            - `phytosanitary certificate`: Verifies the hay is free from regulated pests and meets the
+              import requirements of the destination country
+            - `fumigation certificate`: Confirms the hay has been treated with a fumigant prior to shipment
+            - `certificate of origin`: States the country of production, often required for trade preference or compliance
+            - `weed-free declaration`: Indicates certification of noxious weed-free status under applicable standards
+            - `none`: No export documentation is provided with this hay
+            - `unknown`: The documentation status is not known or not disclosed
+
+          This field supports international trade, reduces risk of shipment rejection, and helps buyers
+          comply with regulatory requirements in their jurisdiction.
+
+          Multiple values may be selected to reflect all relevant documentation.
+
+  - id: crop_management
+    title: In-Season Crop Management
+    description: >
+      This section documents how the hay crop was managed during the growing season - including cutting strategy,
+      weed and pest management, and other contextual information such as weather stresses or field notes.
+
+      These details help buyers and agronomists evaluate how active crop management may have influenced
+      the resulting forage quality, consistency, and marketability.
+
+    fields:
+      - id: growth_conditions_notes
+        data_type: string
+        valid_values: free-text string, max 500 characters
+        definition: >
+          Optional field for describing notable growing conditions that may have impacted the hay crop -
+          such as drought, flooding, hail, or heat stress.
+
+          Because such conditions are unpredictable and varied, this field uses a free-text format to allow flexible input.
+
+          Example entries:
+            - `Light drought stress during early growth; recovered by late season`
+            - `Localized hail damage in May`
+            - `Flooded low areas did not contribute to harvest`
+
+          This field is optional but may support transparency in high-trust markets or export documentation.
+
+      - id: weed_pressure_observed
+        data_type: enum
+        valid_values:
+          - none
+          - low
+          - moderate
+          - high
+          - unknown
+        definition: >
+          Estimates the level of weed presence in the field during the growing season.
+
+          - `none`: No visible weed pressure; stand appears clean and uniform
+          - `low`: Minor weed presence; unlikely to affect palatability or marketability
+          - `moderate`: Noticeable weed presence; may influence feed value or buyer preference
+          - `high`: Significant weed presence; likely to reduce market value or trigger restrictions
+          - `unknown`: Seller does not know or declined to report
+
+          This field supports transparency and may inform eligibility for "certified weed free" programs.
+
+      - id: hay_herbicide_treated
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Discloses whether herbicides were applied to the source field(s) during the growing season.
+
+          Herbicide use may influence weed pressure, forage purity, and chemical residue risk.
+
+          - `true`: Herbicides were used
+          - `false`: No herbicides were applied
+          - `unknown`: Seller does not know or does not wish to disclose
+
+      - id: pest_pressure_observed
+        data_type: enum
+        valid_values:
+          - none
+          - low
+          - moderate
+          - high
+          - unknown
+        definition: >
+          Reports the level of pest pressure during the growing season.
+
+          - `none`: No notable pest activity
+          - `low`: Minor pest presence; little or no impact
+          - `moderate`: Noticeable pest presence; some impact on leaf loss, yield, or quality
+          - `high`: Major pest infestation likely to affect quality or marketability
+          - `unknown`: Seller does not know or declined to report
+
+          Pests may include aphids, armyworms, leafhoppers, or weevils.
+
+      - id: hay_pesticide_treated
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Discloses whether pesticides (excluding herbicides) such as insecticides, fungicides, or miticides
+          were applied to the hay crop during its growing season.
+
+          This field is important for organic compliance, residue monitoring, and sensitive livestock species.
+
+          - `true`: One or more pesticide treatments were applied
+          - `false`: No pesticide treatments were applied
+          - `unknown`: Seller does not know or does not wish to disclose
+
+      - id: hay_preservative_applied
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether a preservative - such as propionic acid - was applied to the hay during harvest or storage.
+
+          Preservatives are used to inhibit mold growth and improve storability for hay baled at higher moisture levels.
+
+          - `true`: A preservative was applied
+          - `false`: No preservative was used
+          - `unknown`: Seller does not know or does not wish to disclose
+
+      - id: hay_coloring_agent_used
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether a coloring agent was applied to the hay for cosmetic or marketing purposes.
+
+          While coloring agents do not alter nutritional value, they may influence buyer perception or suitability for certain markets.
+
+          - `true`: A coloring agent was used
+          - `false`: No coloring agent was applied
+          - `unknown`: Seller does not know or does not wish to disclose
+
+      - id: cutting_regimen_usual
+        data_type: int
+        valid_values: positive integer
+        definition: >
+          Represents the grower's customary number of hay cuttings per growing season,
+          based on long-term practice with this stand or forage type.
+
+          This field supports agronomic profiling and helps buyers understand harvest frequency and regrowth potential.
+
+      - id: cutting_stage_target
+        data_type: enum
+        valid_values:
+          - early vegetative
+          - late vegetative
+          - early bud
+          - full bud
+          - early bloom
+          - full bloom
+          - boot stage
+          - heading
+          - other
+          - unknown
+        definition: >
+          Identifies the growth stage at which the grower typically aims to cut hay for optimal quality and yield.
+
+          - `early bud`: Alfalfa cut when first buds appear (dairy-grade forage)
+          - `boot stage`: Grass cut when seed head is enclosed (balance yield and quality)
+          - `full bloom`: Often cut here for seed production or low-cost forage
+          - `other`: Atypical or user-defined cutting target
+          - `unknown`: Not disclosed or unknown
+
+          This is a grower-reported target, not a measurement of actual maturity at harvest.
+
+  - id: harvest
+    title: Harvest-Level Data
+    description: >
+      This section documents key facts about the harvest event or events from which the hay was produced.
+
+      It includes cutting number, harvest dates, field yield, and average bale weight - along with indicators
+      of harvest-specific practices such as conditioning.
+
+      These fields provide crucial context for traceability, logistics, and quality interpretation,
+      especially when evaluating consistency across lots, seasons, or producers.
+
+      Accurate reporting of this data supports both market transparency and informed decision-making by buyers and nutritionists.
+
+    fields:
+      - id: harvest_date_start
+        data_type: datetime
+        valid_values: YYYYMMDD format (supports zero placeholders)
+        definition: >
+          Represents the commencement date of the hay harvest, typically corresponding to the mowing date.
+
+          This date informs the consumer about the age of the hay, its seasonal timing, and allows for correlation
+          with local weather conditions.
+
+          Use the following placeholder format for unknown components:
+            - `YYYYMMDD`: Full date known
+            - `YYYYMM00`: Day unknown
+            - `YYYY0000`: Month and day unknown
+
+          Estimations are allowed using zero placeholders as needed.
+
+      - id: harvest_date_end
+        data_type: datetime
+        valid_values: YYYYMMDD format (supports zero placeholders)
+        definition: >
+          Represents the conclusion date of the hay harvest.
+
+          This must not precede `harvest_date_start`.
+
+          If `hay_single_lot_traceable` is `true`, the time span from start to end must not exceed 48 hours.
+
+          Placeholder formats:
+            - `YYYYMM00`: Day unknown
+            - `YYYY0000`: Month and day unknown
+
+      - id: hay_cutting
+        data_type: int
+        valid_values: non-negative integer
+        definition: >
+          Indicates which cutting (e.g., 1st, 2nd) of the season produced this hay.
+
+          Enter `0` if the cutting number is unknown.
+
+      - id: baler_moisture_average
+        data_type: float
+        valid_values: decimal percentage (wet basis)
+        definition: >
+          Records the average hay moisture content at harvest, based on baler sensor data.
+
+          Values above ~18% may signal risk of spoilage without preservation treatment.
+
+          This field is optional.
+
+      - id: baler_moisture_high
+        data_type: float
+        valid_values: decimal percentage (wet basis)
+        definition: >
+          Records the highest observed moisture value from baling equipment sensors.
+
+          Helps detect risk zones for mold or internal heating in storage.
+
+          Optional field, complements `baler_moisture_average`.
+
+      - id: hay_conditioned
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether hay was mechanically conditioned (e.g., crimped or crushed) during harvest.
+
+          Conditioning accelerates drying and helps reduce nutrient loss from weathering.
+
+      - id: bale_weight_intended
+        data_type: int
+        valid_values: positive integer
+        definition: >
+          Targeted average bale weight set on the baler or planned by the grower.
+
+          Must be interpreted with `bale_weight_units`.
+
+      - id: average_bale_weight
+        data_type: int
+        valid_values: positive integer
+        definition: >
+          Average weight of bales in the lot, measured or estimated.
+
+          Must match the units in `bale_weight_units`.
+
+          Interpretation depends on `bale_weight_assessment_method`.
+
+      - id: bale_weight_assessment_method
+        data_type: enum
+        valid_values:
+          - Truckload average
+          - Explicit weight
+          - Baler target
+          - Grower estimate-uniform bales
+          - Grower estimate-disparate bales
+        definition: >
+          Specifies the method used to determine reported bale weight.
+
+          Enables transparency for buyers and analysts.
+
+      - id: bale_count
+        data_type: int
+        valid_values: positive integer
+        definition: >
+          Total number of bales produced for this hay lot.
+
+          Used to calculate inventory, shipping, and total yield.
+
+      - id: source_field_yield
+        data_type: int
+        valid_values: whole number
+        definition: >
+          Total yield (mass) from the source field(s), calculated or estimated.
+
+          Must be interpreted with `source_field_yield_units`.
+
+      - id: source_field_yield_units
+        data_type: enum
+        valid_values:
+          - metric tons
+          - British (long) tons
+          - U.S. (short) tons
+        definition: >
+          Unit of measure for `source_field_yield`.
+
+          Must align with the reported numeric value.
+
+          - Metric ton = 1,000 kg (~2,204.62 lbs)
+          - British ton = 2,240 lbs
+          - U.S. ton = 2,000 lbs
+
+  - id: packaging
+    title: Hay packaging
+    description: >
+      This section describes the physical form in which the hay is currently packaged for sale or shipment.
+      It includes bale dimensions, binding material, compression method, and other packaging details that affect
+      storage, transport, handling, and customer preferences.
+
+      Packaging specifications may differ from original harvest conditions - particularly in cases where hay has been
+      rebaled or processed after the initial cutting. Buyers rely on this data to assess compatibility with feeding
+      systems, freight capacity, and regulatory or market requirements.
+
+      Note: Some hay may be reprocessed or rebaled after the initial harvest. Fields in this section (including weight,
+      shape, and compression) describe the hay as currently packaged for sale or shipment - which may differ from
+      the original harvest form.
+
+    fields:
+      - name: hay_packaging_history
+        title: Packaging history
+        data_type: enum
+        valid_values: [original, rebaled, repackaged, unknown]
+        description: >
+          Describes whether the hay is in its original bale form or has undergone repackaging.
+          Repackaging may include unrolling and re-baling, compressing for export, or resizing for specific markets.
+        details: |
+          - **original**: Hay is in the form in which it was first baled.
+          - **rebaled**: Hay was originally baled, then unrolled and baled again.
+          - **repackaged**: Hay was processed into a different format (e.g., compressed, shrink-wrapped).
+          - **unknown**: Packaging history is unclear or not disclosed.
+
+          This field supports traceability and helps buyers assess potential quality or handling concerns related to reprocessing.
+
+      - name: bale_weight_intended_repackaged
+        title: Intended bale weight (repackaged)
+        data_type: int
+        valid_values: >
+          A positive whole number representing the intended weight (in units defined by `bale_weight_units`) of each bale in its final, repackaged form.
+        description: >
+          Applies only when hay has been re-baled or repackaged after the original harvest.
+          This field specifies the target weight of the new bales, such as when large round bales are broken down and re-formed into smaller square bales.
+        details: |
+          This value is expressed in the same units as `bale_weight_units` (e.g., pounds or kilograms).
+          It reflects the intended packaging outcome and may differ substantially from the original `bale_weight_intended` captured at harvest.
+
+          Use this field only if `hay_packaging_history` includes values such as `rebaled` or `repackaged`.
+          When applicable, this field provides important clarity for buyers and logistics providers, especially in export or high-volume contexts.
+
+          System interfaces may optionally validate this field in relation to `bale_shape`, `bale_dimension_*`, or `bale_binding` fields to ensure internal consistency.
+
+      - name: bale_weight_units
+        title: Bale weight units
+        data_type: enum
+        valid_values: [kilograms, pounds]
+        description: >
+          Specifies the unit of measurement used in the `bale_weight_intended` and potentially other bale weight fields.
+        details: |
+          Most systems should standardize internally on one unit, but external presentation may vary by user preference or region.
+
+          Providing a clear unit prevents misinterpretation, especially when converting or comparing listings across geographies.
+
+      - name: bale_binding_material
+        title: Bale binding material
+        data_type: enum
+        valid_values: [twine, net wrap, wire, plastic strap, none, unknown]
+        description: >
+          Records the primary material used to bind or wrap the bale for storage and handling.
+        details: |
+          Material type affects bale durability, safety, and disposal requirements.
+
+          - `twine`: Natural (e.g., sisal) or synthetic (e.g., polypropylene) twine.
+          - `net wrap`: Plastic or polymer netting, typically used on round bales.
+          - `wire`: Steel or galvanized wire, often used for high-density rectangular bales.
+          - `plastic strap`: Plastic strapping commonly used on compressed or export bales.
+          - `none`: No external binding applied to the bale.
+          - `unknown`: Binding material is not known or not disclosed.
+
+      - name: bale_binding_details
+        title: Bale binding details
+        data_type: enum
+        valid_values:
+          - small two-strand
+          - small three-strand
+          - large 3x3x8
+          - large 3x4x8
+          - large 4x4x8
+          - round twine
+          - round net wrap
+          - round plastic wrap
+          - other
+        description: >
+          Represents the bale's size and binding configuration. Independent of binding material.
+        details: |
+          This field captures the size, shape, and basic binding configuration of the bale. It is independent of the binding material (e.g., wire or twine), which is recorded separately in `bale_binding`.
+
+          - `small two-strand`: Small rectangular bale tied with two strands of twine or wire.
+          - `small three-strand`: Slightly larger small bale tied with three strands.
+          - `large 3x3x8`: Large square bale approximately 3'x3'x8'.
+          - `large 3x4x8`: Large square bale approximately 3'x4'x8'.
+          - `large 4x4x8`: Extra-large square bale approximately 4'x4'x8'.
+          - `round twine`: Round bale bound with twine.
+          - `round net wrap`: Round bale secured with net wrap.
+          - `round plastic wrap`: Round bale sealed in plastic, often for haylage.
+          - `other`: Non-standard or specialized bale types.
+
+          Binding material (twine, wire, net, plastic) should be separately recorded in `bale_binding`.
+
+      - name: hay_compression
+        title: Hay compression level
+        data_type: enum
+        valid_values:
+          - standard
+          - mid-compressed
+          - fully compressed
+          - unknown
+        description: >
+          Represents the extent to which the hay bale has been mechanically compressed for storage or transport.
+        details: |
+          This field describes whether and to what extent the bale has been mechanically compressed to reduce its volume. Compressed hay is often produced for export or for storage efficiency.
+
+          - `standard`: Bales are not compressed beyond what occurs during baling.
+          - `mid-compressed`: Bales have undergone moderate compression (e.g., for container loading).
+          - `fully compressed`: Bales are significantly compressed using hydraulic or mechanical means.
+          - `unknown`: Compression status is not known or not disclosed.
+
+          This field is particularly useful in international trade and for evaluating bale density relative to storage or freight constraints.
+
+      - name: bale_shape
+        title: Bale shape
+        data_type: enum
+        valid_values:
+          - round
+          - rectangular
+          - other
+        description: >
+          Represents the geometric shape of the hay bale.
+        details: |
+          This field records the geometric shape of the bale. Bale shape affects equipment compatibility, stacking, and handling procedures.
+
+          - `round`: Cylindrical bale shape, often larger and heavier.
+          - `rectangular`: Includes small square, mid-size, and large square bales.
+          - `other`: Includes cubes, wafers, or non-standard formats.
+
+          Shape selection may be influenced by market expectations, shipping constraints, or equipment availability.
+
+      - name: bale_dimension_width
+        title: Bale dimension - width
+        data_type: float
+        valid_values: A positive decimal value representing the width of the bale, in the units specified by `bale_dimension_units`.
+        description: >
+          Width of the bale, typically the short side of a rectangular face or the diameter for round bales.
+        details: |
+          Enter the bale's width (short side of the rectangular face, or diameter for round bales).
+          Values should be rounded to the nearest 0.1 unit (e.g., 3.5 feet).
+
+          This field helps buyers assess compatibility with handling equipment and loading systems.
+
+      - name: bale_dimension_height
+        title: Bale dimension - height
+        data_type: float
+        valid_values: A positive decimal value representing the height of the bale, in the units specified by `bale_dimension_units`.
+        description: >
+          Height of the bale, typically the long side of the rectangular face when standing, or the vertical axis if round.
+        details: |
+          Enter the bale's height (long side of the rectangular face when standing, or vertical axis if round).
+          Round to the nearest 0.1 unit.
+
+          This field is important for planning stacking and clearance requirements in storage facilities.
+
+      - name: bale_dimension_length
+        title: Bale dimension - length
+        data_type: float
+        valid_values: A positive decimal value representing the length of the bale, in the units specified by `bale_dimension_units`.
+        description: >
+          Length of the bale, typically the longest axis for rectangular bales.
+        details: |
+          Enter the bale's length (longest axis for rectangular bales).
+          Round to the nearest 0.1 unit.
+
+          This measurement aids in evaluating stacking strategies and trailer fit.
+
+      - name: bale_dimension_diameter
+        title: Bale dimension - diameter
+        data_type: float
+        valid_values: A positive decimal value representing the diameter of round bales, in the units specified by `bale_dimension_units`.
+        description: >
+          Diameter of the bale, applicable only to round bales.
+        details: |
+          Use this field only for round bales. Enter the diameter of the cylinder,
+          rounded to the nearest 0.1 unit. For rectangular bales, leave this field blank
+          or exclude it from output.
+
+          Diameter is crucial for modeling bale volume and handling characteristics.
+
+      - name: bale_dimension_units
+        title: Bale dimension units
+        data_type: enum
+        valid_values: [inches, centimeters, feet, meters]
+        description: >
+          Unit of measurement used for all bale dimension fields.
+        details: |
+          This field specifies the unit of measurement used for the bale dimensions
+          listed above. Consistent units allow for accurate volume, storage, and logistics
+          calculations.
+
+          - inches: Common in North America for small bales.
+          - centimeters: Metric alternative to inches.
+          - feet: Common for large bales in U.S. agriculture.
+          - meters: Used in international and metric-based systems.
+
+          Implementing systems should support conversion and validation tools based on this field.
+
+      # Cross-field consistency guidance (informational only)
+      #
+      # - If `hay_packaging_history` is `rebaled` or `repackaged`, then `average_bale_weight`
+      #   and `bale_dimension_*` fields may differ significantly from typical field-scale values.
+      #
+      # - If `bale_shape` is `round`, then `bale_dimension_diameter` is expected and
+      #   `bale_dimension_length` may be optional or ignored.
+      #
+      # - If `bale_shape` is `rectangular`, then `bale_dimension_width`, `bale_dimension_height`,
+      #   and `bale_dimension_length` should be present; `bale_dimension_diameter` should be excluded.
+      #
+      # - If `hay_compression` is `fully compressed`, then `bale_binding` is likely `plastic strap`
+      #   or `wire`, and bale weight may exceed standard values for the declared shape and dimensions.
+
+  - id: physical_characteristics
+    title: Physical Characteristics and Condition
+    description: >
+      This section captures the visible, tactile, and olfactory traits of the hay,
+      as well as relevant effects from post-harvest weather exposure and
+      storage-related degradation.
+
+    # Cross-field consistency guidance:
+    # - If `organoleptic_factor_moldy` = true, then `organoleptic_factor_odor` is often `Moldy`.
+    # - If `organoleptic_factor_rot` = true, then `organoleptic_factor_odor` may be `Sour` or `Rotten or otherwise foul`.
+    # - If `foreign_material_weeds` = true, buyers may infer that weed-free certification is unlikely (if separately disclosed).
+    # - If `weather_damage_windrow_rain` = true or `weather_damage_windrow_snow` = true, then `hay_color` may tend toward `Yellow to slightly brownish` or `Brown or black`.
+    # - If `final_storage_structure` = field or tarp-covered, and `final_airflow_condition` = enclosed with limited airflow, then `visible_moisture_damage` = true becomes more likely.
+    # - If `restacked_since_baling` = true, expect possible impact on `hay_leafiness` due to leaf loss.
+
+    fields:
+
+      # --- Weather Exposure and Damage ---
+
+      # Weather Exposure and Damage fields disclose whether the hay was exposed
+      # to adverse weather events during two key periods:
+
+      # (1) while remaining in the windrow (post-mowing, pre-baling), and
+      # (2) after baling (during handling or storage).
+
+      # Weather-related exposure can significantly affect visual quality,
+      # nutritional value, and storability.
+
+      # Fields in this section cover:
+      #  - Windrow-stage exposure: Rain, snow, sleet, hail, fog, and dewfall
+      #  - Baled-stage exposure: Rain, snow, sleet, hail, and condensation-related damage
+      #  - Summary assessments: Overall severity of weather damage at each stage
+
+      # These fields improve transparency, support accurate grading, and reduce disputes
+      # by clarifying the weather history of the lot.
+
+      - id: weather_damage_windrow_rain
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay was exposed to rainfall while lying in the windrow (after mowing, before baling).
+
+          - `true`: Rainfall occurred during windrow stage
+          - `false`: No rain fell on the hay while in windrow
+          - `unknown`: Rain exposure is not known or not disclosed
+
+          Rain in the windrow can leach nutrients, promote mold, and reduce forage quality.
+
+      - id: weather_damage_windrow_snow
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay was exposed to snowfall while lying in the windrow.
+
+          Snowfall can delay drying, increase moisture retention, and contribute to microbial degradation
+          if the forage is not properly managed during the curing process.
+
+          Use:
+            - `true` if snow fell on the hay while in the windrow
+            - `false` if no snow was received during this stage
+            - `unknown` if the seller is uncertain whether snowfall occurred
+
+          Snow exposure during curing is a key concern in colder climates and may influence
+          storage recommendations and marketability.
+
+      - id: weather_damage_windrow_sleet
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay was exposed to sleet while lying in the windrow.
+
+          Sleet - a mix of rain and ice - can extend drying time, increase leaf loss,
+          and accelerate physical weathering of forage material.
+
+          Use:
+            - `true` if sleet fell on the hay during the windrow stage
+            - `false` if no sleet occurred
+            - `unknown` if the seller is uncertain whether sleet exposure took place
+
+          Even short periods of sleet can negatively affect hay quality, especially
+          when followed by freezing conditions or prolonged curing.
+
+      - id: weather_damage_windrow_hail
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay was exposed to hail while lying in the windrow.
+
+          Hail can physically damage forage by shattering leaves, bruising stems, or embedding ice
+          into the material - all of which reduce forage quality and palatability.
+
+          Use:
+            - `true` if hail fell on the hay during the windrow stage
+            - `false` if no hail occurred
+            - `unknown` if the seller is unsure about hail exposure
+
+          Even localized hail events can damage specific areas of a field.
+          Sellers should respond based on the best available observation or weather data.
+
+      - id: weather_damage_windrow_fog
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay was exposed to fog while lying in the windrow.
+
+          Fog can prolong moisture retention, delay drying, and increase the risk of mold growth
+          or spontaneous heating - particularly if hay is baled before reaching safe moisture levels.
+
+          Use:
+            - `true` if fog was observed or known to have affected the windrow
+            - `false` if fog did not occur
+            - `unknown` if the seller lacks information about fog exposure
+
+          Fog-related moisture is especially critical in humid climates or during short drying windows.
+          Sellers should answer based on field observation or reliable local weather data.
+
+      - id: weather_damage_windrow_dewfall
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay experienced heavy dewfall while lying in the windrow.
+
+          Dew can reintroduce moisture to partially dried forage, delaying curing
+          and increasing the risk of microbial activity, mold development, or heat damage
+          if the hay is baled prematurely.
+
+          Use:
+            - `true` if significant dewfall was observed during the windrow stage
+            - `false` if no heavy dew occurred
+            - `unknown` if the seller lacks sufficient knowledge to assess dew exposure
+
+          Heavy dew is especially common under certain weather replacements or in specific regions.
+          Accurate disclosure helps buyers assess quality risks related to post-mowing moisture events.
+
+      - id: weather_damage_windrow_assessment
+        data_type: enum
+        valid_values:
+          - none
+          - minor
+          - modest
+          - substantial
+          - unknown
+        definition: >
+          Seller's qualitative assessment of weather-related damage to the hay while it was lying in the windrow.
+
+          This field provides context for previously disclosed moisture events by allowing
+          a summary-level judgment based on observation or experience.
+
+          Use:
+            - `none` for no perceptible damage
+            - `minor` for slight discoloration or nutrient loss
+            - `modest` for moderate quality reduction
+            - `substantial` for significant degradation in hay quality
+            - `unknown` if the seller lacks enough information to assess
+
+          This qualitative field supplements binary moisture disclosures with human judgment,
+          offering an important signal to buyers in the absence of lab analysis.
+
+      - id: weather_damage_baled_rain
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay received rainfall after it was baled.
+
+          Rainfall post-baling can introduce mold risk, lower palatability,
+          and increase spoilage potential during storage.
+
+          Use:
+            - `true` if the seller discloses that the hay received rainfall once baled
+            - `false` if no rain fell on the bales
+            - `unknown` if the seller has no knowledge of post-baling rain exposure
+
+          Accurate disclosure supports buyer decision-making and storage or feeding planning.
+
+      - id: weather_damage_baled_snow
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay received snowfall after it was baled.
+
+          Snow accumulation on baled hay can lead to external moisture exposure,
+          spoilage, and mold growth - particularly during freeze-thaw cycles.
+
+          Use:
+            - `true` if the seller discloses that snow fell on the bales after baling
+            - `false` if no snowfall occurred
+            - `unknown` if the seller lacks knowledge of post-baling snow exposure
+
+          Disclosure of snow exposure helps buyers assess potential quality degradation
+          and storage-related risks.
+
+      - id: weather_damage_baled_sleet
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay received sleet after it was baled.
+
+          Sleet exposure may cause surface moisture and freezing damage, compromising
+          bale integrity, increasing spoilage risk, or complicating handling.
+
+          Use:
+            - `true` if sleet fell on the hay after baling
+            - `false` if no sleet occurred
+            - `unknown` if the seller lacks knowledge of sleet exposure
+
+          Disclosure supports assessment of post-harvest vulnerability and product condition.
+
+      - id: weather_damage_baled_hail
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay received hail after it was baled.
+
+          Hail can damage the outer surfaces of bales, compromise structural integrity,
+          and increase moisture penetration - all of which may lead to spoilage.
+
+          Use:
+            - `true` if the hay was exposed to hail post-baling
+            - `false` if no hail occurred
+            - `unknown` if the seller is unsure about hail exposure
+
+          Although less common, hail can affect bale appearance, palatability, and storage performance.
+
+      - id: weather_damage_baled_moisture
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay experienced excessive moisture after it was baled,
+          such as fog, heavy dewfall, or condensation.
+
+          Use:
+            - `true` if the seller discloses post-baling moisture exposure
+            - `false` if no such moisture events occurred
+            - `unknown` if the seller does not know or declined to report
+
+          Excessive post-baling moisture can lead to spoilage, mold, or bale heating -
+          all of which may compromise hay safety, shelf life, or livestock health.
+
+      - id: weather_damage_baled_assessment
+        data_type: enum
+        valid_values:
+          - None
+          - Minor
+          - Modest
+          - Substantial
+          - Unknown
+        definition: >
+          The seller's qualitative assessment of weather-related damage to the hay
+          after it was baled. This summary includes deterioration from rain, snow, sleet,
+          fog, dewfall, or other post-baling moisture events.
+
+          Valid values:
+            - `None`: No known or suspected post-baling weather damage
+            - `Minor`: Slight damage with minimal quality impact
+            - `Modest`: Noticeable degradation affecting appearance or shelf life
+            - `Substantial`: Significant degradation affecting usability or nutrition
+            - `Unknown`: Seller is unable to assess damage severity
+
+          This field complements detailed weather exposure fields and supports transparency
+          in product condition reporting.
+
+      # --- Visual and Organoleptic Qualities ---
+
+      # This next group of fields captures the hay's appearance, texture, odor, and the presence of foreign
+      # or undesirable materials. These sensory and visual traits heavily influence buyer
+      # perception, animal intake, and marketability--especially when laboratory analysis
+      # is unavailable or impractical.
+
+      # Documenting these factors in a structured format supports consistent grading,
+      # transparent communication, and alignment with the expectations of specialized
+      # markets such as equine, export, and organic systems.
+
+      - id: hay_leafiness
+        data_type: enum
+        valid_values: [Very leafy, Leafy, Slightly stemmy, Stemmy]
+        definition: >
+          A qualitative assessment of the leaf-to-stem ratio in the hay, based on visual observation
+          or standard grading procedures. Leafiness is a key determinant of forage quality, as leaves
+          generally contain more digestible nutrients than stems.
+
+          Classification scheme adapted from Bates (2007):
+          - Very leafy: Dominated by leaves, minimal visible stem.
+          - Leafy: Leafy with some stem presence.
+          - Slightly stemmy: Noticeable stem content, but still a moderate leaf presence.
+          - Stemmy: Predominantly stems, limited leaf material.
+
+          This field supports visual grading and may correlate with laboratory results for digestibility
+          and nutrient density.
+
+      - id: hay_texture
+        data_type: enum
+        valid_values: ["Very soft and pliable", Soft, "Slightly harsh", "Harsh, brittle"]
+        definition: >
+          Captures a tactile assessment of the hay's texture, reflecting how soft or harsh it feels upon physical inspection.
+          Texture can influence animal intake, particularly for selective livestock such as horses or young animals.
+
+          Classification follows the scheme from Bates (2007):
+            - "Very soft and pliable": Tender and flexible, exhibiting no harshness.
+            - Soft: Generally smooth with minor resistance to handling.
+            - "Slightly harsh": Noticeable coarseness or rigidity.
+            - "Harsh, brittle": Very coarse, easily broken, and may contain tough stems.
+
+          This qualitative measure complements analytical and visual data, aiding buyers in anticipating palatability and overall usability.
+
+      - id: hay_color
+        data_type: enum
+        valid_values: ["Natural green color of crop", "Light green", "Yellow to slightly brownish", "Brown or black"]
+        definition: >
+          Records the dominant color of the hay at the time of sale, serving as a visual indicator of forage quality, harvest
+          conditions, and storage practices.
+
+          Adapted from Bates (2007), the classification reflects common color categories:
+            - "Natural green color of crop": Bright green, suggesting good curing and nutrient preservation.
+            - "Light green": Slight fading due to sunlight exposure or aging.
+            - "Yellow to slightly brownish": Indicates delayed harvest, aging, or weathering; potential nutrient loss.
+            - "Brown or black": Often caused by rain damage, heating, or mold; may suggest spoilage or poor palatability.
+
+          Though subjective, hay color influences buyer perception and is frequently considered alongside laboratory analysis.
+
+      - id: organoleptic_factor_odor
+        data_type: enum
+        valid_values:
+          - Clean--"crop smell"
+          - Dusty
+          - Moldy
+          - Somewhat sour
+          - Sour
+          - Rotten or otherwise foul
+        definition: >
+          Captures the perceived odor of the hay as a sensory indicator of harvest and storage conditions.
+          Adapted from Bates (2007), odor categories range from desirable to undesirable:
+
+            - Clean--"crop smell": Fresh, sweet odor typical of well-cured hay.
+            - Dusty: Dry, musty smell, possibly indicating excessive dust or aging.
+            - Moldy: Clear mold odor, a sign of spoilage and potential health risk.
+            - Somewhat sour: Mild fermentation scent, may reflect premature baling.
+            - Sour: Strong sour odor due to improper curing or storage.
+            - Rotten or otherwise foul: Foul smell from decay or contamination.
+
+          Odor assessments are subjective but critical for evaluating hay quality when lab data is unavailable.
+
+      - id: organoleptic_factor_moldy
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether visible mold is present on the hay, based on the seller's observation:
+
+            - true: Seller affirms the presence of visible mold.
+            - false: Seller affirms that no mold is visible.
+            - unknown: Seller does not know or has not inspected closely enough.
+
+          Mold can lower forage quality, reduce palatability, and pose health risks-
+          especially for horses and other sensitive animals. It may arise from excessive
+          moisture, late baling, or poor storage conditions.
+
+      - id: organoleptic_factor_dusty
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay is visibly dusty based on seller observation:
+
+            - true: Seller affirms that visible dust is present.
+            - false: Seller affirms that the hay is not dusty.
+            - unknown: Seller does not know or has not assessed dustiness.
+
+          Dust may result from soil contamination, overly dry baling, or repeated handling.
+          It can reduce palatability, pose respiratory risks to livestock, and lower visual appeal-
+          making it an important indicator in quality assessments.
+
+      - id: organoleptic_factor_rot
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay exhibits visible or olfactory signs of rot based on seller observation:
+
+            - true: Seller affirms that some or all of the hay is rotten.
+            - false: Seller affirms that the hay shows no signs of rot.
+            - unknown: Seller does not know or has not assessed whether the hay is rotten.
+
+          Rot may result from baling at excessive moisture, water damage, or poor storage.
+          It can degrade nutritional quality and present health risks to livestock, making disclosure
+          critical for transparency and quality assurance.
+
+      - id: foreign_material_weeds
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether the hay contains visible weed material based on seller observation or knowledge:
+
+            - true: Seller affirms that weed material is present.
+            - false: Seller affirms that no weed material is present.
+            - unknown: Seller is unsure or has not assessed for the presence of weeds.
+
+          Weeds may reduce nutritional value, harm palatability, or introduce invasive species.
+          This field is especially relevant for export markets and buyers with strict feed quality standards.
+
+      - id: foreign_material_burs
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether burs-sharp, spiny plant structures-are present in the hay based on seller observation or knowledge:
+
+            - true: Seller affirms that burs are present.
+            - false: Seller affirms that no burs are present.
+            - unknown: Seller is unsure or has not assessed for the presence of burs.
+
+          Burs may reduce hay desirability and pose risks to animals with sensitive mouths or coats, especially horses and show livestock.
+
+      - id: foreign_material_insects
+        data_type: enum
+        valid_values:
+          - true
+          - false
+          - unknown
+        definition: >
+          Indicates whether insects or insect residues are present in the hay based on seller observation or knowledge:
+
+            - true: Seller affirms that insects or insect remnants (e.g., wings, legs, webs) are present.
+            - false: Seller affirms that no insect presence has been observed.
+            - unknown: Seller is unsure or has not assessed for insect presence.
+
+          This information may influence buyer decisions related to cleanliness, palatability, and regulatory compliance, particularly for sensitive species or export markets.
+
+      # --- Storage and Handling ---
+
+      # This section captures the conditions under which the hay has been stored following baling. Storage
+      # environment, surface contact, exposure history, and airflow conditions significantly influence hay
+      # quality, shelf life, and susceptibility to spoilage or mold. These fields help buyers understand how
+      # well the hay has been protected and whether storage practices align with their quality expectations.
+
+      - id: final_storage_structure
+        data_type: enum
+        valid_values: [field | tarp-covered | open shed | enclosed barn | unknown]
+        definition: >
+          Describes the most recent structure used to house or protect the hay before sale or pickup.
+
+          - `field`: Stored outdoors with no covering.
+          - `tarp-covered`: Covered with tarp or plastic sheeting outdoors.
+          - `open shed`: Stored under a roofed but open or partially enclosed structure.
+          - `enclosed barn`: Stored in a fully enclosed building.
+          - `unknown`: Final structure not known or not reported.
+
+      - id: final_surface_type
+        data_type: enum
+        valid_values: [ground | pallets | wood | concrete | other]
+        definition: >
+          Describes the surface on which the bottom layer of bales was stored during the final storage stage.
+
+      - id: final_airflow_condition
+        data_type: enum
+        valid_values: [natural ventilation | forced ventilation | enclosed with limited airflow | unknown]
+        definition: >
+          Describes the airflow conditions in the final storage environment. Adequate airflow reduces spoilage risk.
+
+      - id: restacked_since_baling
+        data_type: enum
+        valid_values: [true | false | unknown]
+        definition: >
+          Indicates whether the hay was restacked or relocated at any point after its original baling.
+          Restacking may lead to leaf loss and nutrient degradation.
+
+      - id: visible_moisture_damage
+        data_type: enum
+        valid_values: [true | false | unknown]
+        definition: >
+          Indicates whether there are visible signs of moisture damage on any portion of the hay,
+          such as mold, discoloration, or odor, during the final stage of storage prior to sale or transfer.
+
+      - id: handling_events
+        data_type: object[]
+        valid_values: >
+          A sequential list of storage and handling events from baling to sale. Each event may include:
+
+          - `location_type` (`string`): e.g., `farm`, `dealer yard`, `export staging`
+          - `storage_structure` (`string`): e.g., `enclosed barn`, `tarp-covered`
+          - `surface_type` (`string`): e.g., `pallets`, `ground`, `concrete`
+          - `airflow_condition` (`string`): e.g., `natural ventilation`, `limited airflow`
+          - `duration_estimate` (`string`): e.g., "10-15 days", "~1 month"
+          - `restacked` (`boolean`): Whether the hay was restacked at this stage
+        definition: >
+          Records a chronological sequence of handling or storage events for the hay from the time of baling
+          through to its final location prior to sale or transfer.
+
+          This field supports enhanced traceability and allows buyers to assess how storage environments and
+          handling practices may have influenced forage quality over time.
+
+        examples:
+          - >
+            handling_events:
+              - location_type: farm
+                storage_structure: enclosed barn
+                surface_type: pallets
+                airflow_condition: natural ventilation
+                duration_estimate: "30 days"
+                restacked: false
+
+              - location_type: broker yard
+                storage_structure: tarp-covered
+                surface_type: ground
+                airflow_condition: enclosed with limited airflow
+                duration_estimate: "10-15 days"
+                restacked: true
+
+  - id: nutrient_analysis
+    title: Nutrient analysis
+    description: >
+      This section captures laboratory test results and related metadata for the hay's nutritional profile.
+      These metrics help buyers evaluate forage quality and suitability for various animal classes. When available,
+      forage analysis results supplement visual observations and support data-driven ration formulation.
+
+      Fields cover whether the hay was tested, how the sample was processed, and selected analytical values.
+
+    fields:
+      # Sample processing
+      - id: hay_tested
+        data_type: enum
+        valid_values: [true, false, unknown]
+        definition: >
+          Indicates whether a forage analysis has been performed on this hay. A value of `true` signifies that the hay
+          has been tested through a lab or analytical facility. A value of `false` indicates that no testing has been
+          done, while `unknown` allows for the possibility that the seller is unsure whether testing has occurred-
+          e.g., in the case of a broker or distributor.
+
+      - id: hay_sample_date
+        data_type: datetime
+        valid_values: YYYYMMDD format
+        definition: >
+          Records the date on which the hay sample was collected for laboratory analysis. Accurate sample dating is
+          important for interpreting results in the context of hay storage time, nutrient degradation, and marketing
+          timelines.
+
+          Sampling should reflect the hay offered for sale and should be conducted using representative methods,
+          such as a coring probe across multiple bales. Some laboratories require the sample date for regulatory or
+          archival purposes.
+
+      - id: hay_sampler_independent
+        data_type: enum
+        valid_values: [true, false, unknown]
+        definition: >
+          Indicates whether the individual or entity that collected the hay sample was independent of the seller.
+          A value of `true` denotes that the sample was taken by a third party, such as a certified lab technician
+          or agricultural extension agent, with no financial interest in the sale of the hay.
+
+          A value of `false` indicates the sample was collected by the seller or someone affiliated with the seller.
+          A value of `unknown` applies when the identity or affiliation of the sampler is not known.
+
+          This distinction may influence the buyer's confidence in the validity and impartiality of the analysis
+          results, particularly in high-value transactions or formal feed programs.
+
+      - id: hay_sampler_certified
+        data_type: enum
+        valid_values: [true, false, unknown]
+        definition: >
+          Indicates whether the person who collected the hay sample holds a recognized certification in forage or
+          feed sampling. A value of `true` means the sampler was certified by a qualified authority-such as a state
+          agriculture department, accredited laboratory, or national hay testing council-at the time the sample was
+          collected.
+
+          A value of `false` denotes that the sampler was not certified, while `unknown` applies when certification
+          status is not known or not disclosed.
+
+          Certified sampling can improve the credibility and repeatability of forage analysis, especially in cases
+          where sampling technique significantly influences test results.
+
+      - id: hay_sampling_protocol
+        data_type: enum
+        valid_values: [NFTA, other]
+        definition: >
+          Identifies the protocol used for collecting the hay sample.
+
+          A value of `NFTA` indicates the sample was collected according to guidelines established by the National
+          Forage Testing Association (NFTA), which include specifications for core sampling depth, number of cores
+          per lot, sampling equipment, and bale selection.
+
+          A value of `other` signifies that a different protocol was used-such as a custom, lab-specific, or
+          industry-standard method outside NFTA guidelines. Users may wish to capture additional descriptive detail
+          in a separate comments field if `other` is selected.
+
+          The sampling protocol can affect the reliability and comparability of analytical results and may be a key
+          consideration in quality assurance or product claims.
+
+      - id: hay_testing_laboratory
+        data_type: enum
+        valid_values: [list of recognized lab names, Internal lab]
+        definition: >
+          Identifies the laboratory responsible for conducting the forage analysis. Accurate and transparent
+          reporting of the testing laboratory helps ensure confidence in test results, supports traceability,
+          and enables standardized reporting across producers and regions.
+
+          For external labs, the enumerated list should include commonly used, certified forage testing labs-
+          many of which participate in the National Forage Testing Association (NFTA) proficiency program or
+          equivalent international standards.
+
+          If analysis was conducted using in-house resources, enter `Internal lab`. It is advisable for sellers
+          selecting this value to provide documentation of their testing procedures and equipment calibration
+          where appropriate.
+
+      - id: hay_testing_method
+        data_type: enum
+        valid_values:
+          - Chemical analysis
+          - Near Infrared Reflectance (NIR) spectroscopy
+          - Both chemical analysis and NIR
+        definition: >
+          Identifies the analytical method used to evaluate the hay sample. This provides context for interpreting
+          the precision and reliability of reported forage values.
+
+          - `Chemical analysis`: Traditional wet chemistry methods. Highly accurate and used to calibrate other methods.
+          - `Near Infrared Reflectance (NIR) spectroscopy`: A rapid, cost-effective method that compares sample spectra
+            to a calibrated database. Accuracy depends on sample type and calibration quality.
+          - `Both chemical analysis and NIR`: Both methods were applied to the same sample for validation or complementary
+            results.
+
+          Understanding the method is essential for comparing results across samples and for evaluating suitability
+          for ration formulation or regulatory compliance.
+
+      - id: hay_testing_date
+        data_type: datetime
+        valid_values: YYYYMMDD format
+        definition: >
+          Records the date on which the laboratory analysis of the hay sample was completed. This helps establish
+          the timeline between harvest, sampling, and testing, which can influence interpretation of results-
+          particularly for parameters sensitive to storage time (e.g., mold development or nutrient degradation).
+
+          Use the `YYYYMMDD` format. If the exact date is unknown, use `YYYYMM00` for unknown day or `YYYY0000` for
+          unknown month and day.
+
+        # Suggestions to Consider (Cross-field Validation and Extensions)
+        # These enhancements are optional but may improve clarity, data consistency, and user experience.
+
+        # Conditional Field Visibility or Validation:
+        # - If `hay_tested = false`, the remaining Sample Processing fields may be hidden or marked not applicable.
+        # - If `hay_sampler_certified = true`, `hay_sampler_independent` should not be `unknown`.
+        # - If `hay_testing_method = Both chemical analysis and NIR`, the selected lab should support both services.
+
+        # Additional Field (Optional):
+        # - hay_testing_lab_other (string): Free-text field for lab name if `hay_testing_laboratory = other`.
+
+        # Date Consistency Check:
+        # - hay_testing_date should not be earlier than hay_sample_date.
+
+        # Optional Implementation Note:
+        # - Systems may show soft alerts (not hard errors) for logically inconsistent field combinations.
+
+      # Base values
+      - id: dry_matter
+        data_type: float
+        valid_values: A positive decimal value representing the dry matter content as a percentage.
+        definition: >
+          Dry matter is the portion of the hay that remains after all water has been removed. It is complementary to
+          moisture content and serves as the baseline for most nutrient analyses, which are typically reported on a
+          dry matter basis.
+
+          Most cured hays fall between 80% and 92% dry matter. Values significantly outside this range may indicate
+          atypical storage conditions or sample contamination.
+
+          Dry matter is typically derived by subtracting moisture content from 100%.
+
+      - id: dry_matter
+        data_type: float
+        valid_values: A positive decimal value representing the dry matter content as a percentage.
+        definition: >
+          Dry matter is the portion of the forage that remains after all moisture has been removed. It includes all
+          nutrients - such as fiber, protein, minerals, and energy - and is the standard basis for comparing feeds and
+          formulating rations.
+
+          This value is the mathematical complement of moisture content; that is, `dry matter = 100 - moisture content`.
+          Most properly stored hay will contain 85% to 92% dry matter. Lower values may indicate elevated moisture and
+          a risk of spoilage or heating during storage.
+
+          All nutrient values are typically reported on a dry matter basis to eliminate dilution effects from water and
+          ensure comparability across feed types.
+
+      # Index values
+
+      - id: relative_feed_value
+        data_type: float
+        valid_values: A positive decimal value representing the Relative Feed Value (RFV) of the hay sample.
+        definition: >
+          Relative Feed Value (RFV) is a standardized index used to estimate the overall quality of hay and other
+          forages based on two key factors: digestibility and potential intake. It is calculated from Acid Detergent
+          Fiber (ADF) and Neutral Detergent Fiber (NDF) values using the following formula:
+
+            RFV = (Dry Matter Intake %) x (Digestible Dry Matter %) / 1.29
+
+          RFV is scaled such that full-bloom alfalfa has an index of 100. Higher values suggest improved animal
+          performance due to better digestibility and intake. For example:
+
+            - >150: Excellent
+            - 125-150: Good
+            - 103-124: Fair
+            - 87-102: Poor
+            - <87: Reject or very low quality
+
+          RFV does not account for fiber digestibility differences among forages and is gradually being replaced by
+          Relative Forage Quality (RFQ) in many applications.
+
+      - id: relative_forage_quality
+        data_type: float
+        valid_values: A positive decimal value representing the Relative Forage Quality (RFQ) of the hay sample.
+        definition: >
+          Relative Forage Quality (RFQ) is an enhanced forage index that estimates overall feed value by incorporating
+          both potential intake and fiber digestibility. It improves upon Relative Feed Value (RFV) by replacing Acid
+          Detergent Fiber (ADF) with Total Digestible Nutrients (TDN) and factoring in Neutral Detergent Fiber
+          Digestibility (NDFD), when available.
+
+          RFQ is calculated using formulas like:
+
+            RFQ = (DMI, % of BW) x (TDN, % of DM) / 1.23
+
+          where:
+            - DMI = Dry Matter Intake, based on NDF
+            - TDN = Total Digestible Nutrients, based on ADF and NDFD
+
+          RFQ better reflects the true feeding value of forage for ruminants than RFV, especially for grasses, mixed
+          forages, and those with high fiber digestibility. Like RFV, RFQ is scaled such that full-bloom alfalfa has a
+          value of 100. For example:
+
+            - >170: Prime
+            - 150-170: Premium
+            - 130-149: Good
+            - 100-129: Fair
+            - <100: Low quality
+
+          RFQ is now the preferred index in many extension and laboratory reports, particularly where NDFD is measured
+          or predicted.
+
+      - id: nrc_2001_energy
+        data_type: section
+        valid_values: n/a
+        definition: >
+          The NRC 2001 energy system provides detailed energy estimates used in ruminant nutrition modeling, particularly
+          for dairy cattle. It is based on the 2001 National Research Council (NRC) guidelines and accounts for the
+          dynamic digestibility of feeds, microbial protein synthesis, and nutrient availability. This model distinguishes
+          among different energy values, each reflecting specific physiological processes and efficiencies.
+
+      - id: digestible_energy_1x_mcal_per_lb
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the digestible energy (DE) of the hay sample in megacalories per pound
+          (Mcal/lb), calculated at maintenance-level intake (1X). Typical values range from 0.85 to 1.25 Mcal/lb.
+        definition: >
+          Digestible Energy (DE) is an intermediate measure of forage energy content, calculated as the gross energy
+          of the feed minus fecal energy losses. It is a precursor to metabolizable and net energy calculations.
+
+          This value is expressed in megacalories per pound of feed on a dry matter basis. The 1X designation refers to
+          maintenance-level intake, which avoids energy-use adjustments for production (e.g., lactation or growth).
+
+          Typical DE values for hay range from 0.85 to 1.25 Mcal/lb, with higher values indicating better digestibility
+          and energy availability. This field is used in ration formulation, particularly for horses, beef cattle, and sheep.
+
+      - id: metabolizable_energy_1x_mcal_per_lb
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the metabolizable energy (ME) of the hay sample in megacalories per
+          pound (Mcal/lb), calculated at maintenance-level intake (1X). Typical values range from 0.75 to 1.10 Mcal/lb.
+        definition: >
+          Metabolizable Energy (ME) is calculated as the Digestible Energy (DE) of the forage minus energy lost as
+          gases (primarily methane) and in urine. It represents the portion of energy available for maintenance and
+          production in the animal.
+
+          The 1X label refers to a baseline intake level (maintenance), meaning this energy value does not include
+          intake adjustments for increased metabolic demand such as lactation or growth.
+
+          Typical forage ME values range from 0.75 to 1.10 Mcal/lb on a dry matter basis. This field is commonly used
+          in ration formulation for ruminants and equines and serves as the foundation for calculating net energy values.
+
+      - id: net_energy_lactation_3x_mcal_per_lb
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the net energy of lactation (NEL) of the hay sample in megacalories per
+          pound (Mcal/lb), adjusted for intake at three times maintenance level (3X). Typical values range from 0.60 to
+          0.80 Mcal/lb.
+        definition: >
+          Net Energy of Lactation (NEL) estimates the energy available from forage for milk production after accounting
+          for all energy losses - including fecal, urinary, gaseous, and heat increment. It is a critical measure in
+          dairy cow rations.
+
+          The 3X designation reflects a standardized dry matter intake level that corresponds to three times the
+          maintenance energy requirement. This intake level reflects typical consumption for lactating cows and
+          improves comparability of NEL values across forages.
+
+          Values typically range from 0.60 to 0.80 Mcal/lb on a dry matter basis. This value is used extensively in
+          balancing dairy rations and estimating milk yield potential.
+
+      - id: net_energy_maintenance_3x_mcal_per_lb
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the net energy available for maintenance (NEM) of the hay sample in
+          megacalories per pound (Mcal/lb), assuming dry matter intake at three times maintenance level (3X).
+          Typical values range from 0.50 to 0.75 Mcal/lb.
+        definition: >
+          Net Energy for Maintenance (NEM) is the portion of forage energy available to support the basic metabolic
+          functions of livestock - such as body temperature regulation, organ function, and standing activity - without
+          contributing to growth or production.
+
+          This value is calculated after subtracting all forms of energy loss, including fecal, urinary, gaseous, and
+          heat increment losses. The 3X designation reflects intake level three times above basal maintenance, which
+          aligns with standardized assumptions used in NRC 2001 energy modeling.
+
+          Typical hay samples range from 0.50 to 0.75 Mcal/lb NEM on a dry matter basis. Higher values indicate
+          better-quality forage for maintaining body weight without needing energy supplementation.
+
+      - id: net_energy_gain_3x_mcal_per_lb
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the net energy for gain (NEG) of the hay sample in megacalories per
+          pound (Mcal/lb), assuming dry matter intake at three times maintenance level (3X). Typical values range from
+          0.25 to 0.60 Mcal/lb.
+        definition: >
+          Net Energy for Gain (NEG) estimates the energy available for body weight gain - such as muscle and fat
+          deposition - after an animal's maintenance requirements are met. It is particularly important for growing and
+          finishing beef cattle and feedlot operations.
+
+          This value is expressed in megacalories per pound (Mcal/lb) of dry matter, with the 3X intake assumption
+          standardizing the calculation across feeding models.
+
+          Higher NEG values are associated with higher-quality forages and support faster average daily gains (ADG).
+          Typical hay samples fall between 0.25 and 0.60 Mcal/lb.
+
+      - id: digestible_energy_1x_mcal_per_kg
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the digestible energy (DE) of the hay sample in megacalories per
+          kilogram (Mcal/kg), calculated at maintenance-level intake (1X). Typical values range from 1.8 to 2.6 Mcal/kg.
+        definition: >
+          Digestible Energy (DE) measures the amount of energy in forage that is available to livestock after
+          subtracting fecal losses from the gross energy content. This value is expressed here in Mcal/kg to support
+          international and metric-based ration formulations.
+
+          The 1X designation indicates that the estimate is based on intake equivalent to one times maintenance energy
+          requirement - a standard NRC basis. Typical DE values for hay range from 1.8 to 2.6 Mcal/kg on a dry matter
+          basis.
+
+          While U.S. feeding systems often use Mcal/lb, metric values are common in international livestock nutrition contexts.
+
+      - id: metabolizable_energy_1x_mcal_per_kg
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the metabolizable energy (ME) of the hay sample in megacalories per
+          kilogram (Mcal/kg), calculated at maintenance-level intake (1X). Typical values range from 1.6 to 2.3 Mcal/kg.
+        definition: >
+          Metabolizable Energy (ME) is the amount of energy available to the animal after subtracting fecal, urinary,
+          and gaseous losses from the Digestible Energy (DE) of the forage. This value is expressed in Mcal/kg to
+          support metric feeding systems.
+
+          The 1X label signifies that the value is based on a dry matter intake equal to maintenance-level energy
+          requirements. This is a standard assumption in NRC 2001 energy models for ruminants.
+
+          Most hays provide between 1.6 and 2.3 Mcal/kg of metabolizable energy on a dry matter basis. This value is
+          essential for ration formulation, especially when comparing forage sources in metric-based nutrition models.
+
+      - id: net_energy_lactation_3x_mcal_per_kg
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the net energy of lactation (NEL) of the hay sample in megacalories per
+          kilogram (Mcal/kg), assuming dry matter intake at three times maintenance level (3X). Typical values range
+          from 1.3 to 1.8 Mcal/kg.
+        definition: >
+          Net Energy for Lactation (NEL) represents the energy available from forage for milk production, after all
+          losses from feces, urine, gas, and heat increment have been subtracted. This field expresses that value in
+          Mcal/kg to support metric-based feed systems.
+
+          The 3X label reflects a standardized dry matter intake level equivalent to three times maintenance, in line
+          with NRC 2001 energy modeling conventions. This assumption supports comparability of values across different
+          forages and feeding scenarios.
+
+          Most hays fall between 1.3 and 1.8 Mcal/kg NEL on a dry matter basis. Higher values indicate improved energy
+          density and are associated with earlier-cut or legume-rich forages suitable for lactating animals.
+
+      - id: net_energy_maintenance_3x_mcal_per_kg
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the net energy for maintenance (NEM) of the hay sample in megacalories
+          per kilogram (Mcal/kg), assuming dry matter intake at three times maintenance level (3X). Typical values
+          range from 1.1 to 1.6 Mcal/kg.
+        definition: >
+          Net Energy for Maintenance (NEM) is the portion of forage energy available to maintain essential animal
+          functions such as thermoregulation, circulation, and tissue maintenance. It is a core energy metric in both
+          beef and dairy nutrition models.
+
+          The 3X designation reflects dry matter intake at three times the maintenance requirement, following the
+          standard intake assumption of the NRC 2001 model. This value is expressed in Mcal/kg to support international
+          and metric-based nutrition systems.
+
+          Forage samples typically range from 1.1 to 1.6 Mcal/kg of NEM. Higher values indicate better energy efficiency
+          for livestock maintenance needs, with legume and early-cut forages tending to score higher.
+
+      - id: net_energy_gain_3x_mcal_per_kg
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the net energy for gain (NEG) of the hay sample in megacalories per
+          kilogram (Mcal/kg), assuming dry matter intake at three times maintenance level (3X). Typical values range
+          from 0.55 to 1.3 Mcal/kg.
+        definition: >
+          Net Energy for Gain (NEG) estimates the amount of energy available in forage for supporting body weight gain -
+          including muscle and fat deposition - after an animal's maintenance needs are met.
+
+          This value is reported in Mcal/kg on a dry matter basis, aligning with metric-based nutrition systems. The 3X
+          intake label conforms to NRC 2001 energy modeling, assuming animals are consuming dry matter at three times
+          their maintenance requirement.
+
+          Most forages range between 0.55 and 1.3 Mcal/kg NEG. Higher values correspond to higher energy-density hays
+          and support greater average daily gains (ADG), especially in growing and finishing cattle.
+
+      - id: tdn_1x
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the Total Digestible Nutrients (TDN) of the hay sample, expressed as a
+          percentage of dry matter, at maintenance-level intake (1X). Typical values range from 50.0% to 70.0%.
+        definition: >
+          Total Digestible Nutrients (TDN) is an estimate of the total amount of digestible fiber, protein, lipid, and
+          carbohydrate in a forage. It serves as a key indicator of the forage's overall energy content.
+
+          The 1X designation indicates that the TDN value is calculated at an intake level equal to one times the animal's
+          maintenance requirement. This is standard for NRC 2001 models and serves as the baseline for comparing forages.
+
+          TDN is expressed as a percentage of dry matter. Most hays range from 50% (low-quality grass) to 70%
+          (high-quality legume). Higher TDN values indicate greater energy availability and generally correlate with
+          earlier harvest maturity and better digestibility.
+
+      - id: protein_and_fractions
+        data_type: section
+        valid_values: n/a
+        definition: >
+          This section contains total crude protein and various protein fractions as defined by forage testing
+          laboratories and ruminant nutrition models. Protein fractions reflect how nitrogen is partitioned in the
+          forage and influence how protein is degraded, absorbed, and utilized in the animal's digestive system.
+
+          The values in this section are particularly important when balancing rations for dairy and beef cattle using
+          the NRC 2001 or CNCPS (Cornell Net Carbohydrate and Protein System) models.
+
+      - id: crude_protein
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the crude protein (CP) content of the hay sample, expressed as a
+          percentage of dry matter. Typical values range from 6.0% to 25.0%.
+        definition: >
+          Crude Protein (CP) is an estimate of the total protein content in forage, calculated by measuring the
+          nitrogen content and multiplying by a factor of 6.25. This includes both true protein and non-protein
+          nitrogen (NPN) compounds.
+
+          Crude protein is expressed on a dry matter basis to eliminate dilution by moisture. Most grass hays contain
+          6%-12% CP, while legume hays (such as alfalfa) may contain 15%-25% CP, depending on maturity and harvest
+          conditions.
+
+          CP is a standard input for animal ration formulation and is used to evaluate whether a forage meets the
+          protein requirements of different livestock classes.
+
+      - id: available_protein
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the available protein content of the hay sample, expressed as a
+          percentage of dry matter. Typical values range from 5.0% to 22.0%.
+        definition: >
+          Available protein is the portion of crude protein (CP) that remains digestible and usable by the animal after
+          accounting for reductions due to heat damage, insolubility, and fiber-bound nitrogen. It reflects the true
+          nutritional value of the protein in the forage.
+
+          This value is often calculated as:
+
+            Available Protein = Crude Protein - Acid Detergent Insoluble Crude Protein (ADF-CP)
+
+          Available protein is particularly important when evaluating hays that have been exposed to moisture during
+          harvest or that may have undergone Maillard reactions (browning) due to overheating in storage.
+
+          Values are expressed on a dry matter basis. Legumes tend to have higher available protein content than
+          grasses, and well-preserved hay will typically retain most of its crude protein as available protein.
+
+      - id: acid_detergent_insoluble_crude_protein
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the acid detergent insoluble crude protein (ADF-CP) content of the hay
+          sample, expressed as a percentage of dry matter. Typical values range from 0.3% to 5.0%.
+        definition: >
+          Acid Detergent Insoluble Crude Protein (ADF-CP) is the fraction of crude protein that is bound to indigestible
+          fiber components in the forage and is considered largely unavailable to ruminants. This includes protein that
+          has been rendered inaccessible due to heat damage during harvest or storage.
+
+          ADF-CP is a key factor in calculating available_protein:
+
+            Available Protein = Crude Protein - ADF-CP
+
+          Higher ADF-CP values typically indicate poorer forage quality. Values above 3.0% suggest significant heat
+          damage or poor harvest conditions, and forages with high ADF-CP may underperform despite high crude protein content.
+
+      - id: adjusted_crude_protein
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the adjusted crude protein (ACP) content of the hay sample, expressed as
+          a percentage of dry matter. Typical values range from 5.0% to 22.0%.
+        definition: >
+          Adjusted Crude Protein (ACP) represents the total protein content of the forage after correcting for
+          indigestible fractions, such as heat-damaged or fiber-bound protein. It provides a more realistic estimate of
+          protein availability for livestock.
+
+          ACP is typically calculated as:
+
+            Adjusted Crude Protein = Crude Protein - ADF-CP (or other unavailable protein fractions)
+
+          This field may overlap conceptually with available_protein, depending on how the lab or model calculates each.
+          In your data model, this field can be retained to preserve compatibility with test results from labs that
+          report both.
+
+          Values are expressed on a dry matter basis. Accurate representation of ACP is critical in formulating
+          protein-sufficient diets, especially when working with weather-damaged hay.
+
+      - id: soluble_protein_%_cp
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the soluble protein fraction of the hay sample, expressed as a
+          percentage of crude protein (% of CP). Typical values range from 15.0% to 40.0%.
+        definition: >
+          Soluble Protein is the portion of crude protein (CP) that dissolves rapidly in rumen fluid and is quickly
+          available for microbial fermentation. It includes non-protein nitrogen (NPN), peptides, amino acids, and some
+          true protein.
+
+          This value is expressed as a percentage of the forage's total crude protein. A typical range for hay is 15%-40%
+          of CP, with higher values indicating faster ruminal degradation and potentially greater risk of nitrogen
+          imbalance if not matched with available energy.
+
+          Soluble protein is a component of degradable protein and is often used in formulating balanced rations for
+          optimal microbial protein synthesis.
+
+      - id: degradable_protein_%_cp
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the degradable crude protein content of the hay sample, expressed as a
+          percentage of crude protein (% of CP). Typical values range from 30.0% to 80.0%.
+        definition: >
+          Degradable Protein (also known as Ruminally Degradable Protein or RDP) refers to the fraction of crude protein
+          that is broken down by rumen microbes into ammonia, peptides, and amino acids. This component supports
+          microbial protein synthesis and overall fermentation efficiency.
+
+          This value is expressed as a percentage of the forage's total crude protein. It includes soluble protein as a
+          subset, along with slowly degradable true protein fractions.
+
+          Values typically range from 30%-80% of CP. Forages with excessive degradability may require supplementation
+          with rumen undegradable protein (RUP) to balance nitrogen supply with energy availability.
+
+      - id: neutral_detergent_insoluble_crude_protein
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the neutral detergent insoluble crude protein (NDICP) content of the hay
+          sample, expressed as a percentage of dry matter. Typical values range from 1.0% to 6.0%.
+        definition: >
+          Neutral Detergent Insoluble Crude Protein (NDICP) refers to the fraction of forage protein that is insoluble
+          in the neutral detergent solution used to measure fiber (NDF). It is associated with the cell wall and may be
+          partially or fully indigestible depending on forage quality and animal passage rate.
+
+          NDICP is typically larger than ADF-CP, as it includes both indigestible and potentially digestible fiber-bound
+          protein. It plays a role in estimating the rumen undegradable protein (RUP) and metabolizable protein supply.
+
+          Values are expressed on a dry matter basis. High NDICP may indicate fiber maturity, weather damage, or
+          overmature forage.
+
+      - id: amino_acids
+        data_type: section
+        valid_values: n/a
+        definition: >
+          This section includes individual amino acid concentrations in forage, typically expressed as a percentage of
+          dry matter or as a percentage of crude protein. Amino acids are the building blocks of protein and play
+          essential roles in growth, reproduction, and immune function in livestock.
+
+          While total protein content is often used in ration formulation, specific amino acid values-especially for
+          lysine and methionine-are critical for precision feeding in dairy, swine, and poultry systems. These metrics
+          are increasingly reported by advanced forage labs and integrated into metabolizable protein models.
+
+      - id: lysine
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the lysine content of the forage sample, expressed as a percentage of
+          dry matter. Values typically range between 0.1 and 3.0.
+        definition: >
+          Lysine is an essential amino acid required for growth, milk production, and muscle development. This field
+          reports the lysine content of the hay sample on a dry matter basis. Results are typically derived from
+          laboratory analysis and may vary based on forage type and maturity.
+
+          Values may be estimated via Near Infrared Reflectance (NIR) or measured via wet chemistry. For most hay
+          samples, lysine content will fall within a typical range of 0.3% to 1.5% of dry matter.
+
+      - id: methionine
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the methionine content of the forage sample, expressed as a percentage
+          of dry matter. Values typically range between 0.1 and 0.5.
+        definition: >
+          Methionine is an essential amino acid involved in protein synthesis and methylation processes. It is
+          particularly important for dairy animals and poultry. This field reports the methionine content of the hay
+          sample on a dry matter basis, as determined by laboratory analysis.
+
+          Values are commonly derived from Near Infrared Reflectance (NIR) estimates or direct wet chemistry testing.
+          Typical methionine levels in legume or grass hay range from 0.1% to 0.4% of dry matter.
+
+      - id: carbohydrates
+        data_type: section
+        valid_values: n/a
+        definition: >
+          This section includes carbohydrate-related metrics that describe the fermentable energy potential of forage,
+          including structural and non-structural fractions. Carbohydrates are the primary source of energy in ruminant
+          diets and influence feed intake, fiber digestibility, and microbial protein synthesis.
+
+          Structural carbohydrates (e.g., NDF and ADF) affect rumen fill and chewing activity, while non-structural
+          carbohydrates (e.g., sugars and starch) are rapidly fermentable and drive energy supply. These values are
+          essential for evaluating forage quality and balancing rations under the NRC 2001 or CNCPS models.
+
+      - id: acid_detergent_fiber
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the acid detergent fiber (ADF) content of the hay sample, expressed as a
+          percentage of dry matter. Values typically range from 20.0 to 45.0.
+        definition: >
+          Acid Detergent Fiber (ADF) represents the fraction of forage composed of cellulose and lignin - the least
+          digestible plant components. It is an important indicator of forage quality and directly correlates with
+          digestibility. As ADF increases, digestibility decreases.
+
+          This value is expressed as a percentage of dry matter and is typically determined by laboratory analysis
+          using either wet chemistry or NIR methods.
+
+      - id: neutral_detergent_fiber
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the neutral detergent fiber (NDF) content of the hay sample, expressed
+          as a percentage of dry matter. Values typically range from 30.0 to 70.0.
+        definition: >
+          Neutral Detergent Fiber (NDF) quantifies the total cell wall content of forage - including hemicellulose,
+          cellulose, and lignin. It is a key determinant of forage bulk and limits dry matter intake, especially in
+          ruminants.
+
+          This field expresses NDF as a percentage of dry matter, and it is typically determined through laboratory
+          analysis via NIR spectroscopy or wet chemistry. Lower NDF is generally associated with higher quality and
+          palatability.
+
+      - id: lignin
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the lignin content of the hay sample, expressed as a percentage of dry
+          matter. Values typically range from 2.0 to 12.0.
+        definition: >
+          Lignin is a complex, indigestible polymer found in plant cell walls. Its concentration significantly
+          influences forage digestibility. As lignin content increases, the digestibility of both cellulose and
+          hemicellulose declines.
+
+          This field expresses lignin as a percentage of dry matter. It is typically measured through laboratory
+          analysis, with values varying depending on forage maturity, plant species, and environmental conditions.
+
+      - id: non_fiber_carbohydrates
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the non-fiber carbohydrate (NFC) content of the hay sample, expressed as
+          a percentage of dry matter. Values typically range from 20.0 to 45.0.
+        definition: >
+          Non-Fiber Carbohydrates (NFC) represent the portion of forage that consists of sugars, starches, pectins, and
+          organic acids. These components are highly digestible and contribute significantly to the energy value of the
+          forage, particularly in ruminant diets.
+
+          NFC is typically calculated using the formula:
+            NFC = 100 - (NDF + CP + Fat + Ash)
+
+          This value is expressed as a percentage of dry matter. Forages with high NFC values provide more rapidly
+          fermentable carbohydrates, which can be beneficial or risky depending on the animal class and overall diet formulation.
+
+      - id: starch
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the starch content of the hay sample, expressed as a percentage of dry
+          matter. Values typically range from 0.0 to 40.0, depending on forage type.
+        definition: >
+          Starch is a non-structural carbohydrate that contributes substantially to the energy density of a forage. It
+          is highly fermentable in the rumen and often derived from grain content or immature plant material in mixed
+          forages.
+
+          This value is expressed as a percentage of dry matter and is determined through laboratory analysis, typically
+          via wet chemistry or NIR. While starch content is usually low in grass and legume hays, it may be higher in
+          small grain or mixed forages harvested at the boot or dough stage.
+
+      - id: water_soluble_carbohydrates
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the water-soluble carbohydrate (WSC) content of the hay sample,
+          expressed as a percentage of dry matter. Values typically range from 2.0 to 20.0.
+        definition: >
+          Water Soluble Carbohydrates (WSC) include sugars and other carbohydrates that dissolve in water and are
+          rapidly fermentable. These carbohydrates affect both the palatability of the forage and its fermentation
+          characteristics when ensiled.
+
+          WSC is expressed as a percentage of dry matter. It is an important metric for animals sensitive to
+          carbohydrate load - such as horses at risk of laminitis. It also plays a role in forage selection for
+          high-energy diets or fermentation profiles.
+
+          Values are typically determined via laboratory analysis using wet chemistry methods.
+
+      - id: fat
+        data_type: section
+        valid_values: n/a
+        definition: >
+          This section describes the ether-extractable fat content of forage, which includes fatty acids, oils, waxes,
+          and other lipid-soluble compounds. While fat is a minor component of most hays, it contributes to the overall
+          energy value of the forage and can affect digestibility, palatability, and feed stability.
+
+          Fat content is typically expressed as a percentage of dry matter and is measured using ether extraction
+          methods. This value is used in ration balancing, particularly for high-producing animals and when evaluating
+          forage blends or byproducts with higher lipid content.
+
+      - id: crude_fat
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the crude fat content of the hay sample, expressed as a percentage of
+          dry matter. Values typically range from 1.0 to 5.0, though higher values may occur in certain treated or
+          ensiled forages.
+        definition: >
+          Crude fat represents the ether-extractable portion of the forage sample, including lipids, fatty acids,
+          waxes, and other ether-soluble compounds. While forage is not typically high in fat, this metric contributes
+          to overall energy calculations.
+
+          Crude fat is expressed as a percentage of dry matter and is typically determined through laboratory
+          extraction methods. Higher crude fat values may indicate the presence of oilseed additives or ensiled
+          materials with higher lipid content.
+
+      - id: total_fatty_acids
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the total fatty acid content of the hay sample, expressed as a
+          percentage of dry matter. Values typically range from 0.8 to 3.5.
+        definition: >
+          Total Fatty Acids (TFA) represent the portion of ether-extractable material in forage that consists
+          specifically of true fatty acids. This field excludes waxes, pigments, and other non-nutritive ether solubles
+          included in crude fat.
+
+          TFA is a more precise indicator of a forage's energy potential and is commonly used in dairy ration models to
+          estimate Net Energy of Lactation (NEL), Maintenance (NEM), and Gain (NEG).
+
+          This value is expressed as a percentage of dry matter and is typically estimated using chemical extraction
+          techniques or derived from crude fat values using a standard coefficient (e.g., 0.8 x crude fat).
+
+      - id: rumen_unsaturated_fatty_acid_load
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the rumen unsaturated fatty acid load (RUFAL) of the hay sample,
+          expressed in grams per kilogram of forage dry matter. Values for hay typically range from 2.0 to 10.0, though
+          higher values may be seen in oil-rich or ensiled forages.
+        definition: >
+          Rumen Unsaturated Fatty Acid Load (RUFAL) is a calculated value representing the concentration of unsaturated
+          fatty acids that can impact rumen fermentation. High RUFAL levels are associated with an increased risk of
+          milk fat depression (MFD) in dairy cattle due to altered rumen biohydrogenation pathways.
+
+          This value is expressed in grams per kilogram of dry matter and is typically calculated from detailed fatty
+          acid profiles. While forages generally have lower RUFAL values compared to byproduct feeds or oilseeds, some
+          high-fat or ensiled hays may exceed typical levels.
+
+          Monitoring RUFAL is essential in balanced ration formulation for lactating cows, especially when multiple feed
+          components contribute to total dietary fat.
+
+      - id: energy_and_digestibility
+        data_type: section
+        valid_values: n/a
+        definition: >
+          This section contains metrics that estimate the digestibility of forage and its contribution to usable energy
+          in the animal. These values are critical for predicting animal performance, ration balancing, and evaluating
+          forage quality over time.
+
+          Digestibility metrics may be based on laboratory analysis (in vitro or in situ), chemical composition, or
+          predictive models such as NRC 2001 or CNCPS. Key values include in vitro digestibility, total digestible
+          nutrients (TDN), and rates or extents of fiber digestion.
+
+      # Digestibility Metrics
+      - id: in_vitro_true_digestibility_30hr_percent_dm
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the in vitro true digestibility of the hay sample after 30 hours of
+          fermentation, expressed as a percentage of dry matter. Values typically range from 50.0 to 90.0.
+        definition: >
+          This field represents In Vitro True Digestibility (IVTD) at 30 hours, expressed as a percentage of dry
+          matter. It reflects the proportion of the forage that is truly digestible by ruminants, based on simulated
+          fermentation in a laboratory setting.
+
+          Higher values indicate better forage quality and higher energy availability. IVTD is typically determined
+          using rumen fluid or enzymatic simulations and is often used as a benchmark for comparing the feeding value
+          of different hay types.
+
+          This metric is particularly important for dairy and beef producers seeking to optimize forage efficiency and
+          milk/meat production per unit of feed intake.
+
+      - id: neutral_detergent_fiber_digestibility_30hr_percent_ndf
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the 30-hour in vitro digestibility of the neutral detergent fiber (NDF)
+          portion of the hay sample, expressed as a percentage of NDF. Values typically range from 30.0 to 70.0.
+        definition: >
+          This field measures Neutral Detergent Fiber Digestibility (NDFD) after 30 hours of fermentation, expressed as
+          a percentage of the total NDF content in the forage sample. It indicates how much of the fiber fraction can
+          be digested by ruminants within a biologically relevant timeframe.
+
+          Higher values correspond to more digestible fiber and are associated with improved feed efficiency and animal
+          performance. This value is especially important in dairy nutrition models such as those used by the NRC and
+          CNCPS.
+
+          NDFD30 is typically measured through laboratory simulation using rumen fluid or enzymatic methods.
+
+      - id: kd_percent_per_hr
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the rate of digestion (kd) of the forage sample, expressed in percent
+          per hour. Values typically range from 2.0 to 8.0.
+        definition: >
+          The kd value represents the fractional rate at which forage dry matter or fiber is digested in the rumen. It
+          is expressed as a percentage of the component digested per hour (%/hr). This parameter is used in dynamic
+          ruminant models to estimate forage retention time and nutrient availability.
+
+          Higher kd values reflect faster digestion, typically associated with younger, more digestible forages. Lower
+          values may indicate mature, weathered, or highly lignified material. Most kd values for NDF digestion fall
+          between 2.0 and 8.0 %/hr.
+
+          Measured values are usually determined in vitro via rumen fluid incubation, or estimated via NIR calibration curves.
+
+      - id: total_digestible_nutrients
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the total digestible nutrients (TDN) of the hay sample, expressed as a
+          percentage of dry matter. Values typically range from 45.0 to 75.0.
+        definition: >
+          Total Digestible Nutrients (TDN) is an aggregate energy metric that estimates the total amount of digestible
+          material in a forage sample, expressed as a percentage of dry matter. TDN includes digestible fiber, crude
+          protein, non-fiber carbohydrates, and fat (multiplied by 2.25).
+
+          TDN is a standard value in forage analysis reports and is used extensively in ruminant nutrition modeling.
+          Higher TDN values indicate higher energy content and generally higher forage quality. Values vary based on
+          forage species, maturity, harvest conditions, and preservation method.
+
+          TDN may be estimated from lab-measured nutrient fractions or predicted via Near Infrared Reflectance
+          Spectroscopy (NIR).
+
+      # Species-Specific Energy Metrics
+      - id: horse_digestible_energy_mcal_per_lb
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the digestible energy (DE) of the hay sample for horses, expressed in
+          megacalories per pound of dry matter. Values typically range from 0.80 to 1.20.
+        definition: >
+          This field represents the Digestible Energy (DE) content of the hay sample for horses, expressed in
+          megacalories per pound of dry matter. DE is the standard energy unit used in equine ration formulation and
+          represents the amount of energy available to the horse after losses in feces are accounted for.
+
+          Typical values vary by forage type and maturity. Grass hays generally range from 0.80 to 1.00 Mcal/lb, while
+          high-quality alfalfa can reach 1.15 Mcal/lb or more. This field may be calculated from lab-measured nutrient
+          fractions (e.g., TDN or NDF) or derived from empirical models for horse digestion.
+
+          This value is useful for formulating diets based on energy requirements by class (maintenance, growth,
+          lactation, work).
+
+      - id: minerals
+        data_type: section
+        valid_values: n/a
+        definition: >
+          This section includes macro- and micromineral concentrations in forage, typically expressed as a percentage
+          or parts per million (ppm) of dry matter. Mineral content affects animal growth, reproduction, milk
+          production, immune function, and feed efficiency.
+
+          Accurate mineral profiling is essential for identifying imbalances, preventing deficiencies or toxicities,
+          and formulating balanced rations. Values may be measured directly via wet chemistry or estimated using
+          Near Infrared Reflectance Spectroscopy (NIR) where calibrated.
+
+      # Minerals
+      - id: ash
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the ash content of the hay sample, expressed as a percentage of dry
+          matter. Values typically range from 6.0 to 12.0, with higher values indicating potential soil contamination.
+        definition: >
+          Ash is the total mineral residue remaining after complete combustion of a forage sample. It includes both
+          essential macro- and microminerals, as well as any inorganic material introduced during harvest, such as dirt
+          or sand.
+
+          This field is expressed as a percentage of dry matter. Ash levels above 12-14% are often considered abnormally
+          high and may suggest soil contamination due to improper raking or baling from muddy fields.
+
+          Ash values are important for both mineral balancing and energy calculations, as high ash reduces the organic
+          matter portion of forage and thus its true energy density.
+
+      - id: calcium
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the calcium content of the hay sample, expressed as a percentage of dry
+          matter. Typical values range from 0.25 to 0.60 for grass hay and from 1.20 to 2.00 for legume hay.
+        definition: >
+          Calcium (Ca) is an essential macromineral required for bone development, muscle contraction, nerve function,
+          and milk production. Forage calcium content varies widely based on plant species, growth stage, and
+          fertilization practices.
+
+          Grass hays - such as bermudagrass, timothy, or orchardgrass - typically contain between 0.25% and 0.60%
+          calcium on a dry matter basis.
+
+          Legume hays - such as alfalfa or clover - generally contain much higher levels, ranging from 1.20% to 2.00%
+          calcium on a dry matter basis.
+
+          This value is typically determined through wet chemistry or NIR estimation. Accurate calcium values are
+          essential in formulating balanced rations for dairy cattle, horses, goats, and other livestock, especially for
+          preventing conditions such as hypocalcemia or milk fever.
+
+      - id: phosphorus
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the phosphorus content of the hay sample, expressed as a percentage of
+          dry matter. Typical values range from 0.15 to 0.35 for grass hay and from 0.25 to 0.45 for legume hay.
+        definition: >
+          Phosphorus (P) is a macromineral that plays vital roles in skeletal health, energy metabolism, and
+          reproductive function. It also supports microbial growth in the rumen, which is essential for digestion of
+          fibrous feeds.
+
+          Grass hays generally contain between 0.15% and 0.35% phosphorus, depending on maturity, soil fertility, and
+          harvest timing. Legume hays typically provide higher levels, ranging from 0.25% to 0.45%.
+
+          Forage phosphorus deficiencies are common in certain regions and must be corrected through mineral
+          supplementation. The calcium-to-phosphorus ratio is also an important consideration in ration formulation,
+          especially for growing livestock and equine diets.
+
+      - id: magnesium
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the magnesium content of the hay sample, expressed as a percentage of
+          dry matter. Typical values range from 0.10 to 0.25 for grass hay and from 0.20 to 0.40 for legume hay.
+        definition: >
+          Magnesium (Mg) is an essential macromineral involved in neuromuscular function, energy metabolism, and bone
+          formation. In ruminants, magnesium deficiencies can lead to grass tetany (hypomagnesemia), particularly in
+          fast-growing spring grasses with high potassium levels.
+
+          Grass hays typically contain between 0.10% and 0.25% magnesium, while legume hays - such as alfalfa - generally
+          contain 0.20% to 0.40%.
+
+          This value is expressed as a percentage of dry matter and is usually measured by laboratory wet chemistry or
+          estimated by NIR. Monitoring magnesium is important in mineral balancing, especially when potassium or
+          nitrogen fertilization is high.
+
+      - id: potassium
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the potassium content of the hay sample, expressed as a percentage of
+          dry matter. Typical values range from 1.00 to 3.00 for grass hay and from 2.00 to 3.50 for legume hay.
+        definition: >
+          Potassium (K) is an essential macromineral involved in fluid balance, muscle and nerve function, and plant
+          health. While vital, excessive potassium in forage can impair absorption of magnesium and calcium in
+          ruminants, contributing to conditions such as grass tetany and milk fever.
+
+          Grass hays generally contain between 1.00% and 3.00% potassium. Legume hays - especially when heavily
+          fertilized - often range from 2.00% to 3.50%.
+
+          Potassium levels above 3.00% may require dietary adjustment or supplementation of other minerals to ensure
+          metabolic balance, particularly in periparturient dairy cows or spring-calving beef herds.
+
+      - id: sulfur
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the sulfur content of the hay sample, expressed as a percentage of dry
+          matter. Typical values range from 0.10 to 0.25 for grass hay and from 0.20 to 0.35 for legume hay. Values
+          above 0.40% may pose a risk of toxicity.
+        definition: >
+          Sulfur (S) is an essential mineral used in the synthesis of sulfur-containing amino acids and the production
+          of B-vitamins by rumen microbes. It supports structural tissue development, including wool, hair, and hooves.
+
+          Grass hays generally contain 0.10% to 0.25% sulfur, while legume hays may range from 0.20% to 0.35%. Excess
+          sulfur - particularly when combined with high-sulfur water or distillers grains - can cause neurologic
+          disorders such as polioencephalomalacia (PEM) in cattle and sheep.
+
+          This value is expressed as a percentage of dry matter and is important when formulating rations for confined
+          livestock, especially in high-performance beef and dairy systems.
+
+      - id: chloride_ion
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the chloride ion (Cl-) content of the hay sample, expressed as a
+          percentage of dry matter. Typical values range from 0.20 to 0.50. Values above 0.60% may indicate
+          contamination or unusual environmental exposure.
+        definition: >
+          Chloride (Cl-) is a negatively charged electrolyte that contributes to acid-base balance, osmoregulation, and
+          hydrochloric acid production in the digestive tract. In forage analysis, chloride is typically expressed as a
+          percentage of dry matter.
+
+          Chloride is particularly important in dairy nutrition for calculating the Dietary Cation-Anion Difference
+          (DCAD), which influences calcium metabolism and the risk of milk fever. Forages with high chloride
+          concentrations are often used in close-up rations to promote a mild metabolic acidosis.
+
+          Most hays contain between 0.20% and 0.50% chloride. Concentrations above 0.60% are uncommon and may result
+          from exposure to salt-rich water, coastal spray, or chloride-containing fertilizers.
+
+      - id: iron_ppm
+        data_type: int
+        valid_values: >
+          A positive integer representing the iron content of the hay sample in parts per million (PPM). Typical values
+          range from 100 to 500 PPM; values above 1,000 PPM may interfere with absorption of other trace minerals.
+        definition: >
+          Iron (Fe) is a trace mineral required for oxygen transport, enzyme systems, and immune function. It is
+          generally abundant in forages and deficiency is rare. However, high iron levels - especially when combined
+          with iron-rich water or supplements - can lead to reduced absorption of copper, zinc, and manganese.
+
+          Forage iron is measured in parts per million (PPM) on a dry matter basis. Most hays contain between 100 and
+          500 PPM iron. Levels above 1,000 PPM may result from soil contamination or iron-rich irrigation water and may
+          require attention to overall mineral balance.
+
+      - id: zinc_ppm
+        data_type: int
+        valid_values: >
+          A positive integer representing the zinc content of the hay sample in parts per million (PPM). Typical values
+          range from 20 to 50 PPM; values below 30 PPM may indicate marginal zinc availability.
+        definition: >
+          Zinc (Zn) is an essential trace mineral involved in enzyme function, immune response, wound healing, and
+          reproductive performance. Forage zinc levels are commonly marginal or deficient, especially in high-calcium or
+          high-iron environments where mineral interactions reduce bioavailability.
+
+          Zinc is reported in parts per million (PPM) on a dry matter basis. Most forages fall between 20 and 50 PPM.
+          Levels below 30 PPM may be inadequate for optimal livestock performance and often require supplementation.
+
+          Monitoring zinc is especially important in young growing animals, breeding stock, and high-producing dairy cows.
+
+      - id: copper_ppm
+        data_type: int
+        valid_values: >
+          A positive integer representing the copper content of the hay sample in parts per million (PPM). Typical
+          values range from 5 to 15 PPM; values below 8 PPM may be marginal, while values above 20 PPM may pose toxicity
+          risk, particularly in sheep.
+        definition: >
+          Copper (Cu) is an essential trace mineral involved in enzyme activity, immune function, connective tissue
+          formation, and pigment synthesis. Copper deficiency is one of the most common trace mineral issues in
+          forage-fed livestock, particularly in areas with high soil iron, sulfur, or molybdenum.
+
+          Forage copper is reported in parts per million (PPM) on a dry matter basis. Most hays contain between 5 and
+          15 PPM. Levels below 8 PPM are often considered marginal and may require supplementation. However, levels
+          above 20 PPM can be toxic to sheep and should be evaluated carefully for species-specific feeding.
+
+          Mineral interactions should be considered when interpreting forage copper values. Supplemental copper should
+          be based on total dietary antagonistic load, not forage concentration alone.
+
+      - id: manganese_ppm
+        data_type: int
+        valid_values: >
+          A positive integer representing the manganese content of the hay sample in parts per million (PPM). Typical
+          values range from 40 to 300 PPM. Values below 40 PPM may be inadequate; values above 400 PPM are uncommon but
+          generally not toxic.
+        definition: >
+          Manganese (Mn) is a trace mineral critical for skeletal development, reproductive health, and antioxidant
+          enzyme function. Although many forages contain high levels of manganese, its bioavailability is low, and
+          absorption is further reduced by high iron or calcium levels in the diet.
+
+          Forage manganese is measured in parts per million (PPM) on a dry matter basis. Most hays contain between 40
+          and 300 PPM. Levels below 40 PPM may warrant supplementation in growing or breeding animals, particularly when
+          forage iron is elevated.
+
+          There is low risk of toxicity, even at elevated forage manganese levels, though excessive Mn can contribute to
+          mineral imbalances. Forage analysis should be considered alongside total dietary load and antagonist levels.
+
+      - id: molybdenum_ppm
+        data_type: float
+        valid_values: >
+          A positive decimal value representing the molybdenum content of the hay sample in parts per million (PPM).
+          Typical values are less than 2.0 PPM; values above 3.0 PPM may antagonize copper absorption in ruminants.
+        definition: >
+          Molybdenum (Mo) is a trace mineral required in very small amounts for enzyme activity in livestock. However,
+          excess molybdenum can form thiomolybdate compounds in the rumen, which bind to copper and inhibit its
+          absorption, leading to secondary copper deficiency.
+
+          Forage molybdenum is reported in parts per million (PPM) on a dry matter basis. Most forages contain less than
+          2.0 PPM. Concentrations above 3.0 PPM - especially when sulfur is also elevated - may contribute to copper
+          antagonism. Values above 5.0 PPM are generally considered high risk for ruminants, particularly cattle and sheep.
+
+          This field is important for diagnosing trace mineral imbalances and planning appropriate supplementation
+          strategies. When molybdenum levels are elevated, especially in combination with high sulfur, it may be
+          necessary to increase dietary copper or use chelated mineral forms to ensure adequate absorption.
+
+  - id: metadata
+    title: Metadata and Supplemental Information
+    description: >
+      This final section consolidates supporting material related to authorship, licensing,
+      documentation history, contact information, and reference sources. It is intended
+      for readers who seek attribution details, wish to contribute to the standard, or
+      need context regarding its provenance and maintenance.
+
+    subsections:
+      - id: acknowledgements
+        title: Acknowledgements
+        description: >
+          This specification draws upon the insight, work, and feedback of many individuals and organizations
+          across the forage, livestock, and agricultural research communities. While the final structure and
+          content reflect the judgment of the authors, the following contributors and sources provided invaluable
+          perspective, data, and expertise throughout its development.
+        items:
+          - |
+            County extension agents across Texas, Kentucky, New Mexico, and California who provided field-level insight
+            into hay production practices and buyer needs.
+          - |
+            University faculty and forage specialists whose published research and personal correspondence
+            shaped key definitions and data models.
+          - |
+            Hay testing laboratories and forage analysis professionals whose sample reports and reference values
+            guided the formation of nutrient analysis and traceability fields.
+          - |
+            Ranchers, hay producers, merchants, and buyers who reviewed early drafts and offered practical feedback
+            based on real-world use cases and market conditions.
+          - |
+            Members of the National Forage Testing Association (NFTA) and American Forage and Grassland Council (AFGC)
+            for their standards, publications, and advocacy for consistent forage quality reporting.
+
+      - id: licensing_notice
+        title: Licensing Notice
+        description: >
+          This specification is provided for public use and may be implemented freely by producers, buyers,
+          software developers, and standards organizations under the terms of the Creative Commons Attribution 4.0
+          International License (CC BY 4.0).
+
+          Under this license, you are free to:
+
+          - Share - copy and redistribute the material in any medium or format
+          - Adapt - remix, transform, and build upon the material for any purpose, even commercially
+
+          Under the following terms:
+
+          - Attribution - You must give appropriate credit, provide a link to the license, and indicate if changes
+            were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses
+            you or your use.
+
+          To contribute improvements or extensions to this specification, or to report implementation experiences,
+          please contact the maintainers via email at standards@lode.global.
+
+      - id: contact
+        title: Contact
+        description: >
+          This specification is published by Lode, a provider of information, logistics, and trading support
+          for agricultural commodities.
+
+          For questions, feedback, or to request implementation guidance, please contact:
+
+          Lode Standards Team
+          Email:  standards@lode.global
+          Web:  https://lode.global
+
+          We welcome inquiries from producers, merchants, buyers, researchers, industry groups, and software
+          providers seeking to adopt or integrate this standard.
+
+      - id: version_history
+        title: Version History
+        description: >
+          This section documents major changes to the specification across published versions.
+        items:
+          - |
+            v0.90.0 (2025-05-03) - Initial *draft* of the hay specification prepared by the Lode Standards Team. Not yet publicly released.
+
+      - id: document_metadata
+        title: Document Metadata
+        description: >
+          Internal metadata for managing this specification across platforms.
+        items:
+          - |
+            Title: Hay Description Specification
+            Version: 0.90.0
+            Status: Draft
+            Maintainer: standards@lode.global
+            License: CC BY 4.0
+            Source: https://github.com/lode-global/hay-spec (unpublished)

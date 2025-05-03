@@ -1,0 +1,49 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# VS Code settings
+.vscode/
+
+# JetBrains IDEs (e.g., PyCharm)
+.idea/
+
+# macOS files
+.DS_Store
+
+# Backup files
+*~
+*.bak
+*.tmp
+*.swp
+.#*
+
+# Markdown chunks and temporary docs
+docs/index-pt1.md
+docs/index-pt2.md
+
+# MkDocs build output (if used)
+site/
+
+# Logs and coverage
+*.log
+.coverage
+htmlcov/
+.cache/
+
+# Python egg metadata
+*.egg-info/
+.eggs/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
