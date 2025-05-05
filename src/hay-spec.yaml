@@ -3296,7 +3296,7 @@ sections:
           This section documents major changes to the specification across published versions.
         items:
           - |
-            v0.90.0 (2025-05-03) - Initial *draft* of the hay specification prepared by the Lode Standards Team. Not yet publicly released.
+            v0.90.0 (2025-05-05) - Initial *draft* of the hay specification prepared by the Lode Standards Team.
 
       - id: document_metadata
         title: Document Metadata
