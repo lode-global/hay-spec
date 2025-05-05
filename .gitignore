@@ -47,3 +47,5 @@ htmlcov/
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
+# Release archives
+*.zip
