@@ -1,3 +1,4 @@
+---
 site_name: Hay Description Specification
 theme:
   name: material
@@ -15,4 +16,3 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed
   - pymdownx.emoji
-
