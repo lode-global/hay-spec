@@ -6,6 +6,7 @@ A structured, machine-readable standard for describing hay and forage products, 
 
 [![Release](https://img.shields.io/github/v/release/lode-global/hay-spec?include_prereleases)](https://github.com/lode-global/hay-spec/releases)
 [![License](https://img.shields.io/badge/license-CC--BY%204.0-blue)](https://creativecommons.org/licenses/by/4.0/)
+[![YAML Lint](https://github.com/lode-global/hay-spec/actions/workflows/validate-yaml.yml/badge.svg)](https://github.com/lode-global/hay-spec/actions/workflows/validate-yaml.yml)
 
 ---
 
