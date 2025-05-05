@@ -2,8 +2,8 @@
 
 Thank you for your interest in contributing to the Hay Description Specification.
 
-This project defines a structured, machine-readable format for describing hay and forage products 
-using YAML. It supports downstream transformations into JSON, Markdown, and other formats and is 
+This project defines a structured, machine-readable format for describing hay and forage products
+using YAML. It supports downstream transformations into JSON, Markdown, and other formats and is
 intended to serve as an open standard for improved market transparency and analytics.
 
 ## Ways to Contribute
@@ -43,12 +43,10 @@ All proposed changes will be reviewed by the maintainers and discussed publicly.
 
 ## Getting Help
 
-If you're unsure how to contribute or want feedback on an idea before submitting a pull request, 
-feel free to [open an issue](https://github.com/lode-global/hay-spec/issues) or contact the 
+If you're unsure how to contribute or want feedback on an idea before submitting a pull request,
+feel free to [open an issue](https://github.com/lode-global/hay-spec/issues) or contact the
 maintainers.
 
 ---
 
-This project follows the [Contributor Covenant](https://www.contributor-covenant.org/) Code of 
-Conduct.
-
+This project follows the [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md).
