@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Ask a question or get help
+    url: https://github.com/lode-global/hay-spec/discussions
+    about: >
+      Please use GitHub Discussions to ask questions, get informal feedback,
+      or learn more about the hay-spec project.
