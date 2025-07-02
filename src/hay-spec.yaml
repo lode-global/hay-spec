@@ -1,3 +1,4 @@
+# yamllint disable rule:document-start
 - id: introduction
   title: Introduction and Front Matter
   data_type: section
