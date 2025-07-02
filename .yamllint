@@ -4,4 +4,9 @@ extends: default
 rules:
   line-length: disable
   truthy: disable
-  document-start: enable
+
+ignore: |
+  venv/
+  .venv/
+  .github/ISSUE_TEMPLATE/config.yml
+  src/hay-spec-export-to-airtable.yaml
