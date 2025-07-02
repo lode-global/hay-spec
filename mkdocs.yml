@@ -6,6 +6,25 @@ theme:
     - navigation.tabs
     - navigation.top
     - toc.integrate
+
+nav:
+  - Overview: index.md
+  - Field Reference:
+      # -- AUTO-GENERATED SECTION PAGES (do not edit below) --
+        - Introduction and Front Matter: fields/introduction.md
+        - Field Location and Growing Environment: fields/location.md
+        - Soil and Field Management: fields/soil.md
+        - Stand Composition and Agronomic Characteristics: fields/stand.md
+        - In-Season Crop Management: fields/crop_management.md
+        - Harvest-Level Data: fields/harvest.md
+        - Hay Packaging: fields/packaging.md
+        - Traceability: fields/traceability.md
+        - Physical Characteristics and Condition: fields/physical_characteristics.md
+        - Nutrient Analysis: fields/nutrient_analysis.md
+        - Intended Use and Market Context: fields/intended_use.md
+        - Metadata: fields/metadata.md
+      # -- END AUTO-GENERATED --
+
 markdown_extensions:
   - toc:
       permalink: true
