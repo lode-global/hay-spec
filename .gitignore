@@ -49,3 +49,5 @@ htmlcov/
 
 # Release archives
 *.zip
+src/hay-spec-export-to-airtable.yaml
+src/hay-spec-old.yaml
