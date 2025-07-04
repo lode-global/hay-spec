@@ -28,6 +28,7 @@ nav:
     # -- END AUTO-GENERATED --
 
 markdown_extensions:
+  - def_list
   - toc:
       permalink: true
       toc_depth: 2
