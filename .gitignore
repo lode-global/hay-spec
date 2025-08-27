@@ -49,3 +49,20 @@ htmlcov/
 
 # Release archives
 *.zip
+# Python / tooling
+__pycache__/
+*.py[cod]
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.cache/
+.venv/
+venv/
+# MkDocs
+site/
+# macOS
+.DS_Store
+# IDE
+.vscode/
+.idea/
