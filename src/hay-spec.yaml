@@ -1,6 +1,7 @@
----  # This should be the very first line
+---
 title: Hay Description Specification
-version: 0.90.0
+version: 0.91.1
+published_on: "2025-08-31"
 status: draft
 publisher: Lode
 
@@ -3283,8 +3284,8 @@ sections:
           For questions, feedback, or to request implementation guidance, please contact:
 
           Lode Standards Team
-          Email:  standards@lode.global
-          Web:  https://lode.global
+          Email: standards@lode.global
+          Web: https://lode.global
 
           We welcome inquiries from producers, merchants, buyers, researchers, industry groups, and software
           providers seeking to adopt or integrate this standard.
@@ -3295,17 +3296,38 @@ sections:
           This section documents major changes to the specification across published versions.
         items:
           - |
-            v0.90.0 (2025-05-05) - Initial *draft* of the hay specification prepared by the Lode Standards Team.
+            v0.91.1 (2025-08-31) — Metadata corrections and YAML validation/style fixes.
+            - Added top-level published_on and normalized document metadata.
+            - Removed spaces inside {}, [] and fixed indentation per linter rules.
+            - Added document-start marker (---) and resolved minor parsing warnings.
+            - No schema changes to fields compared to v0.91.0.
+          - |
+            v0.91.0 (2025-08-31) — Start of the v0.91 series.
+            - Initiated DRY refactor; clarified section/group structure and naming.
+            - Enforced ASCII-only content; added/clarified unit handling and encoding policies.
+            - Introduced human-readable version history and document metadata conventions.
+            - Refactored fertilizer inputs to fertilizer_application (object[]) replacing prior timing/rates groups.
+            - Refactored organic_amendments to object[] structure for consistency.
+            - Reworked stand section structure and composition fields for clarity and validation.
+            - Converted harvest_date_start and harvest_date_end to datetime precision.
+            - Began dual reporting patterns for nutrient analysis (dry matter and as-fed object fields).
+            - Added lab processing fields (lab_sample_id, lab_report_reference, lab_quality_code, etc.).
+            - Standardized use of valid_range for numeric fields and enum_select_mode for multi-select behavior.
+          - |
+            v0.90.0 (2025-05-05) — Initial draft of the hay specification prepared by the Lode Standards Team.
 
       - id: document_metadata
         title: Document Metadata
         description: >
-          Internal metadata for managing this specification across platforms.
+          Human-readable metadata for managing this specification across platforms.
         items:
           - |
             Title: Hay Description Specification
-            Version: 0.90.0
+            Version: 0.91.1
+            Published on: 2025-08-31
             Status: Draft
             Maintainer: standards@lode.global
             License: CC BY 4.0
             Source: https://github.com/lode-global/hay-spec
+            Release: https://github.com/lode-global/hay-spec/releases/tag/v0.91.1
+            Schema URI: https://github.com/lode-global/hay-spec/tree/v0.91.1/schema.yaml
