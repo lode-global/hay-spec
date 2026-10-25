@@ -64,6 +64,11 @@ and legacy defects remain visible. The overview lists structural warnings and
 includes a source hash. The YAML copy retains comments; JSON does not retain YAML
 comments and is not JSON Schema. These docs describe the current source tree,
 including unreleased additions; they are not a new release or a deployed site.
+Every section page carries a visible current-source/unreleased notice and links
+back to the overview. Source title, version, and status must be strings. Date-like
+scalar values must be quoted when intended as strings: the generator rejects
+non-JSON YAML values or non-string mapping keys rather than silently converting
+their types. Generation errors are detected before output files are written.
 
 All existing fields and summaries are preserved; only `handling_events` gains
 optional child definitions and guidance. Release metadata stays at v0.91.1 until

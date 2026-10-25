@@ -68,6 +68,39 @@ class HandlingDocs(unittest.TestCase):
     def test_output_is_deterministic(self):
         self.assertEqual(outputs(self.source), self.pages)
 
+    def test_every_section_identifies_unreleased_source_status(self):
+        pages = [text for name, text in self.pages.items() if name.startswith('fields/')]
+        self.assertEqual(len(pages), len(self.spec['sections']))
+        for page in pages:
+            self.assertIn('**Current-source reference, including unreleased additions.**', page)
+            self.assertIn('Source version: 0.91.1; status: draft.', page)
+            self.assertIn('../index.md', page)
+
+    def test_unsupported_source_metadata_is_rejected_explicitly(self):
+        for source in [
+            'sections: []\n',
+            'title: Test\nversion: 1.0\nstatus: draft\nsections: []\n',
+            'title: Test\nversion: "1"\nstatus: draft\npublished_on: 2026-10-24\nsections: []\n',
+            'title: Test\nversion: "1"\nstatus: draft\nextra: {1: value}\nsections: []\n',
+        ]:
+            with self.subTest(source=source), self.assertRaises(ValueError):
+                outputs(source)
+
+    def test_generation_failure_does_not_write_partial_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / 'spec.yaml'
+            source.write_text('title: Test\nversion: "1"\nstatus: draft\n'
+                              'published_on: 2026-10-24\nsections: []\n')
+            result = subprocess.run([
+                sys.executable, str(ROOT / 'tools/generate_docs.py'), '--source',
+                str(source), '--output', str(root / 'output'),
+            ], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn('quote date-like values', result.stderr)
+            self.assertNotIn('Traceback', result.stderr)
+            self.assertFalse((root / 'output').exists())
+
     def test_check_detects_stale_output_without_rewriting_it(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

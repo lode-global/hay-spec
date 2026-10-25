@@ -48,17 +48,39 @@ def outputs(source):
     findings = inspect_spec(spec)
     if any(f['severity'] == 'error' for f in findings):
         raise ValueError('Resolve specification structure errors before generating docs.')
+    for key in ('title', 'version', 'status'):
+        if not isinstance(spec.get(key), str) or not spec[key].strip():
+            raise ValueError(f'Source {key} must be a nonempty quoted string.')
+    # Do not silently stringify dates, non-string mapping keys, or other YAML
+    # values that JSON cannot preserve. Validate before any output is written.
+    def json_values(value):
+        if isinstance(value, dict):
+            if any(not isinstance(key, str) for key in value):
+                raise ValueError('JSON transcription requires string mapping keys.')
+            for child in value.values():
+                json_values(child)
+        elif isinstance(value, list):
+            for child in value:
+                json_values(child)
+        elif value is not None and type(value) not in (str, bool, int, float):
+            raise ValueError('JSON transcription cannot preserve this YAML scalar type; '
+                             'quote date-like values explicitly.')
+    json_values(spec)
+    transcription = json.dumps(spec, indent=2, ensure_ascii=False, allow_nan=False) + '\n'
     digest = hashlib.sha256(source.encode('utf-8')).hexdigest()
     pages = {}
     links = []
     for i, section in enumerate(spec['sections']):
-        identity = section['id']
-        if not re.fullmatch(r'[a-z][a-z0-9_]*', identity):
+        identity = section.get('id')
+        if not isinstance(identity, str) or not re.fullmatch(r'[a-z][a-z0-9_]*', identity):
             raise ValueError('Section identifiers must be safe documentation filenames.')
         path = f'fields/{identity}.md'
         if path in pages:
             raise ValueError('Duplicate section identifier would overwrite a documentation page.')
-        pages[path] = NOTICE + '\n' + render_node(section, ['sections', i], 1)
+        status = (f'> **Current-source reference, including unreleased additions.** '
+                  f'Source version: {spec["version"]}; status: {spec["status"]}. '
+                  '[Overview and source downloads](../index.md).\n\n')
+        pages[path] = NOTICE + '\n' + status + render_node(section, ['sections', i], 1)
         links.append(f'- [{section.get("title", identity)}]({path})')
     intro = [NOTICE, f'# {spec["title"]}\n',
              f'Source version: **{spec["version"]}**; status: **{spec["status"]}**.\n',
@@ -86,8 +108,7 @@ def outputs(source):
         front, sort_keys=False, allow_unicode=True, width=90) + '```\n']
     pages['index.md'] = '\n'.join(intro)
     pages['source/hay-spec.yaml'] = source
-    pages['source/hay-spec.json'] = json.dumps(
-        spec, indent=2, ensure_ascii=False, allow_nan=False) + '\n'
+    pages['source/hay-spec.json'] = transcription
     return pages
 
 
