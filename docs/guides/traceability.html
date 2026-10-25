@@ -324,11 +324,7 @@
         <div>
           <div class="eyebrow">Field guide · Review prototype</div>
           <h1>Traceability</h1>
-          <p>
-            Understand how a hay lot connects to its identifiers and
-            contributing production fields. Explore the outline, then read a
-            field in context.
-          </p>
+          <p>Understand how a hay lot connects to its identifiers and contributing production fields. Explore the outline, then read a field in context.</p>
         </div>
         <span class="badge" id="version"></span>
       </div>
@@ -344,8 +340,8 @@
           <p class="fine" id="results" role="status"></p>
           <nav class="outline" id="outline" aria-label="Fields"></nav>
           <p class="fine">
-            Section = documentation organization.<br />Component = one
-            structured block.<br />Repeated object = one entry per item.
+            Section / navigation group = documentation organization.<br />Component
+            = one structured block.<br />Repeated object = one entry per item.
           </p>
           <button id="reset" type="button">
             Clear search &amp; expand all
@@ -359,22 +355,21 @@
         ></section>
       </div>
       <footer class="fine">
-        Read-only presentation prototype. Section breadcrumbs describe the
-        documentation hierarchy, not a new record envelope. Existing identifiers
-        and record structures are preserved. Examples are fragments, not
-        complete records or validation results.
+        Read-only presentation prototype. Section and navigation-group
+        breadcrumbs describe the documentation hierarchy, not a new record
+        envelope. Existing identifiers and record structures are preserved.
+        Examples are fragments, not complete records or validation results.
       </footer>
     </main>
     <noscript
       ><p class="wrap">
         This interactive prototype needs JavaScript.
-        <a href="../fields/traceability/"
-          >Read the complete Traceability reference</a
+        <a href="../fields/traceability/">Read the complete Traceability reference</a
         >.
       </p></noscript
     >
     <script id="guide-data" type="application/json">
-      {"version": "0.92.0", "publication": "unreleased", "root": {"key": "traceability", "id": "traceability", "title": "Traceability", "anchor": "node-sections-0", "source": {"id": "traceability", "title": "Traceability", "description": "This section captures whether the hay can be traced to a clearly defined production lot and whether formal identifiers exist that facilitate lot-level tracking, recall, or certification. Traceability is increasingly important in high-value or regulated markets, as it supports inventory segregation, quality assurance, documentation of origin, and post-sale issue resolution.\n", "fields": [{"id": "hay_single_lot_traceable", "data_type": "boolean", "valid_values": [true, false], "definition": "Affirms whether the hay being described originates from a single, defined lot, harvested under uniform agronomic and environmental conditions. A lot is defined as \"forage taken from the same farm, field, and cut under uniform conditions within a 48-hour time period,\" as described in Ball et al. (2001).\nThis designation supports clarity in nutritional representation, quality assessment, and logistical consistency.\n", "notes": ["This field represents a binary value: `true` if traceable to a single, defined lot; `false` otherwise.", "Common use in export markets and quality certification workflows."], "references": [{"title": "Forage Quality Terminology and Guidelines", "url": "https://fyi.extension.wisc.edu/forage/files/2017/04/FQ.pdf", "author": "Ball et al. (2001)"}]}, {"id": "lot_identifier_internal", "data_type": "string", "valid_values": "free-text, max 100 characters", "definition": "This field allows the seller to assign an internal identifier to the lot from which the hay originated. It may reflect farm, field, cutting, or date conventions relevant to the seller's operation. Systems should enforce a character limit of 100 to ensure consistency and compatibility.\nInternal lot identifiers do not need to conform to any industry standard but should be unique within the seller's system. They may be used for inventory management, customer reference, and traceability across quality or testing modules.\n"}, {"id": "lot_identifier_external", "data_type": "component", "definition": "A structured block consisting of two related fields: an externally issued lot identifier and the name of the organization or program that issued it. Used for regulatory or certification purposes.\n", "components": [{"id": "lot_identifier_external.value", "data_type": "string", "valid_values": "free-text, max 100 characters", "definition": "This field records the externally issued lot identifier assigned to the hay or forage lot by a regulatory, certifying, or export authority. Its meaning depends on the associated lot_identifier_external.issuer field, which specifies the issuing organization.\nExternal lot identifiers may appear on documents such as:\n  - Organic certificates (e.g., USDA NOP Lot #12345)\n  - Phytosanitary inspection reports\n  - Export documents or permits\n  - Weed-free forage program tags or declarations\n\nThe value may include letters, numbers, or a combination thereof. Systems should enforce a maximum of 100 characters and preserve the identifier exactly as provided by the issuing body, including any dashes, slashes, or formatting symbols.\nThis field enhances traceability and may support validation workflows, especially in regulated or export-focused markets.\n"}, {"id": "lot_identifier_external.issuer", "data_type": "enum", "valid_values": ["USDA", "CFIA", "State agriculture department", "Export certification agency", "Organic certifier", "Weed-free program", "Other"], "definition": "Identifies the organization or program that issued the external lot identifier.\nCommon issuers include:\n  - USDA - e.g., for organic certification or phytosanitary control\n  - CFIA - Canadian Food Inspection Agency\n  - State agriculture department - e.g., for weed-free programs or grading systems\n  - Export certification agency - country-of-destination compliance\n  - Organic certifier - under USDA NOP or equivalent programs\n  - Weed-free program - e.g., NAISMA-affiliated\n  - Other - custom or less common issuers\n\nThis structure allows systems and reviewers to assess the origin and regulatory weight of the identifier and may support future API integrations or document uploads.\n"}]}, {"id": "lot_mapping_field_to_bale_supported", "data_type": "boolean", "valid_values": [true, false], "definition": "Indicates whether the seller maintains a system (digital or physical) for mapping specific bales or sub-lots to field-level characteristics, such as GPS coordinates, yield zones, or harvest time blocks.\nSuch mapping enables greater traceability, enhances data resolution for quality control, and may support integration with field data platforms or precision agriculture systems.\nThis capability is optional but increasingly valuable in transparent or regulated feed markets.\n"}, {"id": "source_fields", "title": "Source fields", "data_type": "object[]", "required": false, "definition": "Optional provenance identifying the production fields contributing to the hay described by this record. Use one entry for one field and separate entries for multiple fields. This collection may be partial; it is not a claim of complete origin coverage, allocation by field, or bale-level mapping.\n", "guidance": "Omission or an empty list means no source-field details are supplied, not that the hay came from one field or that its origin is unknown. Include at least a nonblank name or identifier in each supplied entry. When supplied, the collection must be a list of objects; null is not an empty list. Omit unavailable components rather than supplying null or blank strings. Do not use empty objects or multi_field/multi-field sentinel values to represent multiple fields. A field name is a display label and need not be unique. Interpret an identifier only within its issuer or scope; without that context it is an unscoped source value and must not be treated as globally unique. Preserve identifiers exactly, including leading zeros, case, spaces, and punctuation. Do not merge entries solely because their names or unscoped identifiers match. No registry is required. Do not infer or overwrite hay_single_lot_traceable, lot identifiers, lot_mapping_field_to_bale_supported, or location summaries from this collection. Entry order conveys no priority or contribution share; no count limit is imposed. Preserve conflicting source reports for review. Existing records require no migration.\n", "components": [{"id": "field_name", "title": "Field name", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported human-readable field name. A name alone is permitted; it does not identify a field uniquely across farms or reporting systems.\n"}, {"id": "field_identifier", "title": "Field identifier", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Opaque source-issued identifier for this production field. Store as a string, preserving its exact spelling and formatting; do not coerce to a number or substitute a lot, farm, or bale identifier.\n"}, {"id": "field_identifier_scope", "title": "Field identifier scope", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported issuer or namespace in which field_identifier is meaningful, such as a farm's field register or a named mapping system and account. This is free text, not a controlled registry or a guarantee of uniqueness. Supply with an identifier where known; scope alone is not a field reference.\n"}]}], "guidance": "Traceability fields should be completed to the extent feasible. While not all buyers require formal lot tracking, inclusion of traceability data - especially internal and external identifiers - can streamline certification workflows, support inventory segregation, and build buyer confidence.\nSystems should validate consistency between hay_single_lot_traceable and identifier fields and may allow optional linking to field- or bale-level metadata for advanced users.\n"}, "example": null, "related": [], "children": [{"key": "traceability/hay_single_lot_traceable", "id": "hay_single_lot_traceable", "title": "Traceable to a single hay lot", "anchor": "node-sections-0-fields-0", "source": {"id": "hay_single_lot_traceable", "data_type": "boolean", "valid_values": [true, false], "definition": "Affirms whether the hay being described originates from a single, defined lot, harvested under uniform agronomic and environmental conditions. A lot is defined as \"forage taken from the same farm, field, and cut under uniform conditions within a 48-hour time period,\" as described in Ball et al. (2001).\nThis designation supports clarity in nutritional representation, quality assessment, and logistical consistency.\n", "notes": ["This field represents a binary value: `true` if traceable to a single, defined lot; `false` otherwise.", "Common use in export markets and quality certification workflows."], "references": [{"title": "Forage Quality Terminology and Guidelines", "url": "https://fyi.extension.wisc.edu/forage/files/2017/04/FQ.pdf", "author": "Ball et al. (2001)"}]}, "example": "hay_single_lot_traceable: true", "related": ["traceability/source_fields", "traceability/lot_identifier_internal"], "children": []}, {"key": "traceability/lot_identifier_internal", "id": "lot_identifier_internal", "title": "Internal lot identifier", "anchor": "node-sections-0-fields-1", "source": {"id": "lot_identifier_internal", "data_type": "string", "valid_values": "free-text, max 100 characters", "definition": "This field allows the seller to assign an internal identifier to the lot from which the hay originated. It may reflect farm, field, cutting, or date conventions relevant to the seller's operation. Systems should enforce a character limit of 100 to ensure consistency and compatibility.\nInternal lot identifiers do not need to conform to any industry standard but should be unique within the seller's system. They may be used for inventory management, customer reference, and traceability across quality or testing modules.\n"}, "example": "lot_identifier_internal: LOT-042", "related": ["traceability/lot_identifier_external"], "children": []}, {"key": "traceability/lot_identifier_external", "id": "lot_identifier_external", "title": "External lot identifier", "anchor": "node-sections-0-fields-2", "source": {"id": "lot_identifier_external", "data_type": "component", "definition": "A structured block consisting of two related fields: an externally issued lot identifier and the name of the organization or program that issued it. Used for regulatory or certification purposes.\n", "components": [{"id": "lot_identifier_external.value", "data_type": "string", "valid_values": "free-text, max 100 characters", "definition": "This field records the externally issued lot identifier assigned to the hay or forage lot by a regulatory, certifying, or export authority. Its meaning depends on the associated lot_identifier_external.issuer field, which specifies the issuing organization.\nExternal lot identifiers may appear on documents such as:\n  - Organic certificates (e.g., USDA NOP Lot #12345)\n  - Phytosanitary inspection reports\n  - Export documents or permits\n  - Weed-free forage program tags or declarations\n\nThe value may include letters, numbers, or a combination thereof. Systems should enforce a maximum of 100 characters and preserve the identifier exactly as provided by the issuing body, including any dashes, slashes, or formatting symbols.\nThis field enhances traceability and may support validation workflows, especially in regulated or export-focused markets.\n"}, {"id": "lot_identifier_external.issuer", "data_type": "enum", "valid_values": ["USDA", "CFIA", "State agriculture department", "Export certification agency", "Organic certifier", "Weed-free program", "Other"], "definition": "Identifies the organization or program that issued the external lot identifier.\nCommon issuers include:\n  - USDA - e.g., for organic certification or phytosanitary control\n  - CFIA - Canadian Food Inspection Agency\n  - State agriculture department - e.g., for weed-free programs or grading systems\n  - Export certification agency - country-of-destination compliance\n  - Organic certifier - under USDA NOP or equivalent programs\n  - Weed-free program - e.g., NAISMA-affiliated\n  - Other - custom or less common issuers\n\nThis structure allows systems and reviewers to assess the origin and regulatory weight of the identifier and may support future API integrations or document uploads.\n"}]}, "example": "lot_identifier_external:\n  lot_identifier_external.value: \"00017-A\"\n  lot_identifier_external.issuer: USDA", "related": ["traceability/lot_identifier_internal"], "children": [{"key": "traceability/lot_identifier_external/lot_identifier_external.value", "id": "lot_identifier_external.value", "title": "External lot identifier value", "anchor": "node-sections-0-fields-2-components-0", "source": {"id": "lot_identifier_external.value", "data_type": "string", "valid_values": "free-text, max 100 characters", "definition": "This field records the externally issued lot identifier assigned to the hay or forage lot by a regulatory, certifying, or export authority. Its meaning depends on the associated lot_identifier_external.issuer field, which specifies the issuing organization.\nExternal lot identifiers may appear on documents such as:\n  - Organic certificates (e.g., USDA NOP Lot #12345)\n  - Phytosanitary inspection reports\n  - Export documents or permits\n  - Weed-free forage program tags or declarations\n\nThe value may include letters, numbers, or a combination thereof. Systems should enforce a maximum of 100 characters and preserve the identifier exactly as provided by the issuing body, including any dashes, slashes, or formatting symbols.\nThis field enhances traceability and may support validation workflows, especially in regulated or export-focused markets.\n"}, "example": null, "related": ["traceability/lot_identifier_external/lot_identifier_external.issuer"], "children": []}, {"key": "traceability/lot_identifier_external/lot_identifier_external.issuer", "id": "lot_identifier_external.issuer", "title": "External lot identifier issuer", "anchor": "node-sections-0-fields-2-components-1", "source": {"id": "lot_identifier_external.issuer", "data_type": "enum", "valid_values": ["USDA", "CFIA", "State agriculture department", "Export certification agency", "Organic certifier", "Weed-free program", "Other"], "definition": "Identifies the organization or program that issued the external lot identifier.\nCommon issuers include:\n  - USDA - e.g., for organic certification or phytosanitary control\n  - CFIA - Canadian Food Inspection Agency\n  - State agriculture department - e.g., for weed-free programs or grading systems\n  - Export certification agency - country-of-destination compliance\n  - Organic certifier - under USDA NOP or equivalent programs\n  - Weed-free program - e.g., NAISMA-affiliated\n  - Other - custom or less common issuers\n\nThis structure allows systems and reviewers to assess the origin and regulatory weight of the identifier and may support future API integrations or document uploads.\n"}, "example": null, "related": ["traceability/lot_identifier_external/lot_identifier_external.value"], "children": []}]}, {"key": "traceability/lot_mapping_field_to_bale_supported", "id": "lot_mapping_field_to_bale_supported", "title": "Field-to-bale mapping supported", "anchor": "node-sections-0-fields-3", "source": {"id": "lot_mapping_field_to_bale_supported", "data_type": "boolean", "valid_values": [true, false], "definition": "Indicates whether the seller maintains a system (digital or physical) for mapping specific bales or sub-lots to field-level characteristics, such as GPS coordinates, yield zones, or harvest time blocks.\nSuch mapping enables greater traceability, enhances data resolution for quality control, and may support integration with field data platforms or precision agriculture systems.\nThis capability is optional but increasingly valuable in transparent or regulated feed markets.\n"}, "example": "lot_mapping_field_to_bale_supported: false", "related": ["traceability/source_fields"], "children": []}, {"key": "traceability/source_fields", "id": "source_fields", "title": "Source fields", "anchor": "node-sections-0-fields-4", "source": {"id": "source_fields", "title": "Source fields", "data_type": "object[]", "required": false, "definition": "Optional provenance identifying the production fields contributing to the hay described by this record. Use one entry for one field and separate entries for multiple fields. This collection may be partial; it is not a claim of complete origin coverage, allocation by field, or bale-level mapping.\n", "guidance": "Omission or an empty list means no source-field details are supplied, not that the hay came from one field or that its origin is unknown. Include at least a nonblank name or identifier in each supplied entry. When supplied, the collection must be a list of objects; null is not an empty list. Omit unavailable components rather than supplying null or blank strings. Do not use empty objects or multi_field/multi-field sentinel values to represent multiple fields. A field name is a display label and need not be unique. Interpret an identifier only within its issuer or scope; without that context it is an unscoped source value and must not be treated as globally unique. Preserve identifiers exactly, including leading zeros, case, spaces, and punctuation. Do not merge entries solely because their names or unscoped identifiers match. No registry is required. Do not infer or overwrite hay_single_lot_traceable, lot identifiers, lot_mapping_field_to_bale_supported, or location summaries from this collection. Entry order conveys no priority or contribution share; no count limit is imposed. Preserve conflicting source reports for review. Existing records require no migration.\n", "components": [{"id": "field_name", "title": "Field name", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported human-readable field name. A name alone is permitted; it does not identify a field uniquely across farms or reporting systems.\n"}, {"id": "field_identifier", "title": "Field identifier", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Opaque source-issued identifier for this production field. Store as a string, preserving its exact spelling and formatting; do not coerce to a number or substitute a lot, farm, or bale identifier.\n"}, {"id": "field_identifier_scope", "title": "Field identifier scope", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported issuer or namespace in which field_identifier is meaningful, such as a farm's field register or a named mapping system and account. This is free text, not a controlled registry or a guarantee of uniqueness. Supply with an identifier where known; scope alone is not a field reference.\n"}]}, "example": "source_fields:\n  - field_name: North meadow\n    field_identifier: \"00017\"\n    field_identifier_scope: Example Farm / field register\n  - field_name: South meadow", "related": ["traceability/hay_single_lot_traceable", "traceability/lot_mapping_field_to_bale_supported"], "children": [{"key": "traceability/source_fields/field_name", "id": "field_name", "title": "Field name", "anchor": "node-sections-0-fields-4-components-0", "source": {"id": "field_name", "title": "Field name", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported human-readable field name. A name alone is permitted; it does not identify a field uniquely across farms or reporting systems.\n"}, "example": null, "related": ["traceability/source_fields"], "children": []}, {"key": "traceability/source_fields/field_identifier", "id": "field_identifier", "title": "Field identifier", "anchor": "node-sections-0-fields-4-components-1", "source": {"id": "field_identifier", "title": "Field identifier", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Opaque source-issued identifier for this production field. Store as a string, preserving its exact spelling and formatting; do not coerce to a number or substitute a lot, farm, or bale identifier.\n"}, "example": null, "related": ["traceability/source_fields/field_identifier_scope", "traceability/source_fields"], "children": []}, {"key": "traceability/source_fields/field_identifier_scope", "id": "field_identifier_scope", "title": "Field identifier scope", "anchor": "node-sections-0-fields-4-components-2", "source": {"id": "field_identifier_scope", "title": "Field identifier scope", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported issuer or namespace in which field_identifier is meaningful, such as a farm's field register or a named mapping system and account. This is free text, not a controlled registry or a guarantee of uniqueness. Supply with an identifier where known; scope alone is not a field reference.\n"}, "example": null, "related": ["traceability/source_fields/field_identifier", "traceability/source_fields"], "children": []}]}]}}
+      {"version": "0.92.0", "publication": "unreleased", "root": {"key": "traceability", "id": "traceability", "title": "Traceability", "anchor": "node-sections-0", "source": {"id": "traceability", "title": "Traceability", "description": "This section captures whether the hay can be traced to a clearly defined production lot and whether formal identifiers exist that facilitate lot-level tracking, recall, or certification. Traceability is increasingly important in high-value or regulated markets, as it supports inventory segregation, quality assurance, documentation of origin, and post-sale issue resolution.\n", "fields": [{"id": "hay_single_lot_traceable", "data_type": "boolean", "valid_values": [true, false], "definition": "Affirms whether the hay being described originates from a single, defined lot, harvested under uniform agronomic and environmental conditions. A lot is defined as \"forage taken from the same farm, field, and cut under uniform conditions within a 48-hour time period,\" as described in Ball et al. (2001).\nThis designation supports clarity in nutritional representation, quality assessment, and logistical consistency.\n", "notes": ["This field represents a binary value: `true` if traceable to a single, defined lot; `false` otherwise.", "Common use in export markets and quality certification workflows."], "references": [{"title": "Forage Quality Terminology and Guidelines", "url": "https://fyi.extension.wisc.edu/forage/files/2017/04/FQ.pdf", "author": "Ball et al. (2001)"}]}, {"id": "lot_identifier_internal", "data_type": "string", "valid_values": "free-text, max 100 characters", "definition": "This field allows the seller to assign an internal identifier to the lot from which the hay originated. It may reflect farm, field, cutting, or date conventions relevant to the seller's operation. Systems should enforce a character limit of 100 to ensure consistency and compatibility.\nInternal lot identifiers do not need to conform to any industry standard but should be unique within the seller's system. They may be used for inventory management, customer reference, and traceability across quality or testing modules.\n"}, {"id": "lot_identifier_external", "data_type": "component", "definition": "A structured block consisting of two related fields: an externally issued lot identifier and the name of the organization or program that issued it. Used for regulatory or certification purposes.\n", "components": [{"id": "lot_identifier_external.value", "data_type": "string", "valid_values": "free-text, max 100 characters", "definition": "This field records the externally issued lot identifier assigned to the hay or forage lot by a regulatory, certifying, or export authority. Its meaning depends on the associated lot_identifier_external.issuer field, which specifies the issuing organization.\nExternal lot identifiers may appear on documents such as:\n  - Organic certificates (e.g., USDA NOP Lot #12345)\n  - Phytosanitary inspection reports\n  - Export documents or permits\n  - Weed-free forage program tags or declarations\n\nThe value may include letters, numbers, or a combination thereof. Systems should enforce a maximum of 100 characters and preserve the identifier exactly as provided by the issuing body, including any dashes, slashes, or formatting symbols.\nThis field enhances traceability and may support validation workflows, especially in regulated or export-focused markets.\n"}, {"id": "lot_identifier_external.issuer", "data_type": "enum", "valid_values": ["USDA", "CFIA", "State agriculture department", "Export certification agency", "Organic certifier", "Weed-free program", "Other"], "definition": "Identifies the organization or program that issued the external lot identifier.\nCommon issuers include:\n  - USDA - e.g., for organic certification or phytosanitary control\n  - CFIA - Canadian Food Inspection Agency\n  - State agriculture department - e.g., for weed-free programs or grading systems\n  - Export certification agency - country-of-destination compliance\n  - Organic certifier - under USDA NOP or equivalent programs\n  - Weed-free program - e.g., NAISMA-affiliated\n  - Other - custom or less common issuers\n\nThis structure allows systems and reviewers to assess the origin and regulatory weight of the identifier and may support future API integrations or document uploads.\n"}]}, {"id": "lot_mapping_field_to_bale_supported", "data_type": "boolean", "valid_values": [true, false], "definition": "Indicates whether the seller maintains a system (digital or physical) for mapping specific bales or sub-lots to field-level characteristics, such as GPS coordinates, yield zones, or harvest time blocks.\nSuch mapping enables greater traceability, enhances data resolution for quality control, and may support integration with field data platforms or precision agriculture systems.\nThis capability is optional but increasingly valuable in transparent or regulated feed markets.\n"}, {"id": "source_fields", "title": "Source fields", "data_type": "object[]", "required": false, "definition": "Optional provenance identifying the production fields contributing to the hay described by this record. Use one entry for one field and separate entries for multiple fields. This collection may be partial; it is not a claim of complete origin coverage, allocation by field, or bale-level mapping.\n", "guidance": "Omission or an empty list means no source-field details are supplied, not that the hay came from one field or that its origin is unknown. Include at least a nonblank name or identifier in each supplied entry. When supplied, the collection must be a list of objects; null is not an empty list. Omit unavailable components rather than supplying null or blank strings. Do not use empty objects or multi_field/multi-field sentinel values to represent multiple fields. A field name is a display label and need not be unique. Interpret an identifier only within its issuer or scope; without that context it is an unscoped source value and must not be treated as globally unique. Preserve identifiers exactly, including leading zeros, case, spaces, and punctuation. Do not merge entries solely because their names or unscoped identifiers match. No registry is required. Do not infer or overwrite hay_single_lot_traceable, lot identifiers, lot_mapping_field_to_bale_supported, or location summaries from this collection. Entry order conveys no priority or contribution share; no count limit is imposed. Preserve conflicting source reports for review. Existing records require no migration.\n", "components": [{"id": "field_name", "title": "Field name", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported human-readable field name. A name alone is permitted; it does not identify a field uniquely across farms or reporting systems.\n"}, {"id": "field_identifier", "title": "Field identifier", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Opaque source-issued identifier for this production field. Store as a string, preserving its exact spelling and formatting; do not coerce to a number or substitute a lot, farm, or bale identifier.\n"}, {"id": "field_identifier_scope", "title": "Field identifier scope", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported issuer or namespace in which field_identifier is meaningful, such as a farm's field register or a named mapping system and account. This is free text, not a controlled registry or a guarantee of uniqueness. Supply with an identifier where known; scope alone is not a field reference.\n"}]}], "guidance": "Traceability fields should be completed to the extent feasible. While not all buyers require formal lot tracking, inclusion of traceability data - especially internal and external identifiers - can streamline certification workflows, support inventory segregation, and build buyer confidence.\nSystems should validate consistency between hay_single_lot_traceable and identifier fields and may allow optional linking to field- or bale-level metadata for advanced users.\n"}, "example": null, "related": [], "children": [{"key": "traceability/hay_single_lot_traceable", "id": "hay_single_lot_traceable", "title": "Traceable to a single hay lot", "anchor": "node-sections-0-fields-0", "source": {"id": "hay_single_lot_traceable", "data_type": "boolean", "valid_values": [true, false], "definition": "Affirms whether the hay being described originates from a single, defined lot, harvested under uniform agronomic and environmental conditions. A lot is defined as \"forage taken from the same farm, field, and cut under uniform conditions within a 48-hour time period,\" as described in Ball et al. (2001).\nThis designation supports clarity in nutritional representation, quality assessment, and logistical consistency.\n", "notes": ["This field represents a binary value: `true` if traceable to a single, defined lot; `false` otherwise.", "Common use in export markets and quality certification workflows."], "references": [{"title": "Forage Quality Terminology and Guidelines", "url": "https://fyi.extension.wisc.edu/forage/files/2017/04/FQ.pdf", "author": "Ball et al. (2001)"}]}, "example": "hay_single_lot_traceable: true", "related": ["traceability/source_fields", "traceability/lot_identifier_internal"], "children": []}, {"key": "traceability/lot_identifier_internal", "id": "lot_identifier_internal", "title": "Internal lot identifier", "anchor": "node-sections-0-fields-1", "source": {"id": "lot_identifier_internal", "data_type": "string", "valid_values": "free-text, max 100 characters", "definition": "This field allows the seller to assign an internal identifier to the lot from which the hay originated. It may reflect farm, field, cutting, or date conventions relevant to the seller's operation. Systems should enforce a character limit of 100 to ensure consistency and compatibility.\nInternal lot identifiers do not need to conform to any industry standard but should be unique within the seller's system. They may be used for inventory management, customer reference, and traceability across quality or testing modules.\n"}, "example": "lot_identifier_internal: LOT-042", "related": ["traceability/lot_identifier_external"], "children": []}, {"key": "traceability/lot_identifier_external", "id": "lot_identifier_external", "title": "External lot identifier", "anchor": "node-sections-0-fields-2", "source": {"id": "lot_identifier_external", "data_type": "component", "definition": "A structured block consisting of two related fields: an externally issued lot identifier and the name of the organization or program that issued it. Used for regulatory or certification purposes.\n", "components": [{"id": "lot_identifier_external.value", "data_type": "string", "valid_values": "free-text, max 100 characters", "definition": "This field records the externally issued lot identifier assigned to the hay or forage lot by a regulatory, certifying, or export authority. Its meaning depends on the associated lot_identifier_external.issuer field, which specifies the issuing organization.\nExternal lot identifiers may appear on documents such as:\n  - Organic certificates (e.g., USDA NOP Lot #12345)\n  - Phytosanitary inspection reports\n  - Export documents or permits\n  - Weed-free forage program tags or declarations\n\nThe value may include letters, numbers, or a combination thereof. Systems should enforce a maximum of 100 characters and preserve the identifier exactly as provided by the issuing body, including any dashes, slashes, or formatting symbols.\nThis field enhances traceability and may support validation workflows, especially in regulated or export-focused markets.\n"}, {"id": "lot_identifier_external.issuer", "data_type": "enum", "valid_values": ["USDA", "CFIA", "State agriculture department", "Export certification agency", "Organic certifier", "Weed-free program", "Other"], "definition": "Identifies the organization or program that issued the external lot identifier.\nCommon issuers include:\n  - USDA - e.g., for organic certification or phytosanitary control\n  - CFIA - Canadian Food Inspection Agency\n  - State agriculture department - e.g., for weed-free programs or grading systems\n  - Export certification agency - country-of-destination compliance\n  - Organic certifier - under USDA NOP or equivalent programs\n  - Weed-free program - e.g., NAISMA-affiliated\n  - Other - custom or less common issuers\n\nThis structure allows systems and reviewers to assess the origin and regulatory weight of the identifier and may support future API integrations or document uploads.\n"}]}, "example": "lot_identifier_external:\n  lot_identifier_external.value: \"00017-A\"\n  lot_identifier_external.issuer: USDA", "related": ["traceability/lot_identifier_internal"], "children": [{"key": "traceability/lot_identifier_external/lot_identifier_external.value", "id": "lot_identifier_external.value", "title": "External lot identifier value", "anchor": "node-sections-0-fields-2-components-0", "source": {"id": "lot_identifier_external.value", "data_type": "string", "valid_values": "free-text, max 100 characters", "definition": "This field records the externally issued lot identifier assigned to the hay or forage lot by a regulatory, certifying, or export authority. Its meaning depends on the associated lot_identifier_external.issuer field, which specifies the issuing organization.\nExternal lot identifiers may appear on documents such as:\n  - Organic certificates (e.g., USDA NOP Lot #12345)\n  - Phytosanitary inspection reports\n  - Export documents or permits\n  - Weed-free forage program tags or declarations\n\nThe value may include letters, numbers, or a combination thereof. Systems should enforce a maximum of 100 characters and preserve the identifier exactly as provided by the issuing body, including any dashes, slashes, or formatting symbols.\nThis field enhances traceability and may support validation workflows, especially in regulated or export-focused markets.\n"}, "example": null, "related": ["traceability/lot_identifier_external/lot_identifier_external.issuer"], "children": []}, {"key": "traceability/lot_identifier_external/lot_identifier_external.issuer", "id": "lot_identifier_external.issuer", "title": "External lot identifier issuer", "anchor": "node-sections-0-fields-2-components-1", "source": {"id": "lot_identifier_external.issuer", "data_type": "enum", "valid_values": ["USDA", "CFIA", "State agriculture department", "Export certification agency", "Organic certifier", "Weed-free program", "Other"], "definition": "Identifies the organization or program that issued the external lot identifier.\nCommon issuers include:\n  - USDA - e.g., for organic certification or phytosanitary control\n  - CFIA - Canadian Food Inspection Agency\n  - State agriculture department - e.g., for weed-free programs or grading systems\n  - Export certification agency - country-of-destination compliance\n  - Organic certifier - under USDA NOP or equivalent programs\n  - Weed-free program - e.g., NAISMA-affiliated\n  - Other - custom or less common issuers\n\nThis structure allows systems and reviewers to assess the origin and regulatory weight of the identifier and may support future API integrations or document uploads.\n"}, "example": null, "related": ["traceability/lot_identifier_external/lot_identifier_external.value"], "children": []}]}, {"key": "traceability/lot_mapping_field_to_bale_supported", "id": "lot_mapping_field_to_bale_supported", "title": "Field-to-bale mapping supported", "anchor": "node-sections-0-fields-3", "source": {"id": "lot_mapping_field_to_bale_supported", "data_type": "boolean", "valid_values": [true, false], "definition": "Indicates whether the seller maintains a system (digital or physical) for mapping specific bales or sub-lots to field-level characteristics, such as GPS coordinates, yield zones, or harvest time blocks.\nSuch mapping enables greater traceability, enhances data resolution for quality control, and may support integration with field data platforms or precision agriculture systems.\nThis capability is optional but increasingly valuable in transparent or regulated feed markets.\n"}, "example": "lot_mapping_field_to_bale_supported: false", "related": ["traceability/source_fields"], "children": []}, {"key": "traceability/source_fields", "id": "source_fields", "title": "Source fields", "anchor": "node-sections-0-fields-4", "source": {"id": "source_fields", "title": "Source fields", "data_type": "object[]", "required": false, "definition": "Optional provenance identifying the production fields contributing to the hay described by this record. Use one entry for one field and separate entries for multiple fields. This collection may be partial; it is not a claim of complete origin coverage, allocation by field, or bale-level mapping.\n", "guidance": "Omission or an empty list means no source-field details are supplied, not that the hay came from one field or that its origin is unknown. Include at least a nonblank name or identifier in each supplied entry. When supplied, the collection must be a list of objects; null is not an empty list. Omit unavailable components rather than supplying null or blank strings. Do not use empty objects or multi_field/multi-field sentinel values to represent multiple fields. A field name is a display label and need not be unique. Interpret an identifier only within its issuer or scope; without that context it is an unscoped source value and must not be treated as globally unique. Preserve identifiers exactly, including leading zeros, case, spaces, and punctuation. Do not merge entries solely because their names or unscoped identifiers match. No registry is required. Do not infer or overwrite hay_single_lot_traceable, lot identifiers, lot_mapping_field_to_bale_supported, or location summaries from this collection. Entry order conveys no priority or contribution share; no count limit is imposed. Preserve conflicting source reports for review. Existing records require no migration.\n", "components": [{"id": "field_name", "title": "Field name", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported human-readable field name. A name alone is permitted; it does not identify a field uniquely across farms or reporting systems.\n"}, {"id": "field_identifier", "title": "Field identifier", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Opaque source-issued identifier for this production field. Store as a string, preserving its exact spelling and formatting; do not coerce to a number or substitute a lot, farm, or bale identifier.\n"}, {"id": "field_identifier_scope", "title": "Field identifier scope", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported issuer or namespace in which field_identifier is meaningful, such as a farm's field register or a named mapping system and account. This is free text, not a controlled registry or a guarantee of uniqueness. Supply with an identifier where known; scope alone is not a field reference.\n"}]}, "example": "source_fields:\n  - field_name: North meadow\n    field_identifier: \"00017\"\n    field_identifier_scope: Example Farm / field register\n  - field_name: South meadow", "related": ["traceability/hay_single_lot_traceable", "traceability/lot_mapping_field_to_bale_supported"], "children": [{"key": "traceability/source_fields/field_name", "id": "field_name", "title": "Field name", "anchor": "node-sections-0-fields-4-components-0", "source": {"id": "field_name", "title": "Field name", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported human-readable field name. A name alone is permitted; it does not identify a field uniquely across farms or reporting systems.\n"}, "example": null, "related": ["traceability/source_fields"], "children": []}, {"key": "traceability/source_fields/field_identifier", "id": "field_identifier", "title": "Field identifier", "anchor": "node-sections-0-fields-4-components-1", "source": {"id": "field_identifier", "title": "Field identifier", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Opaque source-issued identifier for this production field. Store as a string, preserving its exact spelling and formatting; do not coerce to a number or substitute a lot, farm, or bale identifier.\n"}, "example": null, "related": ["traceability/source_fields/field_identifier_scope", "traceability/source_fields"], "children": []}, {"key": "traceability/source_fields/field_identifier_scope", "id": "field_identifier_scope", "title": "Field identifier scope", "anchor": "node-sections-0-fields-4-components-2", "source": {"id": "field_identifier_scope", "title": "Field identifier scope", "data_type": "string", "required": false, "valid_values": "Nonblank string, preserved as reported", "definition": "Source-reported issuer or namespace in which field_identifier is meaningful, such as a farm's field register or a named mapping system and account. This is free text, not a controlled registry or a guarantee of uniqueness. Supply with an identifier where known; scope alone is not a field reference.\n"}, "example": null, "related": ["traceability/source_fields/field_identifier", "traceability/source_fields"], "children": []}]}]}, "sectionId": "traceability", "nutrient": false, "reference": "../fields/traceability/", "introCard": "Choose a field from the outline. Expand a component to see its members. Source fields is a repeated collection; its members describe each individual entry.", "notice": null}
     </script>
     <script>
       "use strict";
@@ -400,15 +395,24 @@
         return item;
       }
       function kind(node) {
-        return node === root
-          ? "Documentation section"
-          : node.source.data_type === "object[]"
-            ? "Repeated object · list entries"
-            : node.source.data_type === "component"
-              ? "Component · structured block"
-              : { string: "Text", boolean: "Boolean", enum: "Enumeration" }[
-                  node.source.data_type
-                ] || node.source.data_type;
+        return node.presentation
+          ? "Navigation group · display only"
+          : node.source.data_type === "section"
+            ? "Documentation marker · no stored value"
+            : node === root
+              ? "Documentation section"
+              : node.source.data_type === "object[]"
+                ? "Repeated object · list entries"
+                : node.source.data_type === "component"
+                  ? "Component · structured block"
+                  : {
+                      string: "Text",
+                      boolean: "Boolean",
+                      enum: "Enumeration",
+                      float: "Number",
+                      int: "Whole number",
+                      datetime: "Date",
+                    }[node.source.data_type] || node.source.data_type;
       }
       function selectButton(node) {
         const b = el("button", node.title);
@@ -420,11 +424,25 @@
       }
       function matches(node, query) {
         return (
-          (node.title + " " + node.id).toLowerCase().includes(query) ||
+          (node.title + " " + (node.id || "")).toLowerCase().includes(query) ||
           node.children.some((c) => matches(c, query))
         );
       }
-      function renderOutline() {
+      function revealOutline(key, includeOwnGroup = false, scroll = false) {
+        const selected = Array.from(outline.querySelectorAll("[data-key]")).find(
+          (item) => item.dataset.key === key,
+        );
+        let ancestor = selected?.parentElement;
+        if (selected?.tagName === "SUMMARY" && !includeOwnGroup)
+          ancestor = ancestor?.parentElement;
+        while (ancestor) {
+          if (ancestor.tagName === "DETAILS") ancestor.open = true;
+          ancestor = ancestor.parentElement;
+        }
+        if (selected && data.nutrient && scroll)
+          selected.scrollIntoView({ block: "nearest" });
+      }
+      function renderOutline(expandAll = false) {
         outline.replaceChildren();
         const query = search.value.trim().toLowerCase();
         let count = 0;
@@ -434,12 +452,12 @@
           const li = el("li");
           if (
             !query ||
-            (node.title + " " + node.id).toLowerCase().includes(query)
+            (node.title + " " + (node.id || "")).toLowerCase().includes(query)
           )
             count++;
           if (node.children.length) {
             const box = el("details");
-            box.open = true;
+            box.open = expandAll || !data.nutrient || node === root || Boolean(query);
             const summary = el("summary", node.title);
             summary.dataset.key = node.key;
             summary.append(el("span", kind(node), "kind"));
@@ -462,8 +480,11 @@
           ? count
             ? count + " matching fields or sections"
             : "No matching fields. Clear the search to browse."
-          : nodes.size + " fields and sections · expand to explore";
+          : Array.from(nodes.values()).filter((n) => !n.presentation).length +
+            " source fields and sections · expand to explore";
         markCurrent();
+        // Rebuilding the unfiltered outline must not hide the open field card.
+        if (!query) revealOutline(current);
       }
       let current = root.key;
       function markCurrent() {
@@ -515,11 +536,21 @@
         detail.append(
           crumbs,
           heading,
-          el("p", "Identifier: " + node.id, "identifier"),
+          el(
+            "p",
+            node.presentation
+              ? "Navigation only · not a record key"
+              : "Identifier: " + node.id,
+            "identifier",
+          ),
         );
         const facts = el("div", undefined, "facts");
         facts.append(el("span", kind(node), "badge"));
-        if (node !== root)
+        if (
+          node !== root &&
+          !node.presentation &&
+          node.source.data_type !== "section"
+        )
           facts.append(
             el(
               "span",
@@ -533,14 +564,8 @@
           );
         detail.append(facts);
         block("Definition", node.source.definition || node.source.description);
-        if (node === root)
-          detail.append(
-            el(
-              "p",
-              "Choose a field from the outline. Expand a component to see its members. Source fields is a repeated collection; its members describe each individual entry.",
-              "callout",
-            ),
-          );
+        if (node === root) detail.append(el("p", data.introCard, "callout"));
+        if (data.notice) detail.append(el("p", data.notice, "callout"));
         block("Guidance", node.source.guidance);
         if (parents.get(key)?.id === "source_fields")
           detail.append(
@@ -551,7 +576,14 @@
             ),
           );
         if (node.source.valid_values !== undefined) {
-          detail.append(el("h3", "Declared values"));
+          detail.append(
+            el(
+              "h3",
+              Array.isArray(node.source.valid_values)
+                ? "Declared values"
+                : "Source value guidance",
+            ),
+          );
           const pre = el("pre");
           pre.append(
             el(
@@ -564,6 +596,45 @@
             ),
           );
           detail.append(pre);
+        }
+        if (node.source.valid_range !== undefined) {
+          detail.append(el("h3", "Declared numeric bounds"));
+          const bounds = el("pre");
+          bounds.append(
+            el("code", JSON.stringify(node.source.valid_range, null, 2)),
+          );
+          detail.append(bounds);
+        }
+        const other = Object.fromEntries(
+          Object.entries(node.source).filter(
+            ([key]) =>
+              ![
+                "id",
+                "name",
+                "title",
+                "definition",
+                "description",
+                "guidance",
+                "notes",
+                "references",
+                "valid_values",
+                "valid_range",
+                "fields",
+                "components",
+                "groups",
+                "subsections",
+                "data_type",
+                "required",
+              ].includes(key),
+          ),
+        );
+        if (Object.keys(other).length) {
+          const more = el("details"),
+            label = el("summary", "Additional source metadata"),
+            pre = el("pre");
+          pre.append(el("code", JSON.stringify(other, null, 2)));
+          more.append(label, pre);
+          detail.append(more);
         }
         if (node.source.notes) block("Notes", node.source.notes.join("\n\n"));
         const example = node.example || parents.get(key)?.example;
@@ -584,9 +655,13 @@
           detail.append(
             el(
               "h3",
-              node === root
-                ? "Fields in this section"
-                : "Members" +
+              node.presentation
+                ? "Fields in this navigation group"
+                : node === root
+                  ? data.nutrient
+                    ? "Navigation groups"
+                    : "Fields in this section"
+                  : "Members" +
                     (node.source.data_type === "object[]"
                       ? " of each entry"
                       : ""),
@@ -626,7 +701,7 @@
           });
         }
         const a = el("a", "Read this definition in the full reference");
-        a.href = "../fields/traceability/#" + node.anchor;
+        a.href = data.reference + "#" + node.anchor;
         detail.append(el("hr"), a);
         const hash = "#" + encodeURIComponent(key);
         if (location.hash !== hash && historyMode !== "none") {
@@ -634,27 +709,18 @@
           else history.pushState(null, "", hash);
         }
         markCurrent();
-        if (focus) {
-          const selected = Array.from(
-            outline.querySelectorAll("[data-key]"),
-          ).find((e) => e.dataset.key === key);
-          let ancestor = selected?.parentElement;
-          while (ancestor) {
-            if (ancestor.tagName === "DETAILS") ancestor.open = true;
-            ancestor = ancestor.parentElement;
-          }
-          detail.focus();
-        }
+        revealOutline(key, focus, true);
+        if (focus) detail.focus();
       }
       document.querySelector(".skip").addEventListener("click", (event) => {
         // Move focus without creating a non-field entry in browser history.
         event.preventDefault();
         detail.focus();
       });
-      search.addEventListener("input", renderOutline);
+      search.addEventListener("input", () => renderOutline());
       document.getElementById("reset").addEventListener("click", () => {
         search.value = "";
-        renderOutline();
+        renderOutline(true);
         search.focus();
       });
       function restoreLocation() {

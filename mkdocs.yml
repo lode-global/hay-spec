@@ -2,7 +2,9 @@
 site_name: Hay Description Specification
 nav:
   - Overview: index.md
-  - Traceability field guide: guides/traceability.html
+  - Field guides:
+      - Traceability: guides/traceability.html
+      - Nutrient Analysis: guides/nutrient_analysis.html
   - Field reference:
       - Traceability: fields/traceability.md
       - Stand: fields/stand.md
