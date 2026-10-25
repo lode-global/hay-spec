@@ -16,7 +16,7 @@ also links to the guide. GitHub's file view shows HTML source rather than a live
 preview. No documentation deployment is part of this change.
 
 The guide uses canonical definitions and the display overlay. Examples and
-related-field links are presentation annotations in `tools/traceability_guide.py`;
+related-field links are presentation annotations in `tools/field_guides.py`;
 the UI template is `tools/templates/field-guide.html`. Generated HTML is
 tracked under `docs/guides/traceability.html` and checked by the existing freshness
 command. The prototype does not interpret the specification as JSON Schema.

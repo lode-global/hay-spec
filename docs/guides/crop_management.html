@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>In-Season Crop Management field guide · Lode</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #19352c;
+        --muted: #52655c;
+        --line: #d6ddd3;
+        --paper: #fbfcf8;
+        --green: #24583f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f0f2e9;
+        color: var(--ink);
+        font:
+          16px/1.6 system-ui,
+          sans-serif;
+      }
+      a {
+        color: #20513d;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      a:focus-visible,
+      button:focus-visible,
+      summary:focus-visible,
+      input:focus-visible {
+        outline: 3px solid #98621b;
+        outline-offset: 3px;
+      }
+      .skip {
+        position: absolute;
+        left: 16px;
+        top: -60px;
+        background: white;
+        padding: 8px;
+        z-index: 5;
+      }
+      .skip:focus {
+        top: 8px;
+      }
+      header {
+        background: #19352c;
+        color: #fafcf4;
+        padding: 22px max(24px, calc((100vw - 1240px) / 2));
+      }
+      header a {
+        color: #e3eddf;
+      }
+      header .brand {
+        letter-spacing: 0.18em;
+        font-size: 13px;
+        font-weight: 750;
+      }
+      header nav {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+        font-size: 14px;
+      }
+      .wrap {
+        max-width: 1240px;
+        margin: auto;
+        padding: 32px 24px;
+      }
+      .intro {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+      h1 {
+        font-size: clamp(30px, 4vw, 44px);
+        letter-spacing: -0.04em;
+        line-height: 1.15;
+        margin: 6px 0 14px;
+      }
+      h2 {
+        font-size: 28px;
+        line-height: 1.25;
+        margin: 12px 0;
+      }
+      h3 {
+        font-size: 17px;
+        margin: 26px 0 8px;
+      }
+      p {
+        margin: 10px 0;
+      }
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 12px;
+        font-weight: 750;
+        color: var(--muted);
+      }
+      .intro p {
+        max-width: 720px;
+        color: var(--muted);
+      }
+      .badge {
+        display: inline-block;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 3px 9px;
+        font-size: 12px;
+        background: #f0f4ea;
+        white-space: nowrap;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 320px minmax(0, 1fr);
+        gap: 24px;
+        align-items: start;
+      }
+      aside,
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--paper);
+        box-shadow: 0 4px 14px #19352c05;
+      }
+      aside {
+        padding: 20px;
+        position: sticky;
+        top: 16px;
+        max-height: calc(100vh - 32px);
+        overflow: auto;
+      }
+      label {
+        font-size: 13px;
+        font-weight: 650;
+      }
+      input {
+        display: block;
+        width: 100%;
+        border: 1px solid #9eafa0;
+        padding: 10px;
+        border-radius: 6px;
+        margin: 6px 0 14px;
+        background: white;
+        color: var(--ink);
+      }
+      .outline ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .outline ul ul {
+        margin-left: 10px;
+        padding-left: 12px;
+        border-left: 1px solid var(--line);
+      }
+      .outline button,
+      .outline summary {
+        display: block;
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        padding: 9px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      .outline summary {
+        display: list-item;
+        cursor: pointer;
+        list-style-position: inside;
+      }
+      .outline button:hover,
+      .outline summary:hover {
+        background: #eef2e7;
+      }
+      .outline [aria-current="true"] {
+        background: #dfead7;
+        font-weight: 700;
+      }
+      .kind {
+        display: block;
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+      .card {
+        padding: 30px;
+        min-width: 0;
+      }
+      .breadcrumbs {
+        font-size: 13px;
+        color: var(--muted);
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .breadcrumbs button,
+      .related button {
+        border: 0;
+        background: none;
+        padding: 0;
+        color: #20513d;
+        text-decoration: underline;
+      }
+      .identifier {
+        font-size: 13px;
+        overflow-wrap: anywhere;
+        color: var(--muted);
+      }
+      code {
+        font-family: ui-monospace, monospace;
+        font-size: 0.9em;
+      }
+      pre {
+        background: #eef2e7;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 16px;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        font-size: 14px;
+      }
+      .definition {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      .facts {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 18px 0;
+      }
+      .callout {
+        padding: 14px 16px;
+        border-left: 3px solid #829966;
+        background: #f0f4ea;
+        font-size: 14px;
+        margin: 20px 0;
+      }
+      .related {
+        display: flex;
+        gap: 8px 18px;
+        flex-wrap: wrap;
+      }
+      .children {
+        display: grid;
+        gap: 8px;
+      }
+      .children button {
+        text-align: left;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: white;
+        padding: 12px;
+        color: var(--ink);
+      }
+      .children small {
+        display: block;
+        color: var(--muted);
+      }
+      .fine {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        margin-top: 24px;
+        padding-top: 16px;
+      }
+      .hidden,
+      [hidden] {
+        display: none !important;
+      }
+      @media (max-width: 760px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          position: static;
+          max-height: none;
+        }
+        .wrap {
+          padding: 24px 16px;
+        }
+        .card {
+          padding: 20px;
+        }
+        .intro {
+          display: block;
+        }
+        .intro > .badge {
+          margin-top: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#detail">Skip to field details</a>
+    <header>
+      <div class="brand">LODE / HAY DESCRIPTION SPECIFICATION</div>
+      <nav aria-label="Documentation">
+        <a href="index.html">All field guides</a>
+        <a href="../index.html">Specification overview</a
+        ><a href="../fields/crop_management/">Full In-Season Crop Management reference</a>
+      </nav>
+    </header>
+    <main class="wrap">
+      <div class="intro">
+        <div>
+          <div class="eyebrow">Field guide · Review prototype</div>
+          <h1>In-Season Crop Management</h1>
+          <p>Explore field definitions, their context, and any nested members. Choose a field or search for its exact identifier.</p>
+        </div>
+        <span class="badge" id="version"></span>
+      </div>
+      <div class="layout">
+        <aside aria-label="In-Season Crop Management outline">
+          <label for="search">Find a field</label
+          ><input
+            id="search"
+            type="search"
+            placeholder="Name or exact identifier…"
+            autocomplete="off"
+          />
+          <p class="fine" id="results" role="status"></p>
+          <nav class="outline" id="outline" aria-label="Fields"></nav>
+          <p class="fine">
+            Section / navigation group = documentation organization.<br />Component
+            = one structured block.<br />Repeated object = one entry per item.
+          </p>
+          <button id="reset" type="button">
+            Clear search &amp; expand all
+          </button>
+        </aside>
+        <section
+          id="detail"
+          class="card"
+          tabindex="-1"
+          aria-labelledby="field-title"
+        ></section>
+      </div>
+      <footer class="fine">
+        Read-only presentation prototype. Section and navigation-group
+        breadcrumbs describe the documentation hierarchy, not a new record
+        envelope. Existing identifiers and record structures are preserved.
+        Examples are fragments, not complete records or validation results.
+      </footer>
+    </main>
+    <noscript
+      ><p class="wrap">
+        This interactive prototype needs JavaScript.
+        <a href="../fields/crop_management/">Read the complete In-Season Crop Management reference</a
+        >.
+      </p></noscript
+    >
+    <script id="guide-data" type="application/json">
+      {"version": "0.92.0", "publication": "unreleased", "root": {"key": "crop_management", "id": "crop_management", "title": "In-Season Crop Management", "anchor": "node-sections-5", "source": {"id": "crop_management", "title": "In-Season Crop Management", "description": "This section documents how the hay crop was managed during the growing season - including cutting strategy, weed and pest management, and other contextual information such as weather stresses or field notes.\nThese details help buyers and agronomists evaluate how active crop management may have influenced the resulting forage quality, consistency, and marketability.\n", "fields": [{"id": "growth_conditions_notes", "data_type": "string", "valid_values": "free-text string, max 500 characters", "definition": "Optional field for describing notable growing conditions that may have impacted the hay crop - such as drought, flooding, hail, or heat stress.\nBecause such conditions are unpredictable and varied, this field uses a free-text format to allow flexible input.\nExample entries:\n  - `Light drought stress during early growth; recovered by late season`\n  - `Localized hail damage in May`\n  - `Flooded low areas did not contribute to harvest`\n\nThis field is optional but may support transparency in high-trust markets or export documentation.\n"}, {"id": "weed_pressure_observed", "data_type": "enum", "valid_values": ["none", "low", "moderate", "high", "unknown"], "definition": "Estimates the level of weed presence in the field during the growing season.\n- `none`: No visible weed pressure; stand appears clean and uniform - `low`: Minor weed presence; unlikely to affect palatability or marketability - `moderate`: Noticeable weed presence; may influence feed value or buyer preference - `high`: Significant weed presence; likely to reduce market value or trigger restrictions - `unknown`: Seller does not know or declined to report\nThis field supports transparency and may inform eligibility for \"certified weed free\" programs.\n"}, {"id": "hay_herbicide_treated", "data_type": "enum", "valid_values": [true, false, "unknown"], "definition": "Discloses whether herbicides were applied to the source field(s) during the growing season.\nHerbicide use may influence weed pressure, forage purity, and chemical residue risk.\n- `true`: Herbicides were used - `false`: No herbicides were applied - `unknown`: Seller does not know or does not wish to disclose\n"}, {"id": "pest_pressure_observed", "data_type": "enum", "valid_values": ["none", "low", "moderate", "high", "unknown"], "definition": "Reports the level of pest pressure during the growing season.\n- `none`: No notable pest activity - `low`: Minor pest presence; little or no impact - `moderate`: Noticeable pest presence; some impact on leaf loss, yield, or quality - `high`: Major pest infestation likely to affect quality or marketability - `unknown`: Seller does not know or declined to report\nPests may include aphids, armyworms, leafhoppers, or weevils.\n"}, {"id": "hay_pesticide_treated", "data_type": "enum", "valid_values": [true, false, "unknown"], "definition": "Discloses whether pesticides (excluding herbicides) such as insecticides, fungicides, or miticides were applied to the hay crop during its growing season.\nThis field is important for organic compliance, residue monitoring, and sensitive livestock species.\n- `true`: One or more pesticide treatments were applied - `false`: No pesticide treatments were applied - `unknown`: Seller does not know or does not wish to disclose\n"}, {"id": "hay_preservative_applied", "data_type": "enum", "valid_values": [true, false, "unknown"], "definition": "Indicates whether a preservative - such as propionic acid - was applied to the hay during harvest or storage.\nPreservatives are used to inhibit mold growth and improve storability for hay baled at higher moisture levels.\n- `true`: A preservative was applied - `false`: No preservative was used - `unknown`: Seller does not know or does not wish to disclose\n"}, {"id": "hay_coloring_agent_used", "data_type": "enum", "valid_values": [true, false, "unknown"], "definition": "Indicates whether a coloring agent was applied to the hay for cosmetic or marketing purposes.\nWhile coloring agents do not alter nutritional value, they may influence buyer perception or suitability for certain markets.\n- `true`: A coloring agent was used - `false`: No coloring agent was applied - `unknown`: Seller does not know or does not wish to disclose\n"}, {"id": "cutting_regimen_usual", "data_type": "int", "valid_values": "positive integer", "definition": "Represents the grower's customary number of hay cuttings per growing season, based on long-term practice with this stand or forage type.\nThis field supports agronomic profiling and helps buyers understand harvest frequency and regrowth potential.\n"}, {"id": "cutting_stage_target", "data_type": "enum", "valid_values": ["early vegetative", "late vegetative", "early bud", "full bud", "early bloom", "full bloom", "boot stage", "heading", "other", "unknown"], "definition": "Identifies the growth stage at which the grower typically aims to cut hay for optimal quality and yield.\n- `early bud`: Alfalfa cut when first buds appear (dairy-grade forage) - `boot stage`: Grass cut when seed head is enclosed (balance yield and quality) - `full bloom`: Often cut here for seed production or low-cost forage - `other`: Atypical or user-defined cutting target - `unknown`: Not disclosed or unknown\nThis is a grower-reported target, not a measurement of actual maturity at harvest.\n"}]}, "example": null, "documentary": false, "related": [], "children": [{"key": "crop_management/growth_conditions_notes", "id": "growth_conditions_notes", "title": "Growth conditions notes", "anchor": "node-sections-5-fields-0", "source": {"id": "growth_conditions_notes", "data_type": "string", "valid_values": "free-text string, max 500 characters", "definition": "Optional field for describing notable growing conditions that may have impacted the hay crop - such as drought, flooding, hail, or heat stress.\nBecause such conditions are unpredictable and varied, this field uses a free-text format to allow flexible input.\nExample entries:\n  - `Light drought stress during early growth; recovered by late season`\n  - `Localized hail damage in May`\n  - `Flooded low areas did not contribute to harvest`\n\nThis field is optional but may support transparency in high-trust markets or export documentation.\n"}, "example": "growth_conditions_notes: Source reported dry conditions.", "documentary": false, "related": [], "children": []}, {"key": "crop_management/weed_pressure_observed", "id": "weed_pressure_observed", "title": "Weed pressure observed", "anchor": "node-sections-5-fields-1", "source": {"id": "weed_pressure_observed", "data_type": "enum", "valid_values": ["none", "low", "moderate", "high", "unknown"], "definition": "Estimates the level of weed presence in the field during the growing season.\n- `none`: No visible weed pressure; stand appears clean and uniform - `low`: Minor weed presence; unlikely to affect palatability or marketability - `moderate`: Noticeable weed presence; may influence feed value or buyer preference - `high`: Significant weed presence; likely to reduce market value or trigger restrictions - `unknown`: Seller does not know or declined to report\nThis field supports transparency and may inform eligibility for \"certified weed free\" programs.\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "crop_management/hay_herbicide_treated", "id": "hay_herbicide_treated", "title": "Hay herbicide treated", "anchor": "node-sections-5-fields-2", "source": {"id": "hay_herbicide_treated", "data_type": "enum", "valid_values": [true, false, "unknown"], "definition": "Discloses whether herbicides were applied to the source field(s) during the growing season.\nHerbicide use may influence weed pressure, forage purity, and chemical residue risk.\n- `true`: Herbicides were used - `false`: No herbicides were applied - `unknown`: Seller does not know or does not wish to disclose\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "crop_management/pest_pressure_observed", "id": "pest_pressure_observed", "title": "Pest pressure observed", "anchor": "node-sections-5-fields-3", "source": {"id": "pest_pressure_observed", "data_type": "enum", "valid_values": ["none", "low", "moderate", "high", "unknown"], "definition": "Reports the level of pest pressure during the growing season.\n- `none`: No notable pest activity - `low`: Minor pest presence; little or no impact - `moderate`: Noticeable pest presence; some impact on leaf loss, yield, or quality - `high`: Major pest infestation likely to affect quality or marketability - `unknown`: Seller does not know or declined to report\nPests may include aphids, armyworms, leafhoppers, or weevils.\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "crop_management/hay_pesticide_treated", "id": "hay_pesticide_treated", "title": "Hay pesticide treated", "anchor": "node-sections-5-fields-4", "source": {"id": "hay_pesticide_treated", "data_type": "enum", "valid_values": [true, false, "unknown"], "definition": "Discloses whether pesticides (excluding herbicides) such as insecticides, fungicides, or miticides were applied to the hay crop during its growing season.\nThis field is important for organic compliance, residue monitoring, and sensitive livestock species.\n- `true`: One or more pesticide treatments were applied - `false`: No pesticide treatments were applied - `unknown`: Seller does not know or does not wish to disclose\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "crop_management/hay_preservative_applied", "id": "hay_preservative_applied", "title": "Hay preservative applied", "anchor": "node-sections-5-fields-5", "source": {"id": "hay_preservative_applied", "data_type": "enum", "valid_values": [true, false, "unknown"], "definition": "Indicates whether a preservative - such as propionic acid - was applied to the hay during harvest or storage.\nPreservatives are used to inhibit mold growth and improve storability for hay baled at higher moisture levels.\n- `true`: A preservative was applied - `false`: No preservative was used - `unknown`: Seller does not know or does not wish to disclose\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "crop_management/hay_coloring_agent_used", "id": "hay_coloring_agent_used", "title": "Hay coloring agent used", "anchor": "node-sections-5-fields-6", "source": {"id": "hay_coloring_agent_used", "data_type": "enum", "valid_values": [true, false, "unknown"], "definition": "Indicates whether a coloring agent was applied to the hay for cosmetic or marketing purposes.\nWhile coloring agents do not alter nutritional value, they may influence buyer perception or suitability for certain markets.\n- `true`: A coloring agent was used - `false`: No coloring agent was applied - `unknown`: Seller does not know or does not wish to disclose\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "crop_management/cutting_regimen_usual", "id": "cutting_regimen_usual", "title": "Cutting regimen usual", "anchor": "node-sections-5-fields-7", "source": {"id": "cutting_regimen_usual", "data_type": "int", "valid_values": "positive integer", "definition": "Represents the grower's customary number of hay cuttings per growing season, based on long-term practice with this stand or forage type.\nThis field supports agronomic profiling and helps buyers understand harvest frequency and regrowth potential.\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "crop_management/cutting_stage_target", "id": "cutting_stage_target", "title": "Cutting stage target", "anchor": "node-sections-5-fields-8", "source": {"id": "cutting_stage_target", "data_type": "enum", "valid_values": ["early vegetative", "late vegetative", "early bud", "full bud", "early bloom", "full bloom", "boot stage", "heading", "other", "unknown"], "definition": "Identifies the growth stage at which the grower typically aims to cut hay for optimal quality and yield.\n- `early bud`: Alfalfa cut when first buds appear (dairy-grade forage) - `boot stage`: Grass cut when seed head is enclosed (balance yield and quality) - `full bloom`: Often cut here for seed production or low-cost forage - `other`: Atypical or user-defined cutting target - `unknown`: Not disclosed or unknown\nThis is a grower-reported target, not a measurement of actual maturity at harvest.\n"}, "example": null, "documentary": false, "related": [], "children": []}]}, "sectionId": "crop_management", "nutrient": false, "metadata": false, "reference": "../fields/crop_management/", "introCard": "Choose a field from the outline. Expand a component to see its members. Repeated lists describe one set of members per entry.", "notice": null}
+    </script>
+    <script>
+      "use strict";
+      const data = JSON.parse(
+          document.getElementById("guide-data").textContent,
+        ),
+        root = data.root;
+      const nodes = new Map(),
+        parents = new Map(),
+        outline = document.getElementById("outline"),
+        detail = document.getElementById("detail"),
+        search = document.getElementById("search");
+      function index(node, parent) {
+        nodes.set(node.key, node);
+        if (parent) parents.set(node.key, parent);
+        node.children.forEach((child) => index(child, node));
+      }
+      index(root);
+      function el(tag, text, cls) {
+        const item = document.createElement(tag);
+        if (text !== undefined) item.textContent = text;
+        if (cls) item.className = cls;
+        return item;
+      }
+      function kind(node) {
+        return node.presentation
+          ? "Navigation group · display only"
+          : node.source.data_type === "section"
+            ? "Documentation marker · no stored value"
+            : node === root
+              ? "Documentation section"
+              : node.documentary
+                ? "Documentation subsection"
+                : node.source.data_type === "object[]"
+                  ? "Repeated object · list entries"
+                  : node.source.data_type === "list" &&
+                      node.source.item_type === "component"
+                    ? "Repeated component list · entries"
+                    : node.source.data_type === "component"
+                      ? "Component · structured block"
+                      : {
+                          string: "Text",
+                          boolean: "Boolean",
+                          enum: "Enumeration",
+                          float: "Number",
+                          int: "Whole number",
+                          datetime: "Date",
+                          "string[]": "List of text",
+                          "enum (multi-select)": "Multi-select enumeration",
+                        }[node.source.data_type] || node.source.data_type;
+      }
+      function selectButton(node) {
+        const b = el("button", node.title);
+        b.type = "button";
+        b.dataset.key = node.key;
+        b.append(el("span", kind(node), "kind"));
+        b.addEventListener("click", () => select(node.key, true));
+        return b;
+      }
+      function matches(node, query) {
+        return (
+          (node.title + " " + (node.id || "")).toLowerCase().includes(query) ||
+          node.children.some((c) => matches(c, query))
+        );
+      }
+      function revealOutline(key, includeOwnGroup = false, scroll = false) {
+        const selected = Array.from(
+          outline.querySelectorAll("[data-key]"),
+        ).find((item) => item.dataset.key === key);
+        let ancestor = selected?.parentElement;
+        if (selected?.tagName === "SUMMARY" && !includeOwnGroup)
+          ancestor = ancestor?.parentElement;
+        while (ancestor) {
+          if (ancestor.tagName === "DETAILS") ancestor.open = true;
+          ancestor = ancestor.parentElement;
+        }
+        if (selected && scroll)
+          selected.scrollIntoView({ block: "nearest" });
+      }
+      function renderOutline(expandAll = false) {
+        outline.replaceChildren();
+        const query = search.value.trim().toLowerCase();
+        let count = 0;
+        const list = el("ul");
+        function branch(node) {
+          if (query && !matches(node, query)) return null;
+          const li = el("li");
+          if (
+            !query ||
+            (node.title + " " + (node.id || "")).toLowerCase().includes(query)
+          )
+            count++;
+          if (node.children.length) {
+            const box = el("details");
+            box.open =
+              expandAll || !data.nutrient || node === root || Boolean(query);
+            const summary = el("summary", node.title);
+            summary.dataset.key = node.key;
+            summary.append(el("span", kind(node), "kind"));
+            summary.addEventListener("click", () => select(node.key, false));
+            box.append(summary);
+            const children = el("ul");
+            node.children.forEach((c) => {
+              const item = branch(c);
+              if (item) children.append(item);
+            });
+            box.append(children);
+            li.append(box);
+          } else li.append(selectButton(node));
+          return li;
+        }
+        const item = branch(root);
+        if (item) list.append(item);
+        outline.append(list);
+        document.getElementById("results").textContent = query
+          ? count
+            ? count + " matching fields or sections"
+            : "No matching fields. Clear the search to browse."
+          : Array.from(nodes.values()).filter((n) => !n.presentation).length +
+            " source fields and sections · expand to explore";
+        markCurrent();
+        // Rebuilding the unfiltered outline must not hide the open field card.
+        if (!query) revealOutline(current);
+      }
+      let current = root.key;
+      function markCurrent() {
+        outline.querySelectorAll("[data-key]").forEach((e) => {
+          if (e.dataset.key === current) e.setAttribute("aria-current", "true");
+          else e.removeAttribute("aria-current");
+        });
+      }
+      function block(title, text) {
+        if (!text) return;
+        detail.append(el("h3", title));
+        detail.append(el("p", text, "definition"));
+      }
+      function select(key, focus, historyMode = "push") {
+        const node = nodes.get(key);
+        if (!node) return;
+        current = key;
+        // Related links may target a field excluded by the active search.
+        if (
+          focus &&
+          !Array.from(outline.querySelectorAll("[data-key]")).some(
+            (item) => item.dataset.key === key,
+          )
+        ) {
+          search.value = "";
+          renderOutline();
+        }
+        detail.replaceChildren();
+        const chain = [];
+        let cursor = node;
+        while (cursor) {
+          chain.unshift(cursor);
+          cursor = parents.get(cursor.key);
+        }
+        const crumbs = el("nav", undefined, "breadcrumbs");
+        crumbs.setAttribute("aria-label", "Documentation location");
+        chain.forEach((entry, i) => {
+          if (i) crumbs.append(el("span", "›"));
+          if (entry === node) crumbs.append(el("span", entry.title));
+          else {
+            const b = el("button", entry.title);
+            b.type = "button";
+            b.addEventListener("click", () => select(entry.key, true));
+            crumbs.append(b);
+          }
+        });
+        const heading = el("h2", node.title);
+        heading.id = "field-title";
+        detail.append(
+          crumbs,
+          heading,
+          el(
+            "p",
+            node.presentation
+              ? "Navigation only · not a record key"
+              : "Identifier: " + node.id,
+            "identifier",
+          ),
+        );
+        const facts = el("div", undefined, "facts");
+        facts.append(el("span", kind(node), "badge"));
+        if (
+          node !== root &&
+          !node.presentation &&
+          node.source.data_type !== "section" &&
+          !node.documentary
+        )
+          facts.append(
+            el(
+              "span",
+              node.source.required === false
+                ? "Optional"
+                : node.source.required === true
+                  ? "Required"
+                  : "Requirements: see definition",
+              "badge",
+            ),
+          );
+        detail.append(facts);
+        block(
+          node.source.definition ? "Definition" : "Description",
+          node.source.definition || node.source.description,
+        );
+        if (node.source.definition)
+          block("Description", node.source.description);
+        block("Details", node.source.details);
+        block("Narration", node.source.narration);
+        if (node.source.id && node.source.name)
+          detail.append(
+            el(
+              "p",
+              "The legacy name is a compatibility alias for this same field: " +
+                node.source.name,
+              "fine",
+            ),
+          );
+        if (node === root) detail.append(el("p", data.introCard, "callout"));
+        if (data.notice) detail.append(el("p", data.notice, "callout"));
+        block("Guidance", node.source.guidance);
+        block("Source validation guidance", node.source.validation_guidance);
+        if (node.source.conditional_enums) {
+          detail.append(el("h3", "Conditional options from the source"));
+          Object.entries(node.source.conditional_enums).forEach(([name, condition]) => {
+            detail.append(el("h4", name));
+            detail.append(el("p", "Applies to: " + condition.applies_to, "definition"));
+            const pre = el("pre");
+            pre.append(el("code", JSON.stringify(condition.values, null, 2)));
+            detail.append(pre);
+          });
+        }
+        if (parents.get(key)?.id === "source_fields")
+          detail.append(
+            el(
+              "p",
+              "Entry rule: supply a nonblank field name or field identifier. Identifier scope alone is insufficient. Omit unavailable components.",
+              "callout",
+            ),
+          );
+        if (node.source.valid_values !== undefined) {
+          detail.append(
+            el(
+              "h3",
+              Array.isArray(node.source.valid_values)
+                ? "Declared values"
+                : "Source value guidance",
+            ),
+          );
+          const pre = el("pre");
+          pre.append(
+            el(
+              "code",
+              Array.isArray(node.source.valid_values)
+                ? node.source.valid_values
+                    .map((v) => JSON.stringify(v))
+                    .join("\n")
+                : node.source.valid_values,
+            ),
+          );
+          detail.append(pre);
+          if (
+            Array.isArray(node.source.valid_values) &&
+            node.source.valid_values.some(
+              (value) =>
+                typeof value === "string" &&
+                (value.includes("|") || value.includes("`")),
+            )
+          )
+            detail.append(
+              el(
+                "p",
+                "Legacy literal values are reproduced exactly; they are not split or cleaned.",
+                "fine",
+              ),
+            );
+        }
+        if (node.source.valid_range !== undefined) {
+          detail.append(el("h3", "Declared numeric bounds"));
+          const bounds = el("pre");
+          bounds.append(
+            el("code", JSON.stringify(node.source.valid_range, null, 2)),
+          );
+          detail.append(bounds);
+        }
+        const other = Object.fromEntries(
+          Object.entries(node.source).filter(
+            ([key]) =>
+              ![
+                "id",
+                "name",
+                "title",
+                "definition",
+                "description",
+                "details",
+                "narration",
+                "items",
+                "examples",
+                "guidance",
+                "validation_guidance",
+                "conditional_enums",
+                "notes",
+                "references",
+                "valid_values",
+                "valid_range",
+                "fields",
+                "components",
+                "groups",
+                "subsections",
+                "data_type",
+                "required",
+              ].includes(key),
+          ),
+        );
+        if (Object.keys(other).length) {
+          const more = el("details"),
+            label = el("summary", "Additional source metadata"),
+            pre = el("pre");
+          pre.append(el("code", JSON.stringify(other, null, 2)));
+          more.append(label, pre);
+          detail.append(more);
+        }
+        if (node.source.notes) block("Notes", node.source.notes.join("\n\n"));
+        if (Array.isArray(node.source.items)) {
+          detail.append(el("h3", "Documentation text"));
+          node.source.items.forEach((item) =>
+            detail.append(
+              el(
+                "p",
+                typeof item === "string" ? item : JSON.stringify(item, null, 2),
+                "definition",
+              ),
+            ),
+          );
+        }
+        if (Array.isArray(node.source.examples)) {
+          detail.append(el("h3", "Source examples"));
+          node.source.examples.forEach((text) => {
+            const pre = el("pre");
+            pre.append(el("code", text));
+            detail.append(pre);
+          });
+        }
+        const example = node.example || parents.get(key)?.example;
+        if (example) {
+          detail.append(
+            el(
+              "h3",
+              node.example
+                ? "Example fragment"
+                : "Example in its parent component",
+            ),
+          );
+          const pre = el("pre");
+          pre.append(el("code", example));
+          detail.append(pre);
+        }
+        if (node.children.length) {
+          detail.append(
+            el(
+              "h3",
+              node.presentation
+                ? "Fields in this navigation group"
+                : node === root
+                  ? data.nutrient
+                    ? "Navigation groups"
+                    : data.metadata
+                      ? "Documentation subsections"
+                      : "Fields in this section"
+                  : "Members" +
+                    (node.source.data_type === "object[]" ||
+                    (node.source.data_type === "list" &&
+                      node.source.item_type === "component")
+                      ? " of each entry"
+                      : ""),
+            ),
+          );
+          const children = el("div", undefined, "children");
+          node.children.forEach((c) => children.append(selectButton(c)));
+          detail.append(children);
+        }
+        const related = node.related.map((k) => nodes.get(k)).filter(Boolean);
+        if (related.length) {
+          detail.append(el("h3", "Read alongside"));
+          const links = el("div", undefined, "related");
+          related.forEach((n) => links.append(selectButton(n)));
+          detail.append(links);
+          detail.append(
+            el(
+              "p",
+              "These are related concepts, not inferred values or automatic dependencies.",
+              "fine",
+            ),
+          );
+        }
+        if (node.source.references) {
+          detail.append(el("h3", "References"));
+          node.source.references.forEach((ref) => {
+            const p = el(
+              "p",
+              ref.title +
+                ([ref.author, ref.publisher].filter(Boolean).length
+                  ? " — " +
+                    [ref.author, ref.publisher].filter(Boolean).join(" · ")
+                  : ""),
+            );
+            if (/^https?:\/\//.test(ref.url || "")) {
+              const link = el("a", " Read source");
+              link.href = ref.url;
+              p.append(link);
+            }
+            detail.append(p);
+          });
+        }
+        const a = el("a", "Read this definition in the full reference");
+        a.href = data.reference + "#" + node.anchor;
+        detail.append(el("hr"), a);
+        const hash = "#" + encodeURIComponent(key);
+        if (location.hash !== hash && historyMode !== "none") {
+          if (historyMode === "replace") history.replaceState(null, "", hash);
+          else history.pushState(null, "", hash);
+        }
+        markCurrent();
+        revealOutline(key, focus, true);
+        if (focus) detail.focus();
+      }
+      document.querySelector(".skip").addEventListener("click", (event) => {
+        // Move focus without creating a non-field entry in browser history.
+        event.preventDefault();
+        detail.focus();
+      });
+      search.addEventListener("input", () => renderOutline());
+      document.getElementById("reset").addEventListener("click", () => {
+        search.value = "";
+        renderOutline(true);
+        search.focus();
+      });
+      function restoreLocation() {
+        // The skip link is an ordinary in-page destination, not a field key.
+        if (location.hash === "#detail") return;
+        let key = root.key;
+        try {
+          const requested = decodeURIComponent(location.hash.slice(1));
+          if (nodes.has(requested)) key = requested;
+        } catch {}
+        if (key !== current) select(key, true, "none");
+      }
+      window.addEventListener("popstate", restoreLocation);
+      window.addEventListener("hashchange", restoreLocation);
+      document.getElementById("version").textContent =
+        "Source " +
+        data.version +
+        " · " +
+        (data.publication === "published"
+          ? "Published snapshot"
+          : "Unreleased working reference");
+      renderOutline();
+      let initial = root.key;
+      try {
+        const requested = decodeURIComponent(location.hash.slice(1));
+        if (nodes.has(requested)) initial = requested;
+      } catch {}
+      select(initial, false, "replace");
+    </script>
+  </body>
+</html>

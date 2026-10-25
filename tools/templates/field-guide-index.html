@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Field guides · Lode Hay Description Specification</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f0f2e9;
+        color: #19352c;
+        font:
+          16px/1.6 system-ui,
+          sans-serif;
+      }
+      header {
+        background: #19352c;
+        color: white;
+        padding: 24px;
+      }
+      header a {
+        color: white;
+      }
+      .wrap {
+        max-width: 1240px;
+        margin: auto;
+        padding: 32px 24px;
+      }
+      h1 {
+        font-size: 42px;
+        line-height: 1.15;
+        letter-spacing: -0.04em;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 0 0 12px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 28px;
+      }
+      .card {
+        display: block;
+        background: #fbfcf8;
+        border: 1px solid #d6ddd3;
+        border-radius: 12px;
+        padding: 24px;
+        color: inherit;
+        text-decoration: none;
+      }
+      .card:hover {
+        border-color: #24583f;
+      }
+      .card p {
+        font-size: 14px;
+        margin: 0;
+        color: #52655c;
+      }
+      a:focus-visible {
+        outline: 3px solid #98621b;
+        outline-offset: 4px;
+      }
+      .note {
+        max-width: 800px;
+        color: #52655c;
+      }
+      @media (max-width: 400px) {
+        .wrap {
+          padding: 24px 16px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      LODE / HAY DESCRIPTION SPECIFICATION ·
+      <a href="../index.html">Full reference overview</a>
+    </header>
+    <main class="wrap">
+      <p>FIELD GUIDE · REVIEW PROTOTYPE</p>
+      <h1>Explore the specification</h1>
+      <p class="note">
+        Choose a section, expand its outline, and read each definition in
+        context. Sections organize the documentation; they do not introduce new
+        record envelopes. The guides preserve existing identifiers, values, and
+        nesting.
+      </p>
+      <div class="grid">__GUIDE_CARDS__</div>
+      <p class="note">
+        Metadata covers the specification’s authorship, licensing, history, and
+        publication context, rather than fields in a hay record. These guides do
+        not edit or validate records.
+      </p>
+    </main>
+  </body>
+</html>

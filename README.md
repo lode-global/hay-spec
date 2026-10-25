@@ -65,11 +65,10 @@ specification. Labels do not rename record keys; navigation does not regroup sto
 fields. Existing source titles take precedence. See the
 [display configuration notes](./notes/reference-display.md).
 
-[Try the Traceability field-guide prototype](./docs/guides/traceability.html)
-or [Nutrient Analysis guide](./docs/guides/nutrient_analysis.html)
-in the locally built site. They provide an expandable outline, searchable labels
-and identifiers, field detail cards, and links to the full reference. See
-[prototype review notes](./notes/traceability-field-guide.md) for how to preview it.
+[Browse the field guides](./docs/guides/index.html) in the locally built site.
+Every specification section has a searchable outline and detail cards, including
+nested list members and documentation-only metadata. See the
+[guide review notes](./notes/all-section-field-guides.md) for preview instructions.
 
 To regenerate and check the reference locally:
 

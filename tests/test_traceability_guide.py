@@ -6,7 +6,7 @@ import subprocess
 import unittest
 
 from tools.generate_docs import outputs
-from tools.traceability_guide import guide
+from tools.field_guides import guide
 from tools.validate_spec import load_spec
 
 ROOT = Path(__file__).resolve().parents[1]

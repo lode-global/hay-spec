@@ -1,5 +1,7 @@
 """Build read-only section guides without changing canonical definitions."""
 import json
+import re
+from html import escape
 from pathlib import Path
 
 
@@ -53,6 +55,59 @@ NUTRIENT_RELATED = {
 }
 
 
+SECTION_EXAMPLES = {
+    'stand': {'stand_mixture_intended': 'stand_mixture_intended: true',
+              'forage_variety_count': 'forage_variety_count: 1'},
+    'soil': {'soil_test_ph': 'soil_test_ph: 6.5'},
+    'crop_management': {'growth_conditions_notes': 'growth_conditions_notes: Source reported dry conditions.'},
+    'harvest': {'bale_count': 'bale_count: 100'},
+    'packaging': {'hay_packaging_history': 'hay_packaging_history: original',
+                  'bale_dimension_units': 'bale_dimension_units: inches'},
+}
+SECTION_RELATED = {
+    'stand': {
+        'forage_variety_count': ['stand_mixture_intended', 'forage_variety_components'],
+        'forage_variety_components': ['forage_variety_count', 'stand_mixture_intended'],
+        'variety_representation_target': ['forage_variety_components/variety_representation_result'],
+        'variety_representation_result': ['forage_variety_components/variety_representation_target'],
+    },
+    'location': {
+        'source_field_area': ['source_field_area_units'],
+        'source_field_area_units': ['source_field_area'],
+        'source_field_elevation': ['source_field_elevation_units'],
+        'source_field_elevation_units': ['source_field_elevation'],
+        'irrigation_method_used': ['irrigation_status', 'irrigation_method_available'],
+    },
+    'soil': {
+        'amount_fertilized_nitrogen': ['amount_fertilized_units', 'date_fertilized_nitrogen'],
+        'amount_fertilized_potassium': ['amount_fertilized_units', 'date_fertilized_potassium'],
+        'amount_fertilized_phosphorus': ['amount_fertilized_units', 'date_fertilized_phosphorus'],
+        'amendment_amount': ['organic_amendments_applied/amendment_amount_units'],
+        'amendment_amount_units': ['organic_amendments_applied/amendment_amount'],
+    },
+    'harvest': {
+        'source_field_yield': ['source_field_yield_units'],
+        'source_field_yield_units': ['source_field_yield'],
+        'average_bale_weight': ['bale_weight_assessment_method', 'bale_weight_intended'],
+    },
+    'packaging': {
+        'bale_shape': ['bale_dimension_diameter', 'bale_dimension_axis', 'bale_dimension_height'],
+        'bale_dimension_diameter': ['bale_shape', 'bale_dimension_axis', 'bale_dimension_units'],
+        'bale_dimension_axis': ['bale_shape', 'bale_dimension_diameter', 'bale_dimension_units'],
+        'bale_dimension_height': ['bale_shape', 'bale_dimension_units'],
+        'bale_dimension_width': ['bale_shape', 'bale_dimension_units'],
+        'bale_dimension_length': ['bale_shape', 'bale_dimension_units'],
+        'bale_weight_intended_repackaged': ['hay_packaging_history', 'bale_weight_units'],
+    },
+    'physical_characteristics': {
+        'handling_events': ['final_storage_structure', 'restacked_since_baling'],
+        'final_storage_structure': ['handling_events'],
+        'stage_label': ['handling_events'],
+        'restacked_since_baling': ['handling_events'],
+    },
+}
+
+
 def guide(spec, display=None, section_id='traceability'):
     """Return None for absent sections; all grouping is presentation-only."""
     indexed = [(i, s) for i, s in enumerate(spec['sections']) if s['id'] == section_id]
@@ -60,8 +115,10 @@ def guide(spec, display=None, section_id='traceability'):
         return None
     section_index, section = indexed[0]
     titles = (display or {}).get('titles', {})
-    examples = NUTRIENT_EXAMPLES if section_id == 'nutrient_analysis' else EXAMPLES
-    related = NUTRIENT_RELATED if section_id == 'nutrient_analysis' else RELATED
+    examples = (NUTRIENT_EXAMPLES if section_id == 'nutrient_analysis' else
+                EXAMPLES if section_id == 'traceability' else SECTION_EXAMPLES.get(section_id, {}))
+    related = (NUTRIENT_RELATED if section_id == 'nutrient_analysis' else
+               RELATED if section_id == 'traceability' else SECTION_RELATED.get(section_id, {}))
 
     def node(item, scope, anchor):
         identity = item.get('id', item.get('name'))
@@ -71,6 +128,7 @@ def guide(spec, display=None, section_id='traceability'):
             'title': item.get('title', titles.get(key, identity)),
             'anchor': anchor, 'source': item,
             'example': examples.get(identity),
+            'documentary': section_id == 'metadata',
             'related': [section_id + '/' + value for value in related.get(identity, [])],
             'children': [],
         }
@@ -105,11 +163,14 @@ def guide(spec, display=None, section_id='traceability'):
     data = {
         'version': spec['version'], 'publication': spec.get('publication_status'),
         'root': root, 'sectionId': section_id, 'nutrient': nutrient,
+        'metadata': section_id == 'metadata',
         'reference': f'../fields/{section_id}/',
         'introCard': ('Choose a navigation group, then a laboratory or nutrient field. '
                       'Grouping is visual only: nutrient fields retain their existing flat identifiers.'
-                      if nutrient else 'Choose a field from the outline. Expand a component to see its '
-                      'members. Source fields is a repeated collection; its members describe each individual entry.'),
+                      if nutrient else 'Browse the documentation subsections. These describe the specification, '
+                      'not fields in a hay record.' if section_id == 'metadata' else
+                      'Choose a field from the outline. Expand a component to see its '
+                      'members. Repeated lists describe one set of members per entry.'),
         'notice': ('Read each definition for units, reporting basis, and sample context. '
                    'Typical ranges in prose are not hard rejection limits. This guide does not '
                    'convert units, calculate values, or judge feeding suitability.' if nutrient else None),
@@ -117,13 +178,28 @@ def guide(spec, display=None, section_id='traceability'):
     # This is JSON inside a script element: prevent source text ending the element.
     payload = json.dumps(data, ensure_ascii=False).replace('&', '\\u0026').replace('<', '\\u003c').replace('>', '\\u003e')
     template = (Path(__file__).parent / 'templates' / 'field-guide.html').read_text()
-    from html import escape
     title = section.get('title', section_id)
     intro = ('Explore laboratory provenance, sample basis, and nutrient measurements. '
              'Browse a navigation group or search for an exact field identifier.' if nutrient else
              'Understand how a hay lot connects to its identifiers and contributing production fields. '
-             'Explore the outline, then read a field in context.')
+             'Explore the outline, then read a field in context.' if section_id == 'traceability' else
+             'Explore the specification’s authorship, licensing, history, and publication context.'
+             if section_id == 'metadata' else
+             'Explore field definitions, their context, and any nested members. '
+             'Choose a field or search for its exact identifier.')
     return (template.replace('__SECTION_TITLE__', escape(title))
             .replace('__SECTION_INTRO__', escape(intro))
             .replace('__REFERENCE__', f'../fields/{section_id}/')
             .replace('__GUIDE_DATA__', payload))
+
+
+def guide_index(spec):
+    """Link every canonical section, without presenting sections as record envelopes."""
+    cards = []
+    for section in spec['sections']:
+        identity = section['id']
+        cards.append('<a class="card" href="' + escape(identity, quote=True) + '.html">'
+                     '<h2>' + escape(section.get('title', identity)) + '</h2><p>' +
+                     escape(re.split(r'(?<=[.!?])\s+', section.get('description', '').strip(), maxsplit=1)[0]) + '</p></a>')
+    template = (Path(__file__).parent / 'templates' / 'field-guide-index.html').read_text()
+    return template.replace('__GUIDE_CARDS__', '\n'.join(cards))

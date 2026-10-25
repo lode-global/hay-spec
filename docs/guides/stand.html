@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Stand Composition and Agronomic Characteristics field guide · Lode</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #19352c;
+        --muted: #52655c;
+        --line: #d6ddd3;
+        --paper: #fbfcf8;
+        --green: #24583f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f0f2e9;
+        color: var(--ink);
+        font:
+          16px/1.6 system-ui,
+          sans-serif;
+      }
+      a {
+        color: #20513d;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      a:focus-visible,
+      button:focus-visible,
+      summary:focus-visible,
+      input:focus-visible {
+        outline: 3px solid #98621b;
+        outline-offset: 3px;
+      }
+      .skip {
+        position: absolute;
+        left: 16px;
+        top: -60px;
+        background: white;
+        padding: 8px;
+        z-index: 5;
+      }
+      .skip:focus {
+        top: 8px;
+      }
+      header {
+        background: #19352c;
+        color: #fafcf4;
+        padding: 22px max(24px, calc((100vw - 1240px) / 2));
+      }
+      header a {
+        color: #e3eddf;
+      }
+      header .brand {
+        letter-spacing: 0.18em;
+        font-size: 13px;
+        font-weight: 750;
+      }
+      header nav {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+        font-size: 14px;
+      }
+      .wrap {
+        max-width: 1240px;
+        margin: auto;
+        padding: 32px 24px;
+      }
+      .intro {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+      h1 {
+        font-size: clamp(30px, 4vw, 44px);
+        letter-spacing: -0.04em;
+        line-height: 1.15;
+        margin: 6px 0 14px;
+      }
+      h2 {
+        font-size: 28px;
+        line-height: 1.25;
+        margin: 12px 0;
+      }
+      h3 {
+        font-size: 17px;
+        margin: 26px 0 8px;
+      }
+      p {
+        margin: 10px 0;
+      }
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 12px;
+        font-weight: 750;
+        color: var(--muted);
+      }
+      .intro p {
+        max-width: 720px;
+        color: var(--muted);
+      }
+      .badge {
+        display: inline-block;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 3px 9px;
+        font-size: 12px;
+        background: #f0f4ea;
+        white-space: nowrap;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 320px minmax(0, 1fr);
+        gap: 24px;
+        align-items: start;
+      }
+      aside,
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--paper);
+        box-shadow: 0 4px 14px #19352c05;
+      }
+      aside {
+        padding: 20px;
+        position: sticky;
+        top: 16px;
+        max-height: calc(100vh - 32px);
+        overflow: auto;
+      }
+      label {
+        font-size: 13px;
+        font-weight: 650;
+      }
+      input {
+        display: block;
+        width: 100%;
+        border: 1px solid #9eafa0;
+        padding: 10px;
+        border-radius: 6px;
+        margin: 6px 0 14px;
+        background: white;
+        color: var(--ink);
+      }
+      .outline ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .outline ul ul {
+        margin-left: 10px;
+        padding-left: 12px;
+        border-left: 1px solid var(--line);
+      }
+      .outline button,
+      .outline summary {
+        display: block;
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        padding: 9px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      .outline summary {
+        display: list-item;
+        cursor: pointer;
+        list-style-position: inside;
+      }
+      .outline button:hover,
+      .outline summary:hover {
+        background: #eef2e7;
+      }
+      .outline [aria-current="true"] {
+        background: #dfead7;
+        font-weight: 700;
+      }
+      .kind {
+        display: block;
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+      .card {
+        padding: 30px;
+        min-width: 0;
+      }
+      .breadcrumbs {
+        font-size: 13px;
+        color: var(--muted);
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .breadcrumbs button,
+      .related button {
+        border: 0;
+        background: none;
+        padding: 0;
+        color: #20513d;
+        text-decoration: underline;
+      }
+      .identifier {
+        font-size: 13px;
+        overflow-wrap: anywhere;
+        color: var(--muted);
+      }
+      code {
+        font-family: ui-monospace, monospace;
+        font-size: 0.9em;
+      }
+      pre {
+        background: #eef2e7;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 16px;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        font-size: 14px;
+      }
+      .definition {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      .facts {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 18px 0;
+      }
+      .callout {
+        padding: 14px 16px;
+        border-left: 3px solid #829966;
+        background: #f0f4ea;
+        font-size: 14px;
+        margin: 20px 0;
+      }
+      .related {
+        display: flex;
+        gap: 8px 18px;
+        flex-wrap: wrap;
+      }
+      .children {
+        display: grid;
+        gap: 8px;
+      }
+      .children button {
+        text-align: left;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: white;
+        padding: 12px;
+        color: var(--ink);
+      }
+      .children small {
+        display: block;
+        color: var(--muted);
+      }
+      .fine {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        margin-top: 24px;
+        padding-top: 16px;
+      }
+      .hidden,
+      [hidden] {
+        display: none !important;
+      }
+      @media (max-width: 760px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          position: static;
+          max-height: none;
+        }
+        .wrap {
+          padding: 24px 16px;
+        }
+        .card {
+          padding: 20px;
+        }
+        .intro {
+          display: block;
+        }
+        .intro > .badge {
+          margin-top: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#detail">Skip to field details</a>
+    <header>
+      <div class="brand">LODE / HAY DESCRIPTION SPECIFICATION</div>
+      <nav aria-label="Documentation">
+        <a href="index.html">All field guides</a>
+        <a href="../index.html">Specification overview</a
+        ><a href="../fields/stand/">Full Stand Composition and Agronomic Characteristics reference</a>
+      </nav>
+    </header>
+    <main class="wrap">
+      <div class="intro">
+        <div>
+          <div class="eyebrow">Field guide · Review prototype</div>
+          <h1>Stand Composition and Agronomic Characteristics</h1>
+          <p>Explore field definitions, their context, and any nested members. Choose a field or search for its exact identifier.</p>
+        </div>
+        <span class="badge" id="version"></span>
+      </div>
+      <div class="layout">
+        <aside aria-label="Stand Composition and Agronomic Characteristics outline">
+          <label for="search">Find a field</label
+          ><input
+            id="search"
+            type="search"
+            placeholder="Name or exact identifier…"
+            autocomplete="off"
+          />
+          <p class="fine" id="results" role="status"></p>
+          <nav class="outline" id="outline" aria-label="Fields"></nav>
+          <p class="fine">
+            Section / navigation group = documentation organization.<br />Component
+            = one structured block.<br />Repeated object = one entry per item.
+          </p>
+          <button id="reset" type="button">
+            Clear search &amp; expand all
+          </button>
+        </aside>
+        <section
+          id="detail"
+          class="card"
+          tabindex="-1"
+          aria-labelledby="field-title"
+        ></section>
+      </div>
+      <footer class="fine">
+        Read-only presentation prototype. Section and navigation-group
+        breadcrumbs describe the documentation hierarchy, not a new record
+        envelope. Existing identifiers and record structures are preserved.
+        Examples are fragments, not complete records or validation results.
+      </footer>
+    </main>
+    <noscript
+      ><p class="wrap">
+        This interactive prototype needs JavaScript.
+        <a href="../fields/stand/">Read the complete Stand Composition and Agronomic Characteristics reference</a
+        >.
+      </p></noscript
+    >
+    <script id="guide-data" type="application/json">
+      {"version": "0.92.0", "publication": "unreleased", "root": {"key": "stand", "id": "stand", "title": "Stand Composition and Agronomic Characteristics", "anchor": "node-sections-1", "source": {"id": "stand", "title": "Stand Composition and Agronomic Characteristics", "description": "This section describes the planted forage stand-the biological and agronomic foundation of the hay crop. It includes the intended composition of plant varieties, their representation in the harvested hay, and related agronomic details such as establishment method, density, and maturity at harvest.\nThese fields support transparency around crop planning, species selection, and cultural practices, helping buyers assess the identity, uniformity, and development stage of the forage. The section also captures information relevant to quality, palatability, and intended use, and it helps agricultural professionals interpret how the hay's characteristics relate to field management decisions.\n", "fields": [{"id": "stand_mixture_intended", "data_type": "boolean", "valid_values": [true, false], "definition": "This field expresses whether the grower intended to plant a mixed stand (polyculture) or a pure stand (monoculture) of forage species.\nA value of `true` indicates the intention to grow a mix of species or varieties; a value of `false` indicates a monoculture was intended.\nThis field captures grower intent and does not reflect the final outcome, which may differ due to environmental or agronomic factors. For example, a grower may plant an alfalfa/timothy mix, but only the timothy survives to harvest. This field would still be `true`.\nThis field pairs with `forage_species_type`, which records the actual species composition of the forage at harvest, and with the `hay_variety_instances` group, which captures the grower's target and achieved representation of each variety.\n"}, {"id": "forage_species_type", "data_type": "enum", "valid_values": ["grass", "legume", "grass/legume mix", "other"], "definition": "This field describes the biological classification of the forage species present in the hay at harvest. It reflects the actual or observed composition, rather than the grower's original intention.\n- `grass`: The hay consists primarily of grasses, such as bermudagrass or orchardgrass. - `legume`: The hay consists primarily of legumes, such as alfalfa or clover. - `grass/legume mix`: Both grasses and legumes are present in significant proportion. - `other`: The forage does not fit into the above categories (e.g., brassicas, forbs, or specialty hays).\nThis field supports downstream applications such as nutritional analysis, ration formulation, and marketing. It is best determined based on post-harvest visual inspection or lab analysis, and complements `stand_mixture_intended`.\n"}, {"id": "forage_variety_count", "data_type": "int", "valid_values": "positive integer (0 or greater)", "definition": "This field reports how many distinct forage varieties were identified in the actual harvested crop. It supports both marketing claims (e.g., \"two-variety blend\") and technical purposes, such as determining how many instances of a `forage_variety_component` block will be included in a structured message.\nThis field reflects actual harvest outcome, not grower intent. By contrast, `stand_mixture_intended` expresses whether the grower intended a mixed or pure sward. These two fields together help distinguish between intent and result.\nIn a pure crop, this field should take a value of `1`. In a mixed crop, this field should take a value of `2` or more. If no species or varieties can be positively identified, the value should be `0`, and the `forage_species_type` should be set to `unknown`.\nSystem validations may check for consistency across `stand_mixture_intended`, `forage_variety_count`, and any listed `forage_variety_component` entries.\n"}, {"id": "forage_variety_components", "data_type": "list", "item_type": "component", "definition": "This block describes each intentionally planted forage variety in the hay sward. Pure (monoculture) hay includes one instance; mixed (polyculture) hay includes two or more.\nEach entry should reflect the grower's intention, variety name, and estimated contribution to the harvested crop. This supports both agronomic analysis and marketplace transparency.\nUse this block in combination with `forage_variety_count` and `stand_mixture_intended` to document crop composition and stand complexity.\n", "components": [{"id": "forage_variety", "data_type": "enum", "valid_values": "reference list of forage species, subspecies, or named varieties", "definition": "Enter the full name of the forage variety, such as `Tifton 85 bermudagrass` or `Vernal alfalfa`. When possible, include binomial nomenclature, common name, and GMO status if known or relevant.\nStandardizing variety names supports better market searchability, agronomic traceability, and nutrient expectation setting.\n"}, {"id": "variety_representation_target", "data_type": "int", "valid_values": "whole number ratio (non-negative)", "definition": "Captures the intended proportion of a given forage variety in the seed mix or planting strategy. Use whole-number ratios to reflect seeding intent. For example, if the mix was designed to be 3 parts orchardgrass and 1 part alfalfa, enter `3` for orchardgrass and `1` for alfalfa.\nThis is not a percentage and does not need to sum to 100 - it expresses relative ratios. Systems can calculate proportional percentages from totals.\nHelps buyers and agronomists understand the seeding strategy, even when outcomes differ due to growing conditions or stand establishment issues.\n"}, {"id": "variety_representation_result", "data_type": "int", "valid_values": "integer percentage (0-100)", "definition": "Captures the observed contribution of this variety in the finished hay. Enter a whole number percentage (e.g., `65` for 65%), based on visual inspection, lab results, or grower knowledge.\nThis value reflects real-world outcome and may differ from `variety_representation_target` due to environmental or agronomic factors.\nTotal values across all components should sum to approximately 100%, with minor discrepancies acceptable for estimated inputs.\n"}]}, {"id": "stand_maturity_at_harvest", "data_type": "enum", "conditional_enums": {"grass": {"applies_to": "grass-dominant stands", "values": ["vegetative", "early head", "mid head", "full head", "post-head"]}, "legume": {"applies_to": "legume-dominant stands (e.g., alfalfa or clover)", "values": ["vegetative", "bud", "early bloom", "full bloom", "post-bloom"]}}, "definition": "Records the predominant maturity stage of the forage stand at the time of harvest. Maturity at harvest strongly influences forage quality, including digestibility, fiber content, and crude protein.\nUse the appropriate maturity scale depending on the crop's dominant species type:\n\n  - **Grass scale**: Used for species like bermudagrass, orchardgrass, or timothy.\n  - **Alfalfa (legume) scale**: Used for alfalfa or clover-dominant stands.\n\nSelection of the correct maturity stage helps buyers and nutritionists anticipate hay characteristics and plan optimal livestock feeding strategies.\n"}, {"id": "stand_establishment_method", "data_type": "enum", "valid_values": ["drilled", "broadcast", "no-till", "sod-seeded", "unknown"], "definition": "Indicates the method used to establish the forage stand. Establishment method can affect plant density, weed suppression, and long-term stand performance.\n"}, {"id": "stand_establishment_date", "data_type": "datetime", "valid_values": "YYYYMMDD format (allow 00 for unknown day or month)", "definition": "Records the date on which the forage stand was planted or sown.\nIf the exact day is unknown, use `00` in the day field. If both day and month are unknown, use `00` in both (e.g., `20240000`).\nExample:\n  - `20240400` -\u003e planted in April 2024 (day unknown)\n  - `20240000` -\u003e planted sometime in 2024 (month and day unknown)\n"}, {"id": "stand_density", "data_type": "enum", "valid_values": ["sparse", "moderate", "dense", "unknown"], "definition": "Qualitatively assesses the density of the forage stand at the time of harvest. Higher density can indicate better competition with weeds and improved yield.\n"}, {"id": "source_stand_age", "data_type": "int", "valid_values": "non-negative integer (0 or greater)", "definition": "Records the number of years the current forage stand has been in place at the time of harvest. It reflects how long the same root system and plant population have been producing harvestable hay from the same field without replanting or reseeding.\nNewly established stands may offer better vigor and fewer weeds, while older stands may show declining productivity, species composition shifts, or increased weed pressure.\nEnter `0` if this is the first year of the stand's establishment. This field is especially important for perennial forages such as alfalfa, bermudagrass, or orchardgrass.\n"}]}, "example": null, "documentary": false, "related": [], "children": [{"key": "stand/stand_mixture_intended", "id": "stand_mixture_intended", "title": "Stand mixture intended", "anchor": "node-sections-1-fields-0", "source": {"id": "stand_mixture_intended", "data_type": "boolean", "valid_values": [true, false], "definition": "This field expresses whether the grower intended to plant a mixed stand (polyculture) or a pure stand (monoculture) of forage species.\nA value of `true` indicates the intention to grow a mix of species or varieties; a value of `false` indicates a monoculture was intended.\nThis field captures grower intent and does not reflect the final outcome, which may differ due to environmental or agronomic factors. For example, a grower may plant an alfalfa/timothy mix, but only the timothy survives to harvest. This field would still be `true`.\nThis field pairs with `forage_species_type`, which records the actual species composition of the forage at harvest, and with the `hay_variety_instances` group, which captures the grower's target and achieved representation of each variety.\n"}, "example": "stand_mixture_intended: true", "documentary": false, "related": [], "children": []}, {"key": "stand/forage_species_type", "id": "forage_species_type", "title": "Forage species type", "anchor": "node-sections-1-fields-1", "source": {"id": "forage_species_type", "data_type": "enum", "valid_values": ["grass", "legume", "grass/legume mix", "other"], "definition": "This field describes the biological classification of the forage species present in the hay at harvest. It reflects the actual or observed composition, rather than the grower's original intention.\n- `grass`: The hay consists primarily of grasses, such as bermudagrass or orchardgrass. - `legume`: The hay consists primarily of legumes, such as alfalfa or clover. - `grass/legume mix`: Both grasses and legumes are present in significant proportion. - `other`: The forage does not fit into the above categories (e.g., brassicas, forbs, or specialty hays).\nThis field supports downstream applications such as nutritional analysis, ration formulation, and marketing. It is best determined based on post-harvest visual inspection or lab analysis, and complements `stand_mixture_intended`.\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "stand/forage_variety_count", "id": "forage_variety_count", "title": "Forage variety count", "anchor": "node-sections-1-fields-2", "source": {"id": "forage_variety_count", "data_type": "int", "valid_values": "positive integer (0 or greater)", "definition": "This field reports how many distinct forage varieties were identified in the actual harvested crop. It supports both marketing claims (e.g., \"two-variety blend\") and technical purposes, such as determining how many instances of a `forage_variety_component` block will be included in a structured message.\nThis field reflects actual harvest outcome, not grower intent. By contrast, `stand_mixture_intended` expresses whether the grower intended a mixed or pure sward. These two fields together help distinguish between intent and result.\nIn a pure crop, this field should take a value of `1`. In a mixed crop, this field should take a value of `2` or more. If no species or varieties can be positively identified, the value should be `0`, and the `forage_species_type` should be set to `unknown`.\nSystem validations may check for consistency across `stand_mixture_intended`, `forage_variety_count`, and any listed `forage_variety_component` entries.\n"}, "example": "forage_variety_count: 1", "documentary": false, "related": ["stand/stand_mixture_intended", "stand/forage_variety_components"], "children": []}, {"key": "stand/forage_variety_components", "id": "forage_variety_components", "title": "Forage variety components", "anchor": "node-sections-1-fields-3", "source": {"id": "forage_variety_components", "data_type": "list", "item_type": "component", "definition": "This block describes each intentionally planted forage variety in the hay sward. Pure (monoculture) hay includes one instance; mixed (polyculture) hay includes two or more.\nEach entry should reflect the grower's intention, variety name, and estimated contribution to the harvested crop. This supports both agronomic analysis and marketplace transparency.\nUse this block in combination with `forage_variety_count` and `stand_mixture_intended` to document crop composition and stand complexity.\n", "components": [{"id": "forage_variety", "data_type": "enum", "valid_values": "reference list of forage species, subspecies, or named varieties", "definition": "Enter the full name of the forage variety, such as `Tifton 85 bermudagrass` or `Vernal alfalfa`. When possible, include binomial nomenclature, common name, and GMO status if known or relevant.\nStandardizing variety names supports better market searchability, agronomic traceability, and nutrient expectation setting.\n"}, {"id": "variety_representation_target", "data_type": "int", "valid_values": "whole number ratio (non-negative)", "definition": "Captures the intended proportion of a given forage variety in the seed mix or planting strategy. Use whole-number ratios to reflect seeding intent. For example, if the mix was designed to be 3 parts orchardgrass and 1 part alfalfa, enter `3` for orchardgrass and `1` for alfalfa.\nThis is not a percentage and does not need to sum to 100 - it expresses relative ratios. Systems can calculate proportional percentages from totals.\nHelps buyers and agronomists understand the seeding strategy, even when outcomes differ due to growing conditions or stand establishment issues.\n"}, {"id": "variety_representation_result", "data_type": "int", "valid_values": "integer percentage (0-100)", "definition": "Captures the observed contribution of this variety in the finished hay. Enter a whole number percentage (e.g., `65` for 65%), based on visual inspection, lab results, or grower knowledge.\nThis value reflects real-world outcome and may differ from `variety_representation_target` due to environmental or agronomic factors.\nTotal values across all components should sum to approximately 100%, with minor discrepancies acceptable for estimated inputs.\n"}]}, "example": null, "documentary": false, "related": ["stand/forage_variety_count", "stand/stand_mixture_intended"], "children": [{"key": "stand/forage_variety_components/forage_variety", "id": "forage_variety", "title": "Forage variety", "anchor": "node-sections-1-fields-3-components-0", "source": {"id": "forage_variety", "data_type": "enum", "valid_values": "reference list of forage species, subspecies, or named varieties", "definition": "Enter the full name of the forage variety, such as `Tifton 85 bermudagrass` or `Vernal alfalfa`. When possible, include binomial nomenclature, common name, and GMO status if known or relevant.\nStandardizing variety names supports better market searchability, agronomic traceability, and nutrient expectation setting.\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "stand/forage_variety_components/variety_representation_target", "id": "variety_representation_target", "title": "Variety representation target", "anchor": "node-sections-1-fields-3-components-1", "source": {"id": "variety_representation_target", "data_type": "int", "valid_values": "whole number ratio (non-negative)", "definition": "Captures the intended proportion of a given forage variety in the seed mix or planting strategy. Use whole-number ratios to reflect seeding intent. For example, if the mix was designed to be 3 parts orchardgrass and 1 part alfalfa, enter `3` for orchardgrass and `1` for alfalfa.\nThis is not a percentage and does not need to sum to 100 - it expresses relative ratios. Systems can calculate proportional percentages from totals.\nHelps buyers and agronomists understand the seeding strategy, even when outcomes differ due to growing conditions or stand establishment issues.\n"}, "example": null, "documentary": false, "related": ["stand/forage_variety_components/variety_representation_result"], "children": []}, {"key": "stand/forage_variety_components/variety_representation_result", "id": "variety_representation_result", "title": "Variety representation result", "anchor": "node-sections-1-fields-3-components-2", "source": {"id": "variety_representation_result", "data_type": "int", "valid_values": "integer percentage (0-100)", "definition": "Captures the observed contribution of this variety in the finished hay. Enter a whole number percentage (e.g., `65` for 65%), based on visual inspection, lab results, or grower knowledge.\nThis value reflects real-world outcome and may differ from `variety_representation_target` due to environmental or agronomic factors.\nTotal values across all components should sum to approximately 100%, with minor discrepancies acceptable for estimated inputs.\n"}, "example": null, "documentary": false, "related": ["stand/forage_variety_components/variety_representation_target"], "children": []}]}, {"key": "stand/stand_maturity_at_harvest", "id": "stand_maturity_at_harvest", "title": "Stand maturity at harvest", "anchor": "node-sections-1-fields-4", "source": {"id": "stand_maturity_at_harvest", "data_type": "enum", "conditional_enums": {"grass": {"applies_to": "grass-dominant stands", "values": ["vegetative", "early head", "mid head", "full head", "post-head"]}, "legume": {"applies_to": "legume-dominant stands (e.g., alfalfa or clover)", "values": ["vegetative", "bud", "early bloom", "full bloom", "post-bloom"]}}, "definition": "Records the predominant maturity stage of the forage stand at the time of harvest. Maturity at harvest strongly influences forage quality, including digestibility, fiber content, and crude protein.\nUse the appropriate maturity scale depending on the crop's dominant species type:\n\n  - **Grass scale**: Used for species like bermudagrass, orchardgrass, or timothy.\n  - **Alfalfa (legume) scale**: Used for alfalfa or clover-dominant stands.\n\nSelection of the correct maturity stage helps buyers and nutritionists anticipate hay characteristics and plan optimal livestock feeding strategies.\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "stand/stand_establishment_method", "id": "stand_establishment_method", "title": "Stand establishment method", "anchor": "node-sections-1-fields-5", "source": {"id": "stand_establishment_method", "data_type": "enum", "valid_values": ["drilled", "broadcast", "no-till", "sod-seeded", "unknown"], "definition": "Indicates the method used to establish the forage stand. Establishment method can affect plant density, weed suppression, and long-term stand performance.\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "stand/stand_establishment_date", "id": "stand_establishment_date", "title": "Stand establishment date", "anchor": "node-sections-1-fields-6", "source": {"id": "stand_establishment_date", "data_type": "datetime", "valid_values": "YYYYMMDD format (allow 00 for unknown day or month)", "definition": "Records the date on which the forage stand was planted or sown.\nIf the exact day is unknown, use `00` in the day field. If both day and month are unknown, use `00` in both (e.g., `20240000`).\nExample:\n  - `20240400` -\u003e planted in April 2024 (day unknown)\n  - `20240000` -\u003e planted sometime in 2024 (month and day unknown)\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "stand/stand_density", "id": "stand_density", "title": "Stand density", "anchor": "node-sections-1-fields-7", "source": {"id": "stand_density", "data_type": "enum", "valid_values": ["sparse", "moderate", "dense", "unknown"], "definition": "Qualitatively assesses the density of the forage stand at the time of harvest. Higher density can indicate better competition with weeds and improved yield.\n"}, "example": null, "documentary": false, "related": [], "children": []}, {"key": "stand/source_stand_age", "id": "source_stand_age", "title": "Source stand age", "anchor": "node-sections-1-fields-8", "source": {"id": "source_stand_age", "data_type": "int", "valid_values": "non-negative integer (0 or greater)", "definition": "Records the number of years the current forage stand has been in place at the time of harvest. It reflects how long the same root system and plant population have been producing harvestable hay from the same field without replanting or reseeding.\nNewly established stands may offer better vigor and fewer weeds, while older stands may show declining productivity, species composition shifts, or increased weed pressure.\nEnter `0` if this is the first year of the stand's establishment. This field is especially important for perennial forages such as alfalfa, bermudagrass, or orchardgrass.\n"}, "example": null, "documentary": false, "related": [], "children": []}]}, "sectionId": "stand", "nutrient": false, "metadata": false, "reference": "../fields/stand/", "introCard": "Choose a field from the outline. Expand a component to see its members. Repeated lists describe one set of members per entry.", "notice": null}
+    </script>
+    <script>
+      "use strict";
+      const data = JSON.parse(
+          document.getElementById("guide-data").textContent,
+        ),
+        root = data.root;
+      const nodes = new Map(),
+        parents = new Map(),
+        outline = document.getElementById("outline"),
+        detail = document.getElementById("detail"),
+        search = document.getElementById("search");
+      function index(node, parent) {
+        nodes.set(node.key, node);
+        if (parent) parents.set(node.key, parent);
+        node.children.forEach((child) => index(child, node));
+      }
+      index(root);
+      function el(tag, text, cls) {
+        const item = document.createElement(tag);
+        if (text !== undefined) item.textContent = text;
+        if (cls) item.className = cls;
+        return item;
+      }
+      function kind(node) {
+        return node.presentation
+          ? "Navigation group · display only"
+          : node.source.data_type === "section"
+            ? "Documentation marker · no stored value"
+            : node === root
+              ? "Documentation section"
+              : node.documentary
+                ? "Documentation subsection"
+                : node.source.data_type === "object[]"
+                  ? "Repeated object · list entries"
+                  : node.source.data_type === "list" &&
+                      node.source.item_type === "component"
+                    ? "Repeated component list · entries"
+                    : node.source.data_type === "component"
+                      ? "Component · structured block"
+                      : {
+                          string: "Text",
+                          boolean: "Boolean",
+                          enum: "Enumeration",
+                          float: "Number",
+                          int: "Whole number",
+                          datetime: "Date",
+                          "string[]": "List of text",
+                          "enum (multi-select)": "Multi-select enumeration",
+                        }[node.source.data_type] || node.source.data_type;
+      }
+      function selectButton(node) {
+        const b = el("button", node.title);
+        b.type = "button";
+        b.dataset.key = node.key;
+        b.append(el("span", kind(node), "kind"));
+        b.addEventListener("click", () => select(node.key, true));
+        return b;
+      }
+      function matches(node, query) {
+        return (
+          (node.title + " " + (node.id || "")).toLowerCase().includes(query) ||
+          node.children.some((c) => matches(c, query))
+        );
+      }
+      function revealOutline(key, includeOwnGroup = false, scroll = false) {
+        const selected = Array.from(
+          outline.querySelectorAll("[data-key]"),
+        ).find((item) => item.dataset.key === key);
+        let ancestor = selected?.parentElement;
+        if (selected?.tagName === "SUMMARY" && !includeOwnGroup)
+          ancestor = ancestor?.parentElement;
+        while (ancestor) {
+          if (ancestor.tagName === "DETAILS") ancestor.open = true;
+          ancestor = ancestor.parentElement;
+        }
+        if (selected && scroll)
+          selected.scrollIntoView({ block: "nearest" });
+      }
+      function renderOutline(expandAll = false) {
+        outline.replaceChildren();
+        const query = search.value.trim().toLowerCase();
+        let count = 0;
+        const list = el("ul");
+        function branch(node) {
+          if (query && !matches(node, query)) return null;
+          const li = el("li");
+          if (
+            !query ||
+            (node.title + " " + (node.id || "")).toLowerCase().includes(query)
+          )
+            count++;
+          if (node.children.length) {
+            const box = el("details");
+            box.open =
+              expandAll || !data.nutrient || node === root || Boolean(query);
+            const summary = el("summary", node.title);
+            summary.dataset.key = node.key;
+            summary.append(el("span", kind(node), "kind"));
+            summary.addEventListener("click", () => select(node.key, false));
+            box.append(summary);
+            const children = el("ul");
+            node.children.forEach((c) => {
+              const item = branch(c);
+              if (item) children.append(item);
+            });
+            box.append(children);
+            li.append(box);
+          } else li.append(selectButton(node));
+          return li;
+        }
+        const item = branch(root);
+        if (item) list.append(item);
+        outline.append(list);
+        document.getElementById("results").textContent = query
+          ? count
+            ? count + " matching fields or sections"
+            : "No matching fields. Clear the search to browse."
+          : Array.from(nodes.values()).filter((n) => !n.presentation).length +
+            " source fields and sections · expand to explore";
+        markCurrent();
+        // Rebuilding the unfiltered outline must not hide the open field card.
+        if (!query) revealOutline(current);
+      }
+      let current = root.key;
+      function markCurrent() {
+        outline.querySelectorAll("[data-key]").forEach((e) => {
+          if (e.dataset.key === current) e.setAttribute("aria-current", "true");
+          else e.removeAttribute("aria-current");
+        });
+      }
+      function block(title, text) {
+        if (!text) return;
+        detail.append(el("h3", title));
+        detail.append(el("p", text, "definition"));
+      }
+      function select(key, focus, historyMode = "push") {
+        const node = nodes.get(key);
+        if (!node) return;
+        current = key;
+        // Related links may target a field excluded by the active search.
+        if (
+          focus &&
+          !Array.from(outline.querySelectorAll("[data-key]")).some(
+            (item) => item.dataset.key === key,
+          )
+        ) {
+          search.value = "";
+          renderOutline();
+        }
+        detail.replaceChildren();
+        const chain = [];
+        let cursor = node;
+        while (cursor) {
+          chain.unshift(cursor);
+          cursor = parents.get(cursor.key);
+        }
+        const crumbs = el("nav", undefined, "breadcrumbs");
+        crumbs.setAttribute("aria-label", "Documentation location");
+        chain.forEach((entry, i) => {
+          if (i) crumbs.append(el("span", "›"));
+          if (entry === node) crumbs.append(el("span", entry.title));
+          else {
+            const b = el("button", entry.title);
+            b.type = "button";
+            b.addEventListener("click", () => select(entry.key, true));
+            crumbs.append(b);
+          }
+        });
+        const heading = el("h2", node.title);
+        heading.id = "field-title";
+        detail.append(
+          crumbs,
+          heading,
+          el(
+            "p",
+            node.presentation
+              ? "Navigation only · not a record key"
+              : "Identifier: " + node.id,
+            "identifier",
+          ),
+        );
+        const facts = el("div", undefined, "facts");
+        facts.append(el("span", kind(node), "badge"));
+        if (
+          node !== root &&
+          !node.presentation &&
+          node.source.data_type !== "section" &&
+          !node.documentary
+        )
+          facts.append(
+            el(
+              "span",
+              node.source.required === false
+                ? "Optional"
+                : node.source.required === true
+                  ? "Required"
+                  : "Requirements: see definition",
+              "badge",
+            ),
+          );
+        detail.append(facts);
+        block(
+          node.source.definition ? "Definition" : "Description",
+          node.source.definition || node.source.description,
+        );
+        if (node.source.definition)
+          block("Description", node.source.description);
+        block("Details", node.source.details);
+        block("Narration", node.source.narration);
+        if (node.source.id && node.source.name)
+          detail.append(
+            el(
+              "p",
+              "The legacy name is a compatibility alias for this same field: " +
+                node.source.name,
+              "fine",
+            ),
+          );
+        if (node === root) detail.append(el("p", data.introCard, "callout"));
+        if (data.notice) detail.append(el("p", data.notice, "callout"));
+        block("Guidance", node.source.guidance);
+        block("Source validation guidance", node.source.validation_guidance);
+        if (node.source.conditional_enums) {
+          detail.append(el("h3", "Conditional options from the source"));
+          Object.entries(node.source.conditional_enums).forEach(([name, condition]) => {
+            detail.append(el("h4", name));
+            detail.append(el("p", "Applies to: " + condition.applies_to, "definition"));
+            const pre = el("pre");
+            pre.append(el("code", JSON.stringify(condition.values, null, 2)));
+            detail.append(pre);
+          });
+        }
+        if (parents.get(key)?.id === "source_fields")
+          detail.append(
+            el(
+              "p",
+              "Entry rule: supply a nonblank field name or field identifier. Identifier scope alone is insufficient. Omit unavailable components.",
+              "callout",
+            ),
+          );
+        if (node.source.valid_values !== undefined) {
+          detail.append(
+            el(
+              "h3",
+              Array.isArray(node.source.valid_values)
+                ? "Declared values"
+                : "Source value guidance",
+            ),
+          );
+          const pre = el("pre");
+          pre.append(
+            el(
+              "code",
+              Array.isArray(node.source.valid_values)
+                ? node.source.valid_values
+                    .map((v) => JSON.stringify(v))
+                    .join("\n")
+                : node.source.valid_values,
+            ),
+          );
+          detail.append(pre);
+          if (
+            Array.isArray(node.source.valid_values) &&
+            node.source.valid_values.some(
+              (value) =>
+                typeof value === "string" &&
+                (value.includes("|") || value.includes("`")),
+            )
+          )
+            detail.append(
+              el(
+                "p",
+                "Legacy literal values are reproduced exactly; they are not split or cleaned.",
+                "fine",
+              ),
+            );
+        }
+        if (node.source.valid_range !== undefined) {
+          detail.append(el("h3", "Declared numeric bounds"));
+          const bounds = el("pre");
+          bounds.append(
+            el("code", JSON.stringify(node.source.valid_range, null, 2)),
+          );
+          detail.append(bounds);
+        }
+        const other = Object.fromEntries(
+          Object.entries(node.source).filter(
+            ([key]) =>
+              ![
+                "id",
+                "name",
+                "title",
+                "definition",
+                "description",
+                "details",
+                "narration",
+                "items",
+                "examples",
+                "guidance",
+                "validation_guidance",
+                "conditional_enums",
+                "notes",
+                "references",
+                "valid_values",
+                "valid_range",
+                "fields",
+                "components",
+                "groups",
+                "subsections",
+                "data_type",
+                "required",
+              ].includes(key),
+          ),
+        );
+        if (Object.keys(other).length) {
+          const more = el("details"),
+            label = el("summary", "Additional source metadata"),
+            pre = el("pre");
+          pre.append(el("code", JSON.stringify(other, null, 2)));
+          more.append(label, pre);
+          detail.append(more);
+        }
+        if (node.source.notes) block("Notes", node.source.notes.join("\n\n"));
+        if (Array.isArray(node.source.items)) {
+          detail.append(el("h3", "Documentation text"));
+          node.source.items.forEach((item) =>
+            detail.append(
+              el(
+                "p",
+                typeof item === "string" ? item : JSON.stringify(item, null, 2),
+                "definition",
+              ),
+            ),
+          );
+        }
+        if (Array.isArray(node.source.examples)) {
+          detail.append(el("h3", "Source examples"));
+          node.source.examples.forEach((text) => {
+            const pre = el("pre");
+            pre.append(el("code", text));
+            detail.append(pre);
+          });
+        }
+        const example = node.example || parents.get(key)?.example;
+        if (example) {
+          detail.append(
+            el(
+              "h3",
+              node.example
+                ? "Example fragment"
+                : "Example in its parent component",
+            ),
+          );
+          const pre = el("pre");
+          pre.append(el("code", example));
+          detail.append(pre);
+        }
+        if (node.children.length) {
+          detail.append(
+            el(
+              "h3",
+              node.presentation
+                ? "Fields in this navigation group"
+                : node === root
+                  ? data.nutrient
+                    ? "Navigation groups"
+                    : data.metadata
+                      ? "Documentation subsections"
+                      : "Fields in this section"
+                  : "Members" +
+                    (node.source.data_type === "object[]" ||
+                    (node.source.data_type === "list" &&
+                      node.source.item_type === "component")
+                      ? " of each entry"
+                      : ""),
+            ),
+          );
+          const children = el("div", undefined, "children");
+          node.children.forEach((c) => children.append(selectButton(c)));
+          detail.append(children);
+        }
+        const related = node.related.map((k) => nodes.get(k)).filter(Boolean);
+        if (related.length) {
+          detail.append(el("h3", "Read alongside"));
+          const links = el("div", undefined, "related");
+          related.forEach((n) => links.append(selectButton(n)));
+          detail.append(links);
+          detail.append(
+            el(
+              "p",
+              "These are related concepts, not inferred values or automatic dependencies.",
+              "fine",
+            ),
+          );
+        }
+        if (node.source.references) {
+          detail.append(el("h3", "References"));
+          node.source.references.forEach((ref) => {
+            const p = el(
+              "p",
+              ref.title +
+                ([ref.author, ref.publisher].filter(Boolean).length
+                  ? " — " +
+                    [ref.author, ref.publisher].filter(Boolean).join(" · ")
+                  : ""),
+            );
+            if (/^https?:\/\//.test(ref.url || "")) {
+              const link = el("a", " Read source");
+              link.href = ref.url;
+              p.append(link);
+            }
+            detail.append(p);
+          });
+        }
+        const a = el("a", "Read this definition in the full reference");
+        a.href = data.reference + "#" + node.anchor;
+        detail.append(el("hr"), a);
+        const hash = "#" + encodeURIComponent(key);
+        if (location.hash !== hash && historyMode !== "none") {
+          if (historyMode === "replace") history.replaceState(null, "", hash);
+          else history.pushState(null, "", hash);
+        }
+        markCurrent();
+        revealOutline(key, focus, true);
+        if (focus) detail.focus();
+      }
+      document.querySelector(".skip").addEventListener("click", (event) => {
+        // Move focus without creating a non-field entry in browser history.
+        event.preventDefault();
+        detail.focus();
+      });
+      search.addEventListener("input", () => renderOutline());
+      document.getElementById("reset").addEventListener("click", () => {
+        search.value = "";
+        renderOutline(true);
+        search.focus();
+      });
+      function restoreLocation() {
+        // The skip link is an ordinary in-page destination, not a field key.
+        if (location.hash === "#detail") return;
+        let key = root.key;
+        try {
+          const requested = decodeURIComponent(location.hash.slice(1));
+          if (nodes.has(requested)) key = requested;
+        } catch {}
+        if (key !== current) select(key, true, "none");
+      }
+      window.addEventListener("popstate", restoreLocation);
+      window.addEventListener("hashchange", restoreLocation);
+      document.getElementById("version").textContent =
+        "Source " +
+        data.version +
+        " · " +
+        (data.publication === "published"
+          ? "Published snapshot"
+          : "Unreleased working reference");
+      renderOutline();
+      let initial = root.key;
+      try {
+        const requested = decodeURIComponent(location.hash.slice(1));
+        if (nodes.has(requested)) initial = requested;
+      } catch {}
+      select(initial, false, "replace");
+    </script>
+  </body>
+</html>
