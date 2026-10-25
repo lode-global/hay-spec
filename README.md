@@ -50,6 +50,9 @@ hay-spec/
 └── .gitignore
 ```
 
+[Read the reconciled version history](./notes/version-history-reconciliation.md)
+and its verbatim archive before interpreting historical schema-change claims.
+
 ## Contributing
 
 ### Current-source reference documentation

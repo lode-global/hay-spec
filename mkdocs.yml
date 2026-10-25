@@ -15,6 +15,7 @@ nav:
       - Physical Characteristics and Condition: guides/physical_characteristics.html
       - Nutrient analysis: guides/nutrient_analysis.html
       - Metadata and Supplemental Information: guides/metadata.html
+  - Reconciled history: history/reconciliation.md
   - Field reference:
       - Traceability: fields/traceability.md
       - Stand: fields/stand.md

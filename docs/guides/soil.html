@@ -696,7 +696,14 @@
         }
         if (node.source.notes) block("Notes", node.source.notes.join("\n\n"));
         if (Array.isArray(node.source.items)) {
-          detail.append(el("h3", "Documentation text"));
+          const archivedHistory = data.metadata && node.id === "version_history";
+          if (archivedHistory) {
+            const notice = el("p", "These are retained original notes. For verified changes and corrections, ", "callout");
+            const audit = el("a", "read the reconciled history and verbatim archive");
+            audit.href = "../history/reconciliation/";
+            notice.append(audit); detail.append(notice);
+          }
+          detail.append(el("h3", archivedHistory ? "Archived original notes" : "Documentation text"));
           node.source.items.forEach((item) =>
             detail.append(
               el(
