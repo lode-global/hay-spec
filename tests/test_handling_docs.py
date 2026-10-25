@@ -10,6 +10,7 @@ import unittest
 
 from tools.generate_docs import outputs
 from tools.validate_spec import load_spec
+from compatibility_helpers import restore_previous_nutrient_definitions
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,6 +30,8 @@ class HandlingDocs(unittest.TestCase):
         previous = load_spec(subprocess.check_output([
             'git', 'show', f'{BASE}:src/hay-spec.yaml'], cwd=ROOT, text=True))
         current = copy.deepcopy(self.spec)
+        current['sections'] = restore_previous_nutrient_definitions(
+            current['sections'], previous['sections'])
         for section in current['sections']:
             for field in section.get('fields', []):
                 if field.get('id') == 'handling_events':
@@ -59,11 +62,13 @@ class HandlingDocs(unittest.TestCase):
         self.assertEqual(self.pages['source/hay-spec.yaml'], self.source)
 
     def test_duplicate_identifiers_remain_distinct_in_documentation(self):
-        page = self.pages['fields/nutrient_analysis.md']
+        # Keep exercising duplicate rendering after the actual duplicate is fixed.
+        duplicate = outputs(self.source.replace('id: moisture_content\n', 'id: dry_matter\n', 1))
+        page = duplicate['fields/nutrient_analysis.md']
         self.assertEqual(page.count('Identifier: `dry_matter`'), 2)
         anchors = re.findall(r'<a id="([^"]+)"', page)
         self.assertEqual(len(anchors), len(set(anchors)))
-        self.assertIn('duplicate_identifier', self.pages['index.md'])
+        self.assertIn('duplicate_identifier', duplicate['index.md'])
 
     def test_output_is_deterministic(self):
         self.assertEqual(outputs(self.source), self.pages)

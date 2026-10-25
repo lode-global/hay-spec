@@ -52,11 +52,5 @@
     "path": "/sections/9/fields/35",
     "message": "degradable_protein_%_cp",
     "severity": "warning"
-  },
-  {
-    "code": "duplicate_identifier",
-    "path": "/sections/9/fields",
-    "message": "dry_matter: 2 definitions",
-    "severity": "warning"
   }
 ]

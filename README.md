@@ -69,6 +69,10 @@ The build creates a local site only. It does not publish or deploy documentation
 
 To propose changes to the specification, open a GitHub issue or submit a pull request.
 
+See the [carry-forward backlog](./notes/backlog.md) for remaining ideas from the
+older draft and the [nutrient compatibility notes](./notes/nutrient-reporting-consistency.md)
+for the current moisture/dry-matter proposal.
+
 - 📌 [Contribution Guidelines](./CONTRIBUTING.md)
 - 📜 [Code of Conduct](./CODE_OF_CONDUCT.md)
 

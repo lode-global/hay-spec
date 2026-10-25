@@ -257,20 +257,26 @@ valid_values: free-text, max 100 characters
 
 <a id="node-sections-9-fields-13"></a>
 
-## dry_matter
+## Laboratory moisture content
 
-Identifier: `dry_matter`
+Identifier: `moisture_content`
 
 **Definition**
 
-Dry matter is the portion of the hay that remains after all water has been removed. It is complementary to moisture content and serves as the baseline for most nutrient analyses, which are typically reported on a dry matter basis.
-Most cured hays fall between 80% and 92% dry matter. Values significantly outside this range may indicate atypical storage conditions or sample contamination.
-Dry matter is typically derived by subtracting moisture content from 100%.
+Water content of the laboratory sample as a percentage of its total as-received mass (wet basis). This is distinct from baler_moisture_average and baler_moisture_high, which describe sensor measurements during harvest. Optional even when hay_tested is true. Omit when unavailable; do not substitute a baler measurement or infer zero from omission.
+
+
+**Guidance**
+
+Preserve the laboratory-reported value and its precision. The 0 to 100 bounds express percentage arithmetic, not a commercial hay acceptance range. No typical moisture range is a hard rejection rule. Moisture and dry matter are complementary only for the same sample and measurement basis. An implementation may calculate a missing value as 100 minus its complement when those conditions are established, but must distinguish calculated results from laboratory-reported results in its own provenance. A calculated value must also satisfy the destination field's existing constraints; do not relax them or clamp a result. Never overwrite a reported value or compare unrelated samples. Review discrepancies allowing for reported rounding; this draft prescribes no universal equality tolerance.
 
 
 ```yaml
 data_type: float
-valid_values: A positive decimal value representing the dry matter content as a percentage.
+required: false
+valid_range:
+  min: 0
+  max: 100
 ```
 
 <a id="node-sections-9-fields-14"></a>
@@ -284,6 +290,11 @@ Identifier: `dry_matter`
 Dry matter is the portion of the forage that remains after all moisture has been removed. It includes all nutrients - such as fiber, protein, minerals, and energy - and is the standard basis for comparing feeds and formulating rations.
 This value is the mathematical complement of moisture content; that is, `dry matter = 100 - moisture content`. Most properly stored hay will contain 85% to 92% dry matter. Lower values may indicate elevated moisture and a risk of spoilage or heating during storage.
 All nutrient values are typically reported on a dry matter basis to eliminate dilution effects from water and ensure comparability across feed types.
+
+
+**Guidance**
+
+This is the single specification definition of the existing dry_matter record key. Consolidating duplicate definitions does not create a new key, change stored values, or require a record migration. See moisture_content for same-sample and measurement-basis requirements before deriving a missing complementary result. Existing reported values remain authoritative.
 
 
 ```yaml

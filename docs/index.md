@@ -6,7 +6,7 @@ Source version: **0.91.1**; status: **draft**.
 
 Generated from the current source tree; additions may be unreleased even when the source still carries the last release version.
 
-Source SHA-256: `4521f57ba4fc04b41873092780f16dc5c59c78b4afe831dd75e0225bd795f870`
+Source SHA-256: `cb9c0e1b5a8d49ef9c9dc9f8df8a4a7b6e011023363876f2de3725412c818c7e`
 
 [Canonical YAML copy](source/hay-spec.yaml) | [JSON transcription](source/hay-spec.json)
 
@@ -86,7 +86,6 @@ These are unresolved source findings, not corrections applied by the generator.
 - `legacy_enum_literal` at `/sections/8/fields/27`: true | false | unknown
 - `legacy_identifier` at `/sections/9/fields/34`: soluble_protein_%_cp
 - `legacy_identifier` at `/sections/9/fields/35`: degradable_protein_%_cp
-- `duplicate_identifier` at `/sections/9/fields`: dry_matter: 2 definitions
 
 ## Field reference
 

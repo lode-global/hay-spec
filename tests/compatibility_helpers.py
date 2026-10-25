@@ -1,0 +1,28 @@
+"""Normalize only explicitly permitted nutrient-definition changes for old guards."""
+import copy
+
+
+def restore_previous_nutrient_definitions(sections, previous_sections):
+    result = copy.deepcopy(sections)
+    current = next(s for s in result if s['id'] == 'nutrient_analysis')
+    previous = next(s for s in previous_sections if s['id'] == 'nutrient_analysis')
+    old_dry = [f for f in previous['fields'] if f['id'] == 'dry_matter']
+    new_dry = [f for f in current['fields'] if f['id'] == 'dry_matter']
+    moisture = [f for f in current['fields'] if f['id'] == 'moisture_content']
+    if len(old_dry) != 2 or len(new_dry) != 1 or len(moisture) != 1:
+        raise ValueError('Expected exactly the reviewed duplicate consolidation and moisture addition.')
+    retained = {k: v for k, v in new_dry[0].items() if k != 'guidance'}
+    if retained != old_dry[1]:
+        raise ValueError('The retained dry-matter definition changed beyond additive guidance.')
+    if (moisture[0].get('data_type') != 'float'
+            or moisture[0].get('required') is not False
+            or 'required_if' in moisture[0]
+            or moisture[0].get('valid_range') != {'min': 0, 'max': 100}):
+        raise ValueError('Moisture no longer matches the reviewed optional percentage contract.')
+    first_dry = old_dry[0]
+    for i, field in enumerate(current['fields']):
+        if field['id'] == 'moisture_content':
+            current['fields'][i] = copy.deepcopy(first_dry)
+        elif field['id'] == 'dry_matter':
+            field.pop('guidance', None)
+    return result

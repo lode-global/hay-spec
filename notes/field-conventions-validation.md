@@ -48,13 +48,15 @@ Without `--baseline`, warnings are informational and structural errors still fai
 
 ## Existing defects deliberately retained
 
-The baseline records ten findings:
+The original baseline recorded ten findings. The nutrient-reporting replacement
+resolves the duplicate dry-matter definition, leaving nine current findings:
 
 - Two dotted external-lot component identifiers.
 - Two protein identifiers containing `%`.
 - Five enum lists containing a pipe-delimited string rather than separate values.
-- Two `dry_matter` definitions in the same nutrient-analysis field collection
-  (one duplicate-identifier finding).
+
+The former duplicate `dry_matter` finding is removed after consolidation; its
+existing record key remains unchanged. See the nutrient-reporting compatibility notes.
 
 These are preserved to avoid silently changing records or consumer behavior.
 Consumers should surface ambiguities instead of selecting a duplicate definition

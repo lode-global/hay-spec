@@ -8,6 +8,7 @@ import tempfile
 import unittest
 
 from tools.validate_spec import inspect_spec, load_baseline, load_spec
+from compatibility_helpers import restore_previous_nutrient_definitions
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -103,7 +104,8 @@ class FieldConventions(unittest.TestCase):
         previous = load_spec(subprocess.check_output(
             ['git', 'show', f'{BASE}:src/hay-spec.yaml'], cwd=ROOT, text=True))
         # The handling replacement only adds optional components and guidance.
-        normalized = copy.deepcopy(current['sections'])
+        normalized = restore_previous_nutrient_definitions(
+            current['sections'], previous['sections'])
         for section in normalized:
             for field in section.get('fields', []):
                 if field.get('id') == 'handling_events':
@@ -117,7 +119,7 @@ class FieldConventions(unittest.TestCase):
         current = load_spec((ROOT / 'src/hay-spec.yaml').read_text())
         baseline = json.loads((ROOT / 'tests/legacy-spec-warnings.json').read_text())
         self.assertEqual(inspect_spec(current), baseline)
-        self.assertEqual(len(baseline), 10)
+        self.assertEqual(len(baseline), 9)
         current['sections'][0]['fields'].append({'id': 'new%identifier'})
         self.assertNotEqual(inspect_spec(current), baseline)
 
