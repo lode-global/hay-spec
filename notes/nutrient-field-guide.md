@@ -8,7 +8,8 @@ including documentation markers, retain their identifiers, order, and anchors.
 The existing percent-bearing protein keys are literal and remain unchanged.
 
 Groups initially collapse to keep the outline manageable. Searching expands
-matching paths; a direct field deep link expands its group. Documentation-marker
+matching paths; a direct field deep link expands its group. Clearing search keeps
+the selected field's group expanded, so the outline stays consistent with its card. Documentation-marker
 cards are explicitly labeled as having no stored value. Group cards have no
 record identifier and link to the corresponding reference navigation anchor.
 

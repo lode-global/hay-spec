@@ -428,6 +428,20 @@
           node.children.some((c) => matches(c, query))
         );
       }
+      function revealOutline(key, includeOwnGroup = false, scroll = false) {
+        const selected = Array.from(outline.querySelectorAll("[data-key]")).find(
+          (item) => item.dataset.key === key,
+        );
+        let ancestor = selected?.parentElement;
+        if (selected?.tagName === "SUMMARY" && !includeOwnGroup)
+          ancestor = ancestor?.parentElement;
+        while (ancestor) {
+          if (ancestor.tagName === "DETAILS") ancestor.open = true;
+          ancestor = ancestor.parentElement;
+        }
+        if (selected && data.nutrient && scroll)
+          selected.scrollIntoView({ block: "nearest" });
+      }
       function renderOutline(expandAll = false) {
         outline.replaceChildren();
         const query = search.value.trim().toLowerCase();
@@ -469,6 +483,8 @@
           : Array.from(nodes.values()).filter((n) => !n.presentation).length +
             " source fields and sections · expand to explore";
         markCurrent();
+        // Rebuilding the unfiltered outline must not hide the open field card.
+        if (!query) revealOutline(current);
       }
       let current = root.key;
       function markCurrent() {
@@ -693,20 +709,8 @@
           else history.pushState(null, "", hash);
         }
         markCurrent();
-        {
-          const selected = Array.from(
-            outline.querySelectorAll("[data-key]"),
-          ).find((e) => e.dataset.key === key);
-          let ancestor = selected?.parentElement;
-          if (selected?.tagName === "SUMMARY" && !focus)
-            ancestor = ancestor?.parentElement;
-          while (ancestor) {
-            if (ancestor.tagName === "DETAILS") ancestor.open = true;
-            ancestor = ancestor.parentElement;
-          }
-          if (selected && data.nutrient) selected.scrollIntoView({ block: "nearest" });
-          if (focus) detail.focus();
-        }
+        revealOutline(key, focus, true);
+        if (focus) detail.focus();
       }
       document.querySelector(".skip").addEventListener("click", (event) => {
         // Move focus without creating a non-field entry in browser history.
