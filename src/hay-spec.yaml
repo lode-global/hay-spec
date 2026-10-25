@@ -1397,8 +1397,25 @@ sections:
       shape, and compression) describe the hay as currently packaged for sale or shipment - which may differ from
       the original harvest form.
 
+    guidance: >
+      Packaging fields use id as their canonical identifier. The matching name keys
+      are retained as compatibility aliases for consumers of v0.91.1.
+      Existing enum values remain unchanged. Omitted values mean not reported;
+      omission must not be interpreted as false or as a measured zero.
+      Numeric weights and dimensions must be finite and greater than zero.
+      Do not impose typical commercial bale sizes as hard validation limits.
+      Require bale_weight_units when any of bale_weight_intended,
+      average_bale_weight, or bale_weight_intended_repackaged is populated.
+      Require bale_dimension_units when any dimension is populated.
+      Unit fields may be supplied before measurements are available.
+      For rectangular bales, use length, width, and height. For round bales, use
+      diameter and axis; width and height remain accepted legacy measurements
+      under the conventions documented below. Do not derive a volume when
+      shape, units, or the necessary dimensions are missing or ambiguous.
+
     fields:
-      - name: hay_packaging_history
+      - id: hay_packaging_history
+        name: hay_packaging_history
         title: Packaging history
         data_type: enum
         valid_values: [original, rebaled, repackaged, unknown]
@@ -1413,7 +1430,8 @@ sections:
 
           This field supports traceability and helps buyers assess potential quality or handling concerns related to reprocessing.
 
-      - name: bale_weight_intended_repackaged
+      - id: bale_weight_intended_repackaged
+        name: bale_weight_intended_repackaged
         title: Intended bale weight (repackaged)
         data_type: int
         valid_values: >
@@ -1428,20 +1446,22 @@ sections:
           Use this field only if `hay_packaging_history` includes values such as `rebaled` or `repackaged`.
           When applicable, this field provides important clarity for buyers and logistics providers, especially in export or high-volume contexts.
 
-          System interfaces may optionally validate this field in relation to `bale_shape`, `bale_dimension_*`, or `bale_binding` fields to ensure internal consistency.
+          System interfaces may optionally validate this field in relation to `bale_shape`, `bale_dimension_*`, or `bale_binding_material` fields to ensure internal consistency.
 
-      - name: bale_weight_units
+      - id: bale_weight_units
+        name: bale_weight_units
         title: Bale weight units
         data_type: enum
         valid_values: [kilograms, pounds]
         description: >
-          Specifies the unit of measurement used in the `bale_weight_intended` and potentially other bale weight fields.
+          Specifies the unit of measurement used in `bale_weight_intended`, `average_bale_weight`, and `bale_weight_intended_repackaged`.
         details: |
           Most systems should standardize internally on one unit, but external presentation may vary by user preference or region.
 
           Providing a clear unit prevents misinterpretation, especially when converting or comparing listings across geographies.
 
-      - name: bale_binding_material
+      - id: bale_binding_material
+        name: bale_binding_material
         title: Bale binding material
         data_type: enum
         valid_values: [twine, net wrap, wire, plastic strap, none, unknown]
@@ -1457,7 +1477,8 @@ sections:
           - `none`: No external binding applied to the bale.
           - `unknown`: Binding material is not known or not disclosed.
 
-      - name: bale_binding_details
+      - id: bale_binding_details
+        name: bale_binding_details
         title: Bale binding details
         data_type: enum
         valid_values:
@@ -1473,7 +1494,7 @@ sections:
         description: >
           Represents the bale's size and binding configuration. Independent of binding material.
         details: |
-          This field captures the size, shape, and basic binding configuration of the bale. It is independent of the binding material (e.g., wire or twine), which is recorded separately in `bale_binding`.
+          This field captures the size, shape, and basic binding configuration of the bale. It is independent of the binding material (e.g., wire or twine), which is recorded separately in `bale_binding_material`.
 
           - `small two-strand`: Small rectangular bale tied with two strands of twine or wire.
           - `small three-strand`: Slightly larger small bale tied with three strands.
@@ -1485,9 +1506,10 @@ sections:
           - `round plastic wrap`: Round bale sealed in plastic, often for haylage.
           - `other`: Non-standard or specialized bale types.
 
-          Binding material (twine, wire, net, plastic) should be separately recorded in `bale_binding`.
+          Binding material (twine, wire, net, plastic) should be separately recorded in `bale_binding_material`.
 
-      - name: hay_compression
+      - id: hay_compression
+        name: hay_compression
         title: Hay compression level
         data_type: enum
         valid_values:
@@ -1507,7 +1529,8 @@ sections:
 
           This field is particularly useful in international trade and for evaluating bale density relative to storage or freight constraints.
 
-      - name: bale_shape
+      - id: bale_shape
+        name: bale_shape
         title: Bale shape
         data_type: enum
         valid_values:
@@ -1525,31 +1548,45 @@ sections:
 
           Shape selection may be influenced by market expectations, shipping constraints, or equipment availability.
 
-      - name: bale_dimension_width
+      - id: bale_dimension_width
+        name: bale_dimension_width
         title: Bale dimension - width
         data_type: float
         valid_values: A positive decimal value representing the width of the bale, in the units specified by `bale_dimension_units`.
         description: >
-          Width of the bale, typically the short side of a rectangular face or the diameter for round bales.
+          Width of the bale, typically the short side of a rectangular face.
+          For round bales, the legacy width value represents the diameter.
         details: |
           Enter the bale's width (short side of the rectangular face, or diameter for round bales).
-          Values should be rounded to the nearest 0.1 unit (e.g., 3.5 feet).
+          Preserve the precision of the reported measurement; no fixed rounding is required.
+          For round bales, prefer bale_dimension_diameter. If width and diameter are
+          both supplied, they must describe the same diameter after unit conversion.
 
           This field helps buyers assess compatibility with handling equipment and loading systems.
 
-      - name: bale_dimension_height
+      - id: bale_dimension_height
+        name: bale_dimension_height
         title: Bale dimension - height
         data_type: float
         valid_values: A positive decimal value representing the height of the bale, in the units specified by `bale_dimension_units`.
         description: >
-          Height of the bale, typically the long side of the rectangular face when standing, or the vertical axis if round.
+          Height of a rectangular bale in its recorded storage or transport orientation.
+          For round bales, this is a legacy measurement with unspecified orientation.
+          It must not be assumed to represent either diameter or cylinder axis length.
         details: |
-          Enter the bale's height (long side of the rectangular face when standing, or vertical axis if round).
-          Round to the nearest 0.1 unit.
+          Enter the rectangular bale height in its recorded orientation.
+          For new round-bale records, omit height and report bale_dimension_diameter
+          and bale_dimension_axis instead. Preserve height in historical records,
+          but do not copy it into either explicit field unless source documentation
+          identifies the measured direction. Do not infer that direction from equal
+          values, relative sizes, or the bale's current storage orientation.
+          A legacy height and an explicit axis may differ without a contradiction.
+          Preserve the precision of the reported measurement.
 
           This field is important for planning stacking and clearance requirements in storage facilities.
 
-      - name: bale_dimension_length
+      - id: bale_dimension_length
+        name: bale_dimension_length
         title: Bale dimension - length
         data_type: float
         valid_values: A positive decimal value representing the length of the bale, in the units specified by `bale_dimension_units`.
@@ -1557,11 +1594,12 @@ sections:
           Length of the bale, typically the longest axis for rectangular bales.
         details: |
           Enter the bale's length (longest axis for rectangular bales).
-          Round to the nearest 0.1 unit.
+          Preserve the precision of the reported measurement.
 
           This measurement aids in evaluating stacking strategies and trailer fit.
 
-      - name: bale_dimension_diameter
+      - id: bale_dimension_diameter
+        name: bale_dimension_diameter
         title: Bale dimension - diameter
         data_type: float
         valid_values: A positive decimal value representing the diameter of round bales, in the units specified by `bale_dimension_units`.
@@ -1569,12 +1607,27 @@ sections:
           Diameter of the bale, applicable only to round bales.
         details: |
           Use this field only for round bales. Enter the diameter of the cylinder,
-          rounded to the nearest 0.1 unit. For rectangular bales, leave this field blank
+          preserving the precision of the reported measurement. For rectangular bales, leave this field blank
           or exclude it from output.
 
           Diameter is crucial for modeling bale volume and handling characteristics.
 
-      - name: bale_dimension_units
+      - id: bale_dimension_axis
+        title: Bale dimension - cylinder axis
+        data_type: float
+        valid_values: finite decimal greater than zero
+        definition: >
+          Length of a round bale along its cylinder axis, expressed in
+          bale_dimension_units. Applicable only when bale_shape is round.
+          This is independent of the bale's standing or lying orientation.
+          Measure along the cylinder from one circular end face to the other;
+          diameter is measured across a circular end face. Do not populate axis
+          from legacy height or length without source confirmation of direction.
+          Axis is not constrained to equal legacy height or diameter.
+          Omit this field for rectangular or other bale shapes.
+
+      - id: bale_dimension_units
+        name: bale_dimension_units
         title: Bale dimension units
         data_type: enum
         valid_values: [inches, centimeters, feet, meters]
@@ -1597,13 +1650,14 @@ sections:
       # - If `hay_packaging_history` is `rebaled` or `repackaged`, then `average_bale_weight`
       #   and `bale_dimension_*` fields may differ significantly from typical field-scale values.
       #
-      # - If `bale_shape` is `round`, then `bale_dimension_diameter` is expected and
-      #   `bale_dimension_length` may be optional or ignored.
+      # - For new round-bale records, use diameter and axis. Preserve legacy height
+      #   and length, but do not use them to calculate volume without documented
+      #   measurement directions. Missing axis is permitted; volume then stays unknown.
       #
       # - If `bale_shape` is `rectangular`, then `bale_dimension_width`, `bale_dimension_height`,
-      #   and `bale_dimension_length` should be present; `bale_dimension_diameter` should be excluded.
+      #   and `bale_dimension_length` should be present; diameter and axis should be excluded.
       #
-      # - If `hay_compression` is `fully compressed`, then `bale_binding` is likely `plastic strap`
+      # - If `hay_compression` is `fully compressed`, then `bale_binding_material` is likely `plastic strap`
       #   or `wire`, and bale weight may exceed standard values for the declared shape and dimensions.
 
   - id: physical_characteristics
@@ -2297,6 +2351,65 @@ sections:
 
         # Optional Implementation Note:
         # - Systems may show soft alerts (not hard errors) for logically inconsistent field combinations.
+
+      # Laboratory provenance (optional)
+      - id: lab_sample_id
+        title: Laboratory sample identifier
+        data_type: string
+        valid_values: free-text, max 100 characters
+        definition: >
+          Identifier assigned by the testing laboratory to the sample whose results
+          are reported. Preserve the identifier as issued, including leading zeros,
+          punctuation, and case. Interpret it together with hay_testing_laboratory;
+          sample identifiers are not assumed to be globally unique.
+          Optional even when hay_tested is true, because historical reports may not
+          disclose an identifier. Omit when unavailable; do not invent an identifier.
+
+      - id: lab_report_reference
+        title: Laboratory report reference
+        data_type: string
+        valid_values: free-text, max 250 characters
+        definition: >
+          Report identifier, file name, or URI identifying the original laboratory
+          report supporting the analytical values. A URI is permitted but not
+          required. Preserve the reference as issued. Availability of this field
+          does not imply public access to the report or establish its authenticity.
+          Optional; omit when unavailable.
+
+      - id: lab_processing_completed_date
+        title: Laboratory sample preparation completed date
+        data_type: datetime
+        valid_values: YYYYMMDD format (supports zero placeholders)
+        definition: >
+          Date on which the laboratory completed sample preparation, such as drying,
+          grinding, or homogenization, before analysis. Distinct from hay_sample_date
+          (collection) and hay_testing_date (analysis completion).
+          Use YYYYMMDD, YYYYMM00 for an unknown day, or YYYY0000 for an unknown month
+          and day, consistent with existing analytical date fields. Omit when unknown;
+          do not substitute a collection, analysis, or report issue date.
+          Compare chronology only where the known date precision supports it.
+
+      - id: lab_processing_notes
+        title: Laboratory processing notes
+        data_type: string
+        valid_values: free-text, max 1000 characters
+        definition: >
+          Laboratory-reported observations about preparation or handling of this
+          sample, such as regrinding, moisture correction, or an unusual sample
+          condition. Preserve source meaning and distinguish these notes from
+          seller observations. Optional; omit when unavailable.
+
+      - id: lab_quality_code
+        title: Laboratory result qualifier
+        data_type: string
+        valid_values: free-text, max 100 characters
+        definition: >
+          Laboratory-issued code qualifying this report or sample's results, such as
+          a rerun flag or a calibration warning. Preserve the code as issued and
+          interpret it using the laboratory's report legend; codes are not assumed
+          to be comparable across laboratories. This is not a hay grade, laboratory
+          certification, or substitute for an individual analyte's result qualifier.
+          Optional; omit when unavailable. Do not infer a passing result from omission.
 
       # Base values
       - id: dry_matter
