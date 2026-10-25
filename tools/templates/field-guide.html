@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Traceability field guide · Lode</title>
+    <title>__SECTION_TITLE__ field guide · Lode</title>
     <style>
       :root {
         color-scheme: light;
@@ -316,24 +316,20 @@
       <div class="brand">LODE / HAY DESCRIPTION SPECIFICATION</div>
       <nav aria-label="Documentation">
         <a href="../index.html">Specification overview</a
-        ><a href="../fields/traceability/">Full Traceability reference</a>
+        ><a href="__REFERENCE__">Full __SECTION_TITLE__ reference</a>
       </nav>
     </header>
     <main class="wrap">
       <div class="intro">
         <div>
           <div class="eyebrow">Field guide · Review prototype</div>
-          <h1>Traceability</h1>
-          <p>
-            Understand how a hay lot connects to its identifiers and
-            contributing production fields. Explore the outline, then read a
-            field in context.
-          </p>
+          <h1>__SECTION_TITLE__</h1>
+          <p>__SECTION_INTRO__</p>
         </div>
         <span class="badge" id="version"></span>
       </div>
       <div class="layout">
-        <aside aria-label="Traceability outline">
+        <aside aria-label="__SECTION_TITLE__ outline">
           <label for="search">Find a field</label
           ><input
             id="search"
@@ -344,8 +340,8 @@
           <p class="fine" id="results" role="status"></p>
           <nav class="outline" id="outline" aria-label="Fields"></nav>
           <p class="fine">
-            Section = documentation organization.<br />Component = one
-            structured block.<br />Repeated object = one entry per item.
+            Section / navigation group = documentation organization.<br />Component
+            = one structured block.<br />Repeated object = one entry per item.
           </p>
           <button id="reset" type="button">
             Clear search &amp; expand all
@@ -359,17 +355,16 @@
         ></section>
       </div>
       <footer class="fine">
-        Read-only presentation prototype. Section breadcrumbs describe the
-        documentation hierarchy, not a new record envelope. Existing identifiers
-        and record structures are preserved. Examples are fragments, not
-        complete records or validation results.
+        Read-only presentation prototype. Section and navigation-group
+        breadcrumbs describe the documentation hierarchy, not a new record
+        envelope. Existing identifiers and record structures are preserved.
+        Examples are fragments, not complete records or validation results.
       </footer>
     </main>
     <noscript
       ><p class="wrap">
         This interactive prototype needs JavaScript.
-        <a href="../fields/traceability/"
-          >Read the complete Traceability reference</a
+        <a href="__REFERENCE__">Read the complete __SECTION_TITLE__ reference</a
         >.
       </p></noscript
     >
@@ -400,15 +395,24 @@
         return item;
       }
       function kind(node) {
-        return node === root
-          ? "Documentation section"
-          : node.source.data_type === "object[]"
-            ? "Repeated object · list entries"
-            : node.source.data_type === "component"
-              ? "Component · structured block"
-              : { string: "Text", boolean: "Boolean", enum: "Enumeration" }[
-                  node.source.data_type
-                ] || node.source.data_type;
+        return node.presentation
+          ? "Navigation group · display only"
+          : node.source.data_type === "section"
+            ? "Documentation marker · no stored value"
+            : node === root
+              ? "Documentation section"
+              : node.source.data_type === "object[]"
+                ? "Repeated object · list entries"
+                : node.source.data_type === "component"
+                  ? "Component · structured block"
+                  : {
+                      string: "Text",
+                      boolean: "Boolean",
+                      enum: "Enumeration",
+                      float: "Number",
+                      int: "Whole number",
+                      datetime: "Date",
+                    }[node.source.data_type] || node.source.data_type;
       }
       function selectButton(node) {
         const b = el("button", node.title);
@@ -420,11 +424,11 @@
       }
       function matches(node, query) {
         return (
-          (node.title + " " + node.id).toLowerCase().includes(query) ||
+          (node.title + " " + (node.id || "")).toLowerCase().includes(query) ||
           node.children.some((c) => matches(c, query))
         );
       }
-      function renderOutline() {
+      function renderOutline(expandAll = false) {
         outline.replaceChildren();
         const query = search.value.trim().toLowerCase();
         let count = 0;
@@ -434,12 +438,12 @@
           const li = el("li");
           if (
             !query ||
-            (node.title + " " + node.id).toLowerCase().includes(query)
+            (node.title + " " + (node.id || "")).toLowerCase().includes(query)
           )
             count++;
           if (node.children.length) {
             const box = el("details");
-            box.open = true;
+            box.open = expandAll || !data.nutrient || node === root || Boolean(query);
             const summary = el("summary", node.title);
             summary.dataset.key = node.key;
             summary.append(el("span", kind(node), "kind"));
@@ -462,7 +466,8 @@
           ? count
             ? count + " matching fields or sections"
             : "No matching fields. Clear the search to browse."
-          : nodes.size + " fields and sections · expand to explore";
+          : Array.from(nodes.values()).filter((n) => !n.presentation).length +
+            " source fields and sections · expand to explore";
         markCurrent();
       }
       let current = root.key;
@@ -515,11 +520,21 @@
         detail.append(
           crumbs,
           heading,
-          el("p", "Identifier: " + node.id, "identifier"),
+          el(
+            "p",
+            node.presentation
+              ? "Navigation only · not a record key"
+              : "Identifier: " + node.id,
+            "identifier",
+          ),
         );
         const facts = el("div", undefined, "facts");
         facts.append(el("span", kind(node), "badge"));
-        if (node !== root)
+        if (
+          node !== root &&
+          !node.presentation &&
+          node.source.data_type !== "section"
+        )
           facts.append(
             el(
               "span",
@@ -533,14 +548,8 @@
           );
         detail.append(facts);
         block("Definition", node.source.definition || node.source.description);
-        if (node === root)
-          detail.append(
-            el(
-              "p",
-              "Choose a field from the outline. Expand a component to see its members. Source fields is a repeated collection; its members describe each individual entry.",
-              "callout",
-            ),
-          );
+        if (node === root) detail.append(el("p", data.introCard, "callout"));
+        if (data.notice) detail.append(el("p", data.notice, "callout"));
         block("Guidance", node.source.guidance);
         if (parents.get(key)?.id === "source_fields")
           detail.append(
@@ -551,7 +560,14 @@
             ),
           );
         if (node.source.valid_values !== undefined) {
-          detail.append(el("h3", "Declared values"));
+          detail.append(
+            el(
+              "h3",
+              Array.isArray(node.source.valid_values)
+                ? "Declared values"
+                : "Source value guidance",
+            ),
+          );
           const pre = el("pre");
           pre.append(
             el(
@@ -564,6 +580,45 @@
             ),
           );
           detail.append(pre);
+        }
+        if (node.source.valid_range !== undefined) {
+          detail.append(el("h3", "Declared numeric bounds"));
+          const bounds = el("pre");
+          bounds.append(
+            el("code", JSON.stringify(node.source.valid_range, null, 2)),
+          );
+          detail.append(bounds);
+        }
+        const other = Object.fromEntries(
+          Object.entries(node.source).filter(
+            ([key]) =>
+              ![
+                "id",
+                "name",
+                "title",
+                "definition",
+                "description",
+                "guidance",
+                "notes",
+                "references",
+                "valid_values",
+                "valid_range",
+                "fields",
+                "components",
+                "groups",
+                "subsections",
+                "data_type",
+                "required",
+              ].includes(key),
+          ),
+        );
+        if (Object.keys(other).length) {
+          const more = el("details"),
+            label = el("summary", "Additional source metadata"),
+            pre = el("pre");
+          pre.append(el("code", JSON.stringify(other, null, 2)));
+          more.append(label, pre);
+          detail.append(more);
         }
         if (node.source.notes) block("Notes", node.source.notes.join("\n\n"));
         const example = node.example || parents.get(key)?.example;
@@ -584,9 +639,13 @@
           detail.append(
             el(
               "h3",
-              node === root
-                ? "Fields in this section"
-                : "Members" +
+              node.presentation
+                ? "Fields in this navigation group"
+                : node === root
+                  ? data.nutrient
+                    ? "Navigation groups"
+                    : "Fields in this section"
+                  : "Members" +
                     (node.source.data_type === "object[]"
                       ? " of each entry"
                       : ""),
@@ -626,7 +685,7 @@
           });
         }
         const a = el("a", "Read this definition in the full reference");
-        a.href = "../fields/traceability/#" + node.anchor;
+        a.href = data.reference + "#" + node.anchor;
         detail.append(el("hr"), a);
         const hash = "#" + encodeURIComponent(key);
         if (location.hash !== hash && historyMode !== "none") {
@@ -634,16 +693,19 @@
           else history.pushState(null, "", hash);
         }
         markCurrent();
-        if (focus) {
+        {
           const selected = Array.from(
             outline.querySelectorAll("[data-key]"),
           ).find((e) => e.dataset.key === key);
           let ancestor = selected?.parentElement;
+          if (selected?.tagName === "SUMMARY" && !focus)
+            ancestor = ancestor?.parentElement;
           while (ancestor) {
             if (ancestor.tagName === "DETAILS") ancestor.open = true;
             ancestor = ancestor.parentElement;
           }
-          detail.focus();
+          if (selected && data.nutrient) selected.scrollIntoView({ block: "nearest" });
+          if (focus) detail.focus();
         }
       }
       document.querySelector(".skip").addEventListener("click", (event) => {
@@ -651,10 +713,10 @@
         event.preventDefault();
         detail.focus();
       });
-      search.addEventListener("input", renderOutline);
+      search.addEventListener("input", () => renderOutline());
       document.getElementById("reset").addEventListener("click", () => {
         search.value = "";
-        renderOutline();
+        renderOutline(true);
         search.focus();
       });
       function restoreLocation() {

@@ -194,9 +194,10 @@ def outputs(source, display=None):
     intro += ['\n## Source front matter\n', '```yaml\n' + yaml.safe_dump(
         front, sort_keys=False, allow_unicode=True, width=90) + '```\n']
     pages['index.md'] = '\n'.join(intro)
-    prototype = guide(spec, display)
-    if prototype is not None:
-        pages['guides/traceability.html'] = prototype
+    for section_id in ('traceability', 'nutrient_analysis'):
+        prototype = guide(spec, display, section_id)
+        if prototype is not None:
+            pages[f'guides/{section_id}.html'] = prototype
     pages['source/hay-spec.yaml'] = source
     pages['source/hay-spec.json'] = transcription
     return pages
