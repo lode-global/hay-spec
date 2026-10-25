@@ -77,4 +77,4 @@ class SourceFieldProvenance(unittest.TestCase):
             if name.startswith('fields/'):
                 self.assertIn('including unreleased additions', text)
                 self.assertNotIn('**Published specification reference.**', text)
-        self.assertIn('Generated from the current source tree', pages['index.md'])
+        self.assertIn('Generated from the current source tree', pages['technical/index.md'])

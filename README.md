@@ -57,7 +57,8 @@ and its verbatim archive before interpreting historical schema-change claims.
 
 ### Current-source reference documentation
 
-[Browse the generated reference](./docs/index.md). It describes the current
+[Explore the field guides](./docs/index.md) or browse the
+[technical reference](./docs/technical/index.md). It describes the current
 source tree, including unreleased additions; use the tagged releases above for
 published snapshots. YAML remains canonical. The generated JSON is a transcription,
 not a JSON Schema or a hay-record validator.

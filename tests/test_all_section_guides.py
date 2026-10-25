@@ -33,9 +33,9 @@ class AllSectionGuides(unittest.TestCase):
             self.assertEqual((ROOT / name).read_bytes(), subprocess.check_output(
                 ['git', 'show', f'{BASE}:{name}'], cwd=ROOT))
         for name, text in self.pages.items():
-            if name.startswith('fields/') or name == 'index.md':
-                self.assertEqual(text, subprocess.check_output(
-                    ['git', 'show', f'{BASE}:docs/{name}'], cwd=ROOT, text=True))
+            if name.startswith('fields/') or name == 'technical/index.md':
+                self.assertEqual(text.replace("](../source/", "](source/").replace("](../fields/", "](fields/"), subprocess.check_output(
+                    ['git', 'show', f'{BASE}:docs/{"index.md" if name == "technical/index.md" else name}'], cwd=ROOT, text=True))
 
     def test_every_canonical_node_has_exact_source_scope_order_and_reference(self):
         for i, section in enumerate(self.spec['sections']):
@@ -62,7 +62,7 @@ class AllSectionGuides(unittest.TestCase):
     def test_overview_and_site_navigation_cover_every_section(self):
         overview = self.pages['guides/index.html']
         navigation = load_spec((ROOT / 'mkdocs.yml').read_text())['nav']
-        guides = next(n['Field guides'] for n in navigation if 'Field guides' in n)
+        guides = next(n['Browse sections'] for n in navigation if 'Browse sections' in n)
         targets = [target for item in guides for target in item.values()]
         self.assertEqual(targets, ['guides/index.html'] +
                          [f'guides/{s["id"]}.html' for s in self.spec['sections']])

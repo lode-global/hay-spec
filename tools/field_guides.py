@@ -203,3 +203,33 @@ def guide_index(spec):
                      escape(re.split(r'(?<=[.!?])\s+', section.get('description', '').strip(), maxsplit=1)[0]) + '</p></a>')
     template = (Path(__file__).parent / 'templates' / 'field-guide-index.html').read_text()
     return template.replace('__GUIDE_CARDS__', '\n'.join(cards))
+
+
+def home_page(spec):
+    """A guide-first entrance; source downloads remain exact transcriptions."""
+    cards = guide_index(spec)
+    start = cards.index('<div class="grid">') + len('<div class="grid">')
+    end = cards.index('</div>', start)
+    cards = cards[start:end].replace('class="card"', 'class="lode-guide-card"')
+    cards = re.sub(r'href="([a-z_]+)\.html"', r'href="guides/\1.html"', cards)
+    state = ('Published snapshot' if spec.get('publication_status') == 'published'
+             else 'Current working specification · includes unreleased changes')
+    return ("---\nhide:\n  - navigation\n  - toc\n---\n\n"
+            '<div class="lode-home" data-technical-overview="technical/">\n'
+            '<p class="eyebrow">LODE / HAY DESCRIPTION SPECIFICATION</p>\n'
+            '<h1>Explore the specification</h1>\n'
+            '<p>Choose a field guide to understand each field and its relationships. '
+            'Use the technical reference for the complete source definitions and metadata.</p>\n'
+            '<p class="publication">' + escape(state) + ' · source version ' + escape(spec['version']) +
+            ' · status: ' + escape(spec['status']) + '.</p>\n'
+            '<div class="downloads"><a href="source/hay-spec.yaml" download="hay-spec.yaml">Download YAML</a>'
+            '<a href="source/hay-spec.json" download="hay-spec.json">Download JSON</a>'
+            '<a href="technical/">Technical reference</a></div>\n'
+            '<p class="publication">Downloads reflect the current source. JSON is a transcription, '
+            'not JSON Schema or a hay-record validator. For immutable snapshots, visit '
+            '<a href="https://github.com/lode-global/hay-spec/releases">published releases</a>.</p>\n'
+            '<div class="lode-guide-grid">' + cards + '</div>\n'
+            '<p>Sections organize the documentation; they do not create new record envelopes. '
+            'Existing identifiers, values, and nesting are preserved. '
+            '<a href="history/reconciliation/">Read the reconciled history and original archive</a>.</p>\n'
+            '</div>\n')

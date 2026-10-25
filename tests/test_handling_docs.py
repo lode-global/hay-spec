@@ -68,7 +68,7 @@ class HandlingDocs(unittest.TestCase):
         self.assertEqual(page.count('Identifier: `dry_matter`'), 2)
         anchors = re.findall(r'<a id="([^"]+)"', page)
         self.assertEqual(len(anchors), len(set(anchors)))
-        self.assertIn('duplicate_identifier', duplicate['index.md'])
+        self.assertIn('duplicate_identifier', duplicate['technical/index.md'])
 
     def test_output_is_deterministic(self):
         self.assertEqual(outputs(self.source), self.pages)

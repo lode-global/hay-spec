@@ -1,0 +1,37 @@
+:root {
+  --md-primary-fg-color: #19352c;
+  --md-primary-bg-color: #fbfcf8;
+  --md-accent-fg-color: #24583f;
+  --md-default-bg-color: #f0f2e9;
+  --md-default-fg-color: #19352c;
+  --md-default-fg-color--light: #52655c;
+  --md-typeset-a-color: #20513d;
+  --md-code-bg-color: #eef2e7;
+  --md-code-fg-color: #19352c;
+  --md-text-font: system-ui, sans-serif;
+}
+body { font-family: system-ui, sans-serif; }
+.md-header, .md-tabs { background: #19352c; color: #fbfcf8; box-shadow: none; }
+.md-header__title { font-weight: 700; }
+.md-grid { max-width: 1240px; }
+.md-typeset { font-size: 16px; line-height: 1.6; }
+.md-typeset h1, .md-typeset h2, .md-typeset h3 { color: #19352c; font-weight: 700; }
+.md-typeset h1 { letter-spacing: -.04em; line-height: 1.15; }
+.md-content__inner { background: #fbfcf8; border: 1px solid #d6ddd3; border-radius: 12px; padding: 28px; }
+.md-content__inner:has(.lode-home) { background: transparent; border: 0; padding: 0; }
+.md-typeset code, .md-typeset pre > code { border-radius: 6px; }
+.md-typeset blockquote { border-left: 3px solid #829966; padding: 12px 16px; background: #eef2e7; color: #19352c; }
+.lode-page-actions { display: flex; flex-wrap: wrap; gap: 10px 20px; font-size: 14px; margin: 0 0 24px; }
+.lode-page-actions a { color: #20513d; text-decoration: underline; }
+.lode-home .eyebrow { letter-spacing: .12em; font-size: 12px; font-weight: 700; }
+.lode-home .publication { color: #52655c; max-width: 800px; }
+.lode-home .downloads { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0 8px; }
+.lode-home .downloads a { border: 1px solid #a1b09f; border-radius: 6px; padding: 8px 14px; background: #fbfcf8; font-weight: 650; }
+.lode-guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin: 28px 0; }
+.md-typeset a.lode-guide-card { display: block; border: 1px solid #d6ddd3; border-radius: 12px; background: #fbfcf8; padding: 24px; color: #19352c; }
+.md-typeset a.lode-guide-card:hover { border-color: #24583f; }
+.md-typeset .lode-guide-card h2 { font-size: 22px; margin: 0 0 12px; line-height: 1.4; }
+.md-typeset .lode-guide-card p { font-size: 14px; margin: 0; color: #52655c; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid #98621b; outline-offset: 3px; }
+@media(max-width:760px) { .md-content__inner { padding: 20px; } }
+@media(max-width:400px) { .lode-guide-grid { grid-template-columns: 1fr; } }
