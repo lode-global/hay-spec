@@ -1,0 +1,209 @@
+---
+titles:
+  traceability/hay_single_lot_traceable: Traceable to a single hay lot
+  traceability/lot_identifier_internal: Internal lot identifier
+  traceability/lot_identifier_external: External lot identifier
+  traceability/lot_identifier_external/lot_identifier_external.value: External lot identifier value
+  traceability/lot_identifier_external/lot_identifier_external.issuer: External lot identifier issuer
+  traceability/lot_mapping_field_to_bale_supported: Field-to-bale mapping supported
+  stand/stand_mixture_intended: Stand mixture intended
+  stand/forage_species_type: Forage species type
+  stand/forage_variety_count: Forage variety count
+  stand/forage_variety_components: Forage variety components
+  stand/forage_variety_components/forage_variety: Forage variety
+  stand/forage_variety_components/variety_representation_target: Variety representation target
+  stand/forage_variety_components/variety_representation_result: Variety representation result
+  stand/stand_maturity_at_harvest: Stand maturity at harvest
+  stand/stand_establishment_method: Stand establishment method
+  stand/stand_establishment_date: Stand establishment date
+  stand/stand_density: Stand density
+  stand/source_stand_age: Source stand age
+  location/hay_origin_country_code: Hay origin country code
+  location/hay_origin_subdivision_code: Hay origin subdivision code
+  location/hay_origin_county: Hay origin county
+  location/hay_origin_postal_code: Hay origin postal code
+  location/source_field_elevation: Source field elevation
+  location/source_field_elevation_units: Source field elevation units
+  location/source_field_climate_class: Source field climate class
+  location/source_field_area: Source field area
+  location/source_field_area_units: Source field area units
+  location/irrigation_status: Irrigation status
+  location/irrigation_method_available: Irrigation method available
+  location/irrigation_method_used: Irrigation method used
+  soil/soil_test_date: Soil test date
+  soil/soil_test_ph: Soil test pH
+  soil/lime_applied: Lime applied
+  soil/lime_application_date: Lime application date
+  soil/date_fertilized_nitrogen: Date fertilized nitrogen
+  soil/date_fertilized_potassium: Date fertilized potassium
+  soil/date_fertilized_phosphorus: Date fertilized phosphorus
+  soil/amount_fertilized_nitrogen: Amount fertilized nitrogen
+  soil/amount_fertilized_potassium: Amount fertilized potassium
+  soil/amount_fertilized_phosphorus: Amount fertilized phosphorus
+  soil/amount_fertilized_units: Amount fertilized units
+  soil/organic_amendments_applied: Organic amendments applied
+  soil/organic_amendments_applied/amendment_type: Amendment type
+  soil/organic_amendments_applied/amendment_amount: Amendment amount
+  soil/organic_amendments_applied/amendment_amount_units: Amendment amount units
+  soil/organic_amendments_applied/amendment_application_date: Amendment application date
+  intended_use/intended_forage_use: Intended forage use
+  intended_use/intended_use_case: Intended use case
+  intended_use/gmo_presence_status: GMO presence status
+  intended_use/production_certification_status: Production certification status
+  intended_use/distribution_channel: Distribution channel
+  intended_use/export_eligibility_documentation: Export eligibility documentation
+  crop_management/growth_conditions_notes: Growth conditions notes
+  crop_management/weed_pressure_observed: Weed pressure observed
+  crop_management/hay_herbicide_treated: Hay herbicide treated
+  crop_management/pest_pressure_observed: Pest pressure observed
+  crop_management/hay_pesticide_treated: Hay pesticide treated
+  crop_management/hay_preservative_applied: Hay preservative applied
+  crop_management/hay_coloring_agent_used: Hay coloring agent used
+  crop_management/cutting_regimen_usual: Cutting regimen usual
+  crop_management/cutting_stage_target: Cutting stage target
+  harvest/harvest_date_start: Harvest date start
+  harvest/harvest_date_end: Harvest date end
+  harvest/hay_cutting: Hay cutting
+  harvest/baler_moisture_average: Baler moisture average
+  harvest/baler_moisture_high: Baler moisture high
+  harvest/hay_conditioned: Hay conditioned
+  harvest/bale_weight_intended: Bale weight intended
+  harvest/average_bale_weight: Average bale weight
+  harvest/bale_weight_assessment_method: Bale weight assessment method
+  harvest/bale_count: Bale count
+  harvest/source_field_yield: Source field yield
+  harvest/source_field_yield_units: Source field yield units
+  physical_characteristics/weather_damage_windrow_rain: Weather damage windrow rain
+  physical_characteristics/weather_damage_windrow_snow: Weather damage windrow snow
+  physical_characteristics/weather_damage_windrow_sleet: Weather damage windrow sleet
+  physical_characteristics/weather_damage_windrow_hail: Weather damage windrow hail
+  physical_characteristics/weather_damage_windrow_fog: Weather damage windrow fog
+  physical_characteristics/weather_damage_windrow_dewfall: Weather damage windrow dewfall
+  physical_characteristics/weather_damage_windrow_assessment: Weather damage windrow assessment
+  physical_characteristics/weather_damage_baled_rain: Weather damage baled rain
+  physical_characteristics/weather_damage_baled_snow: Weather damage baled snow
+  physical_characteristics/weather_damage_baled_sleet: Weather damage baled sleet
+  physical_characteristics/weather_damage_baled_hail: Weather damage baled hail
+  physical_characteristics/weather_damage_baled_moisture: Weather damage baled moisture
+  physical_characteristics/weather_damage_baled_assessment: Weather damage baled assessment
+  physical_characteristics/hay_leafiness: Hay leafiness
+  physical_characteristics/hay_texture: Hay texture
+  physical_characteristics/hay_color: Hay color
+  physical_characteristics/organoleptic_factor_odor: Organoleptic factor odor
+  physical_characteristics/organoleptic_factor_moldy: Organoleptic factor moldy
+  physical_characteristics/organoleptic_factor_dusty: Organoleptic factor dusty
+  physical_characteristics/organoleptic_factor_rot: Organoleptic factor rot
+  physical_characteristics/foreign_material_weeds: Foreign material weeds
+  physical_characteristics/foreign_material_burs: Foreign material burs
+  physical_characteristics/foreign_material_insects: Foreign material insects
+  physical_characteristics/final_storage_structure: Final storage structure
+  physical_characteristics/final_surface_type: Final surface type
+  physical_characteristics/final_airflow_condition: Final airflow condition
+  physical_characteristics/restacked_since_baling: Restacked since baling
+  physical_characteristics/visible_moisture_damage: Visible moisture damage
+  physical_characteristics/handling_events: Handling events
+  physical_characteristics/handling_events/location_type: Location type
+  physical_characteristics/handling_events/storage_structure: Storage structure
+  physical_characteristics/handling_events/surface_type: Surface type
+  physical_characteristics/handling_events/airflow_condition: Airflow condition
+  physical_characteristics/handling_events/duration_estimate: Duration estimate
+  physical_characteristics/handling_events/restacked: Restacked
+  physical_characteristics/handling_events/stage_label: Stage label
+  physical_characteristics/handling_events/storage_degradation_visible: Storage degradation visible
+  nutrient_analysis/hay_tested: Hay tested
+  nutrient_analysis/hay_sample_date: Hay sample date
+  nutrient_analysis/hay_sampler_independent: Hay sampler independent
+  nutrient_analysis/hay_sampler_certified: Hay sampler certified
+  nutrient_analysis/hay_sampling_protocol: Hay sampling protocol
+  nutrient_analysis/hay_testing_laboratory: Hay testing laboratory
+  nutrient_analysis/hay_testing_method: Hay testing method
+  nutrient_analysis/hay_testing_date: Hay testing date
+  nutrient_analysis/dry_matter: Dry matter
+  nutrient_analysis/relative_feed_value: Relative feed value (RFV)
+  nutrient_analysis/relative_forage_quality: Relative forage quality (RFQ)
+  nutrient_analysis/nrc_2001_energy: NRC 2001 energy
+  nutrient_analysis/digestible_energy_1x_mcal_per_lb: Digestible energy 1x (Mcal/lb)
+  nutrient_analysis/metabolizable_energy_1x_mcal_per_lb: Metabolizable energy 1x (Mcal/lb)
+  nutrient_analysis/net_energy_lactation_3x_mcal_per_lb: Net energy lactation 3x (Mcal/lb)
+  nutrient_analysis/net_energy_maintenance_3x_mcal_per_lb: Net energy maintenance 3x (Mcal/lb)
+  nutrient_analysis/net_energy_gain_3x_mcal_per_lb: Net energy gain 3x (Mcal/lb)
+  nutrient_analysis/digestible_energy_1x_mcal_per_kg: Digestible energy 1x (Mcal/kg)
+  nutrient_analysis/metabolizable_energy_1x_mcal_per_kg: Metabolizable energy 1x (Mcal/kg)
+  nutrient_analysis/net_energy_lactation_3x_mcal_per_kg: Net energy lactation 3x (Mcal/kg)
+  nutrient_analysis/net_energy_maintenance_3x_mcal_per_kg: Net energy maintenance 3x (Mcal/kg)
+  nutrient_analysis/net_energy_gain_3x_mcal_per_kg: Net energy gain 3x (Mcal/kg)
+  nutrient_analysis/tdn_1x: Total digestible nutrients (1x intake)
+  nutrient_analysis/protein_and_fractions: Protein and fractions
+  nutrient_analysis/crude_protein: Crude protein
+  nutrient_analysis/available_protein: Available protein
+  nutrient_analysis/acid_detergent_insoluble_crude_protein: Acid detergent insoluble crude protein
+  nutrient_analysis/adjusted_crude_protein: Adjusted crude protein
+  nutrient_analysis/soluble_protein_%_cp: Soluble protein (% of CP)
+  nutrient_analysis/degradable_protein_%_cp: Degradable protein (% of CP)
+  nutrient_analysis/neutral_detergent_insoluble_crude_protein: Neutral detergent insoluble crude protein
+  nutrient_analysis/amino_acids: Amino acids
+  nutrient_analysis/lysine: Lysine
+  nutrient_analysis/methionine: Methionine
+  nutrient_analysis/carbohydrates: Carbohydrates
+  nutrient_analysis/acid_detergent_fiber: Acid detergent fiber
+  nutrient_analysis/neutral_detergent_fiber: Neutral detergent fiber
+  nutrient_analysis/lignin: Lignin
+  nutrient_analysis/non_fiber_carbohydrates: Non fiber carbohydrates
+  nutrient_analysis/starch: Starch
+  nutrient_analysis/water_soluble_carbohydrates: Water soluble carbohydrates
+  nutrient_analysis/fat: Fat
+  nutrient_analysis/crude_fat: Crude fat
+  nutrient_analysis/total_fatty_acids: Total fatty acids
+  nutrient_analysis/rumen_unsaturated_fatty_acid_load: Rumen unsaturated fatty acid load
+  nutrient_analysis/energy_and_digestibility: Energy and digestibility
+  nutrient_analysis/in_vitro_true_digestibility_30hr_percent_dm: In vitro true digestibility (30 hours,
+    % of DM)
+  nutrient_analysis/neutral_detergent_fiber_digestibility_30hr_percent_ndf: NDF digestibility (30 hours,
+    % of NDF)
+  nutrient_analysis/kd_percent_per_hr: Digestion rate (Kd, % per hour)
+  nutrient_analysis/total_digestible_nutrients: Total digestible nutrients
+  nutrient_analysis/horse_digestible_energy_mcal_per_lb: Horse digestible energy (Mcal/lb)
+  nutrient_analysis/minerals: Minerals
+  nutrient_analysis/ash: Ash
+  nutrient_analysis/calcium: Calcium
+  nutrient_analysis/phosphorus: Phosphorus
+  nutrient_analysis/magnesium: Magnesium
+  nutrient_analysis/potassium: Potassium
+  nutrient_analysis/sulfur: Sulfur
+  nutrient_analysis/chloride_ion: Chloride ion
+  nutrient_analysis/iron_ppm: Iron (ppm)
+  nutrient_analysis/zinc_ppm: Zinc (ppm)
+  nutrient_analysis/copper_ppm: Copper (ppm)
+  nutrient_analysis/manganese_ppm: Manganese (ppm)
+  nutrient_analysis/molybdenum_ppm: Molybdenum (ppm)
+nutrient_groups:
+  - anchor: sampling
+    title: Sampling and laboratory provenance
+    starts_at: hay_tested
+  - anchor: base-values
+    title: Moisture and dry matter
+    starts_at: moisture_content
+  - anchor: quality-indexes
+    title: Forage quality indexes
+    starts_at: relative_feed_value
+  - anchor: nrc-energy
+    title: NRC 2001 energy
+    starts_at: nrc_2001_energy
+  - anchor: protein
+    title: Protein and fractions
+    starts_at: protein_and_fractions
+  - anchor: amino-acids
+    title: Amino acids
+    starts_at: amino_acids
+  - anchor: carbohydrates
+    title: Carbohydrates
+    starts_at: carbohydrates
+  - anchor: fat
+    title: Fat
+    starts_at: fat
+  - anchor: digestibility
+    title: Energy and digestibility
+    starts_at: energy_and_digestibility
+  - anchor: minerals
+    title: Minerals
+    starts_at: minerals

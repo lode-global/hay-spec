@@ -58,6 +58,12 @@ source tree, including unreleased additions; use the tagged releases above for
 published snapshots. YAML remains canonical. The generated JSON is a transcription,
 not a JSON Schema or a hay-record validator.
 
+Display labels and nutrient-page navigation are maintained in
+[`reference-display.yaml`](./reference-display.yaml), separately from the canonical
+specification. Labels do not rename record keys; navigation does not regroup stored
+fields. Existing source titles take precedence. See the
+[display configuration notes](./notes/reference-display.md).
+
 To regenerate and check the reference locally:
 
 ```sh

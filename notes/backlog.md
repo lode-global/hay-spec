@@ -24,9 +24,10 @@ superseded. Its remaining useful ideas are recorded below. Do not merge the old 
 - Optional source-field name and identifier for traceability. Define identifier
   scope/issuer and multiple-field representation; avoid the old draft's conflicting
   `multi_field` and `multi-field` sentinels.
-- Optional display titles and nutrient grouping for documentation and forms,
-  without restructuring records or requiring numeric IDs. Numeric IDs need a
-  specific stable-identity use case and allocation policy before adoption.
+- Display titles and nutrient-reference navigation are implemented in the
+  presentation configuration; see [configuration notes](reference-display.md).
+  Form integration remains a consumer decision. Numeric IDs still need a specific
+  stable-identity use case and allocation policy before adoption.
 - Forage-variety and laboratory reference datasets: define ownership, versioning,
   identifier policy, availability, and fallback behavior before requiring them.
 - Consider glyphosate-specific production disclosure only after a separate domain
