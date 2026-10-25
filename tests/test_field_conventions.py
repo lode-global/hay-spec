@@ -102,7 +102,14 @@ class FieldConventions(unittest.TestCase):
         current = load_spec((ROOT / 'src/hay-spec.yaml').read_text())
         previous = load_spec(subprocess.check_output(
             ['git', 'show', f'{BASE}:src/hay-spec.yaml'], cwd=ROOT, text=True))
-        self.assertEqual(current['sections'], previous['sections'])
+        # The handling replacement only adds optional components and guidance.
+        normalized = copy.deepcopy(current['sections'])
+        for section in normalized:
+            for field in section.get('fields', []):
+                if field.get('id') == 'handling_events':
+                    field.pop('components', None)
+                    field.pop('guidance', None)
+        self.assertEqual(normalized, previous['sections'])
         self.assertEqual(current['version'], previous['version'])
         self.assertEqual(current['published_on'], previous['published_on'])
 
