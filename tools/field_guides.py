@@ -193,25 +193,30 @@ def guide(spec, display=None, section_id='traceability'):
             .replace('__GUIDE_DATA__', payload))
 
 
-def guide_index(spec):
-    """Link every canonical section, without presenting sections as record envelopes."""
+def section_cards(spec, prefix="", css_class="card"):
+    """Render shared section links directly from the canonical section list."""
     cards = []
     for section in spec['sections']:
         identity = section['id']
-        cards.append('<a class="card" href="' + escape(identity, quote=True) + '.html">'
+        cards.append('<a class="' + escape(css_class, quote=True) + '" href="' +
+                     escape(prefix + identity + '.html', quote=True) + '">'
                      '<h2>' + escape(section.get('title', identity)) + '</h2><p>' +
                      escape(re.split(r'(?<=[.!?])\s+', section.get('description', '').strip(), maxsplit=1)[0]) + '</p></a>')
+    return '\n'.join(cards)
+
+
+def guide_index(spec):
+    """Link every canonical section, without presenting sections as record envelopes."""
     template = (Path(__file__).parent / 'templates' / 'field-guide-index.html').read_text()
-    return template.replace('__GUIDE_CARDS__', '\n'.join(cards))
+    state = ('Published snapshot' if spec.get('publication_status') == 'published'
+             else 'Unreleased working reference')
+    return (template.replace('__GUIDE_CARDS__', section_cards(spec))
+            .replace('__SOURCE_CONTEXT__', escape('Source ' + spec['version'] + ' · ' + state)))
 
 
 def home_page(spec):
     """A guide-first entrance; source downloads remain exact transcriptions."""
-    cards = guide_index(spec)
-    start = cards.index('<div class="grid">') + len('<div class="grid">')
-    end = cards.index('</div>', start)
-    cards = cards[start:end].replace('class="card"', 'class="lode-guide-card"')
-    cards = re.sub(r'href="([a-z_]+)\.html"', r'href="guides/\1.html"', cards)
+    cards = section_cards(spec, prefix="guides/", css_class="lode-guide-card")
     state = ('Published snapshot' if spec.get('publication_status') == 'published'
              else 'Current working specification · includes unreleased changes')
     return ("---\nhide:\n  - navigation\n  - toc\n---\n\n"

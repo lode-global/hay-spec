@@ -30,6 +30,13 @@ class DocumentationEntranceTests(unittest.TestCase):
         for suffix in ('yaml', 'json'):
             self.assertIn(f'href="source/hay-spec.{suffix}" download="hay-spec.{suffix}"', home)
 
+    def test_guide_index_labels_working_downloads(self):
+        index = (ROOT / "docs/guides/index.html").read_text()
+        self.assertIn("Source 0.92.0 · Unreleased working reference", index)
+        self.assertIn("Downloads reflect the current source", index)
+        self.assertIn("JSON is a transcription", index)
+        self.assertNotIn("__SOURCE_CONTEXT__", index)
+
     def test_guides_keep_source_downloads_and_reference_routes(self):
         for guide in (ROOT / 'docs/guides').glob('*.html'):
             content = guide.read_text()
