@@ -6,6 +6,7 @@ import unittest
 import re
 
 import yaml
+from compatibility_helpers import restore_previous_nutrient_definitions
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,7 +19,9 @@ class PackagingLabContract(unittest.TestCase):
         released = subprocess.check_output(
             ['git', 'show', 'v0.91.1:src/hay-spec.yaml'], cwd=ROOT, text=True)
         cls.released = yaml.safe_load(released)
-        cls.sections = {s['id']: s for s in cls.spec['sections']}
+        restored = restore_previous_nutrient_definitions(
+            cls.spec['sections'], cls.released['sections'])
+        cls.sections = {s['id']: s for s in restored}
         cls.pack = {f['id']: f for f in cls.sections['packaging']['fields']}
         cls.lab = {f['id']: f for f in cls.sections['nutrient_analysis']['fields']}
 

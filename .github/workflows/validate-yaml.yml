@@ -12,6 +12,7 @@ on:
       - 'tools/validate_spec.py'
       - 'tools/generate_docs.py'
       - 'notes/handling-history-docs.md'
+      - 'notes/nutrient-reporting-consistency.md'
       - 'docs/**'
       - 'requirements-docs.txt'
   pull_request:
@@ -24,6 +25,7 @@ on:
       - 'tools/validate_spec.py'
       - 'tools/generate_docs.py'
       - 'notes/handling-history-docs.md'
+      - 'notes/nutrient-reporting-consistency.md'
       - 'docs/**'
       - 'requirements-docs.txt'
 
