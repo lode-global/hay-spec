@@ -21,9 +21,9 @@ superseded. Its remaining useful ideas are recorded below. Do not merge the old 
 
 ## Useful additions
 
-- Optional source-field name and identifier for traceability. Define identifier
-  scope/issuer and multiple-field representation; avoid the old draft's conflicting
-  `multi_field` and `multi-field` sentinels.
+- Optional source-field provenance is implemented as `source_fields`; see
+  [compatibility and examples](source-field-provenance.md). Field-level allocation,
+  completeness declarations, and bale-to-field relationships remain separate work.
 - Display titles and nutrient-reference navigation are implemented in the
   presentation configuration; see [configuration notes](reference-display.md).
   Form integration remains a consumer decision. Numeric IDs still need a specific

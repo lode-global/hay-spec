@@ -1,7 +1,7 @@
 {
   "title": "Hay Description Specification",
   "version": "0.92.0",
-  "publication_status": "published",
+  "publication_status": "unreleased",
   "prepared_on": "2026-10-24",
   "published_on": "2026-10-25",
   "status": "draft",
@@ -95,6 +95,40 @@
             false
           ],
           "definition": "Indicates whether the seller maintains a system (digital or physical) for mapping specific bales or sub-lots to field-level characteristics, such as GPS coordinates, yield zones, or harvest time blocks.\nSuch mapping enables greater traceability, enhances data resolution for quality control, and may support integration with field data platforms or precision agriculture systems.\nThis capability is optional but increasingly valuable in transparent or regulated feed markets.\n"
+        },
+        {
+          "id": "source_fields",
+          "title": "Source fields",
+          "data_type": "object[]",
+          "required": false,
+          "definition": "Optional provenance identifying the production fields contributing to the hay described by this record. Use one entry for one field and separate entries for multiple fields. This collection may be partial; it is not a claim of complete origin coverage, allocation by field, or bale-level mapping.\n",
+          "guidance": "Omission or an empty list means no source-field details are supplied, not that the hay came from one field or that its origin is unknown. Include at least a nonblank name or identifier in each supplied entry; do not use empty objects or multi_field/multi-field sentinel values to represent multiple fields. A field name is a display label and need not be unique. Interpret an identifier only within its issuer or scope; without that context it is an unscoped source value and must not be treated as globally unique. Preserve identifiers exactly, including leading zeros, case, spaces, and punctuation. Do not merge entries solely because their names or unscoped identifiers match. No registry is required. Do not infer or overwrite hay_single_lot_traceable, lot identifiers, lot_mapping_field_to_bale_supported, or location summaries from this collection. Entry order conveys no priority or contribution share; no count limit is imposed. Preserve conflicting source reports for review. Existing records require no migration.\n",
+          "components": [
+            {
+              "id": "field_name",
+              "title": "Field name",
+              "data_type": "string",
+              "required": false,
+              "valid_values": "Nonblank string, preserved as reported",
+              "definition": "Source-reported human-readable field name. A name alone is permitted; it does not identify a field uniquely across farms or reporting systems.\n"
+            },
+            {
+              "id": "field_identifier",
+              "title": "Field identifier",
+              "data_type": "string",
+              "required": false,
+              "valid_values": "Nonblank string, preserved as reported",
+              "definition": "Opaque source-issued identifier for this production field. Store as a string, preserving its exact spelling and formatting; do not coerce to a number or substitute a lot, farm, or bale identifier.\n"
+            },
+            {
+              "id": "field_identifier_scope",
+              "title": "Field identifier scope",
+              "data_type": "string",
+              "required": false,
+              "valid_values": "Nonblank string, preserved as reported",
+              "definition": "Source-reported issuer or namespace in which field_identifier is meaningful, such as a farm's field register or a named mapping system and account. This is free text, not a controlled registry or a guarantee of uniqueness. Supply with an identifier where known; scope alone is not a field reference.\n"
+            }
+          ]
         }
       ],
       "guidance": "Traceability fields should be completed to the extent feasible. While not all buyers require formal lot tracking, inclusion of traceability data - especially internal and external identifiers - can streamline certification workflows, support inventory segregation, and build buyer confidence.\nSystems should validate consistency between hay_single_lot_traceable and identifier fields and may allow optional linking to field- or bale-level metadata for advanced users.\n"
@@ -1766,7 +1800,7 @@
           "title": "Document Metadata",
           "description": "Human-readable metadata for managing this specification across platforms.\n",
           "items": [
-            "Title: Hay Description Specification\nVersion: 0.92.0\nPublication: Published\nPrepared on: 2026-10-24\nPublished on: 2026-10-25\nStatus: Draft\nMaintainer: standards@lode.global\nLicense: CC BY 4.0\nSource: https://github.com/lode-global/hay-spec\nRelease: https://github.com/lode-global/hay-spec/releases/tag/v0.92.0\nRelease notes: https://github.com/lode-global/hay-spec/blob/v0.92.0/releases/v0.92.0.md\nCanonical file: src/hay-spec.yaml\nGenerated reference: docs/index.md\nJSON transcription: docs/source/hay-spec.json (not JSON Schema)\n"
+            "Title: Hay Description Specification\nVersion: 0.92.0\nPublication: Unreleased additions since v0.92.0\nPrepared on: 2026-10-24\nPublished on: 2026-10-25\nStatus: Draft\nMaintainer: standards@lode.global\nLicense: CC BY 4.0\nSource: https://github.com/lode-global/hay-spec\nRelease: https://github.com/lode-global/hay-spec/releases/tag/v0.92.0\nRelease notes: https://github.com/lode-global/hay-spec/blob/v0.92.0/releases/v0.92.0.md\nCanonical file: src/hay-spec.yaml\nGenerated reference: docs/index.md\nJSON transcription: docs/source/hay-spec.json (not JSON Schema)\n"
           ]
         }
       ]

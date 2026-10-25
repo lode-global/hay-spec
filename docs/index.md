@@ -4,9 +4,9 @@
 
 Source version: **0.92.0**; status: **draft**.
 
-Published on 2026-10-25. The specification remains a working draft.
+Generated from the current source tree; additions may be unreleased even when the source still carries the last release version.
 
-Source SHA-256: `39bcd2c179d52dce19f26b7451073287cd18b7a45bb1b134033fd60933038ec6`
+Source SHA-256: `7bc6c25d0922596525cb2fd01d0446f517ae8d4603eda540fe6220cd3611c504`
 
 [Canonical YAML copy](source/hay-spec.yaml) | [JSON transcription](source/hay-spec.json)
 
@@ -109,7 +109,7 @@ Display titles and nutrient navigation are presentation-only; the source downloa
 ```yaml
 title: Hay Description Specification
 version: 0.92.0
-publication_status: published
+publication_status: unreleased
 prepared_on: '2026-10-24'
 published_on: '2026-10-25'
 status: draft

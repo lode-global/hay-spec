@@ -6,6 +6,11 @@ def restore_previous_document_metadata(sections, previous_sections):
     result = copy.deepcopy(sections)
     current = next(s for s in result if s['id'] == 'metadata')
     previous = next(s for s in previous_sections if s['id'] == 'metadata')
+    # The new addition is separately guarded against the immediately preceding main.
+    trace = next(s for s in result if s['id'] == 'traceability')
+    old_trace = next(s for s in previous_sections if s['id'] == 'traceability')
+    if not any(f['id'] == 'source_fields' for f in old_trace['fields']):
+        trace['fields'] = [f for f in trace['fields'] if f['id'] != 'source_fields']
     old = {s['id']: s for s in previous['subsections']}
     current['subsections'] = [copy.deepcopy(old[s['id']])
                               if s['id'] in {'version_history', 'document_metadata'} else s

@@ -30,7 +30,7 @@ class ReleasePreparation(unittest.TestCase):
         self.assertEqual(self.spec['version'], '0.92.0')
         self.assertEqual(self.spec['status'], 'draft')
         self.assertEqual(self.spec['prepared_on'], '2026-10-24')
-        self.assertEqual(self.spec['publication_status'], 'published')
+        self.assertEqual(self.spec['publication_status'], 'unreleased')
         self.assertEqual(self.spec['published_on'], '2026-10-25')
 
     def test_history_preserves_prior_entries_and_dates_release(self):

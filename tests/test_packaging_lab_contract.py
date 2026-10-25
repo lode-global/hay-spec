@@ -75,7 +75,7 @@ class PackagingLabContract(unittest.TestCase):
     def test_release_publication_metadata(self):
         self.assertEqual(self.spec['version'], '0.92.0')
         self.assertEqual(self.spec['published_on'], '2026-10-25')
-        self.assertEqual(self.spec['publication_status'], 'published')
+        self.assertEqual(self.spec['publication_status'], 'unreleased')
 
     def test_documented_examples_match_declared_fields_and_enums(self):
         notes = (ROOT / 'notes/packaging-lab-provenance.md').read_text()
