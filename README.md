@@ -22,7 +22,8 @@ The canonical source of truth is the YAML file in this repository.
 
 ## Status
 
-- **Source version:** v0.92.0 (published October 25, 2026; specification remains Draft)
+- **Source version:** v0.92.0 (published October 25, 2026; specification remains Draft),
+  with unreleased optional source-field provenance additions.
 - **Latest published:** [v0.92.0](https://github.com/lode-global/hay-spec/releases/tag/v0.92.0)
 - **Release notes:** [v0.92.0](./releases/v0.92.0.md)
 - **License:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)

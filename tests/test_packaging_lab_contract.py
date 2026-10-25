@@ -73,9 +73,11 @@ class PackagingLabContract(unittest.TestCase):
                                  old['fields'])
 
     def test_release_publication_metadata(self):
-        self.assertEqual(self.spec['version'], '0.92.0')
-        self.assertEqual(self.spec['published_on'], '2026-10-25')
-        self.assertEqual(self.spec['publication_status'], 'published')
+        published = yaml.safe_load(subprocess.check_output(
+            ['git', 'show', 'v0.92.0:src/hay-spec.yaml'], cwd=ROOT, text=True))
+        self.assertEqual(published['version'], '0.92.0')
+        self.assertEqual(published['published_on'], '2026-10-25')
+        self.assertEqual(published['publication_status'], 'published')
 
     def test_documented_examples_match_declared_fields_and_enums(self):
         notes = (ROOT / 'notes/packaging-lab-provenance.md').read_text()
