@@ -8,7 +8,7 @@ import tempfile
 import unittest
 
 from tools.validate_spec import inspect_spec, load_baseline, load_spec
-from compatibility_helpers import restore_previous_nutrient_definitions
+from compatibility_helpers import restore_previous_nutrient_definitions, restore_previous_document_metadata
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -106,14 +106,13 @@ class FieldConventions(unittest.TestCase):
         # The handling replacement only adds optional components and guidance.
         normalized = restore_previous_nutrient_definitions(
             current['sections'], previous['sections'])
+        normalized = restore_previous_document_metadata(normalized, previous['sections'])
         for section in normalized:
             for field in section.get('fields', []):
                 if field.get('id') == 'handling_events':
                     field.pop('components', None)
                     field.pop('guidance', None)
         self.assertEqual(normalized, previous['sections'])
-        self.assertEqual(current['version'], previous['version'])
-        self.assertEqual(current['published_on'], previous['published_on'])
 
     def test_legacy_findings_are_explicit_and_exact(self):
         current = load_spec((ROOT / 'src/hay-spec.yaml').read_text())

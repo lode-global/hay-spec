@@ -6,7 +6,7 @@ import unittest
 import re
 
 import yaml
-from compatibility_helpers import restore_previous_nutrient_definitions
+from compatibility_helpers import restore_previous_nutrient_definitions, restore_previous_document_metadata
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,6 +21,7 @@ class PackagingLabContract(unittest.TestCase):
         cls.released = yaml.safe_load(released)
         restored = restore_previous_nutrient_definitions(
             cls.spec['sections'], cls.released['sections'])
+        restored = restore_previous_document_metadata(restored, cls.released['sections'])
         cls.sections = {s['id']: s for s in restored}
         cls.pack = {f['id']: f for f in cls.sections['packaging']['fields']}
         cls.lab = {f['id']: f for f in cls.sections['nutrient_analysis']['fields']}
@@ -71,9 +72,10 @@ class PackagingLabContract(unittest.TestCase):
                 self.assertEqual([f for f in new_fields if f['id'] in old_ids],
                                  old['fields'])
 
-    def test_release_metadata_is_not_bumped(self):
-        self.assertEqual(self.spec['version'], '0.91.1')
-        self.assertEqual(self.spec['published_on'], '2025-08-31')
+    def test_release_preparation_is_explicitly_unpublished(self):
+        self.assertEqual(self.spec['version'], '0.92.0')
+        self.assertIsNone(self.spec['published_on'])
+        self.assertEqual(self.spec['publication_status'], 'unreleased')
 
     def test_documented_examples_match_declared_fields_and_enums(self):
         notes = (ROOT / 'notes/packaging-lab-provenance.md').read_text()

@@ -10,7 +10,7 @@ import unittest
 
 from tools.generate_docs import outputs
 from tools.validate_spec import load_spec
-from compatibility_helpers import restore_previous_nutrient_definitions
+from compatibility_helpers import restore_previous_nutrient_definitions, restore_previous_release_metadata
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,7 +29,7 @@ class HandlingDocs(unittest.TestCase):
     def test_existing_source_content_is_unchanged_except_additive_history(self):
         previous = load_spec(subprocess.check_output([
             'git', 'show', f'{BASE}:src/hay-spec.yaml'], cwd=ROOT, text=True))
-        current = copy.deepcopy(self.spec)
+        current = restore_previous_release_metadata(self.spec, previous)
         current['sections'] = restore_previous_nutrient_definitions(
             current['sections'], previous['sections'])
         for section in current['sections']:
@@ -78,7 +78,7 @@ class HandlingDocs(unittest.TestCase):
         self.assertEqual(len(pages), len(self.spec['sections']))
         for page in pages:
             self.assertIn('**Current-source reference, including unreleased additions.**', page)
-            self.assertIn('Source version: 0.91.1; status: draft.', page)
+            self.assertIn(f'Source version: {self.spec["version"]}; status: draft.', page)
             self.assertIn('../index.md', page)
 
     def test_unsupported_source_metadata_is_rejected_explicitly(self):

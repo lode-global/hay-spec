@@ -1,7 +1,9 @@
 ---
 title: Hay Description Specification
-version: 0.91.1
-published_on: "2025-08-31"
+version: 0.92.0
+publication_status: unreleased
+prepared_on: "2026-10-24"
+published_on: null
 status: draft
 publisher: Lode
 
@@ -3527,8 +3529,18 @@ sections:
       - id: version_history
         title: Version History
         description: >
-          This section documents major changes to the specification across published versions.
+          This section documents published versions and the explicitly unreleased next version.
+          Historical notes are retained as originally recorded, not as a verified field inventory.
         items:
+          - |
+            v0.92.0 (unreleased; prepared 2026-10-24) - Compatible reporting and documentation improvements.
+            - Added packaging id aliases and explicit round-bale axis, preserving legacy measurements.
+            - Added optional laboratory provenance and laboratory moisture reporting.
+            - Consolidated duplicate dry_matter definitions without changing the record key.
+            - Added optional handling-event definitions and explicit field interpretation conventions.
+            - Added structural checks, regression tests, generated Markdown/JSON reference, and strict site build.
+            - Superseded PR #1 through reviewed PRs #4-#7; remaining ideas are recorded in the backlog.
+            - Protein keys, existing enum spellings, stored values, and data types remain unchanged.
           - |
             v0.91.1 (2025-08-31) — Metadata corrections and YAML validation/style fixes.
             - Added top-level published_on and normalized document metadata.
@@ -3557,11 +3569,16 @@ sections:
         items:
           - |
             Title: Hay Description Specification
-            Version: 0.91.1
-            Published on: 2025-08-31
+            Version: 0.92.0
+            Publication: Unreleased; no tag or GitHub release created
+            Prepared on: 2026-10-24
+            Published on: Not yet published
             Status: Draft
             Maintainer: standards@lode.global
             License: CC BY 4.0
             Source: https://github.com/lode-global/hay-spec
-            Release: https://github.com/lode-global/hay-spec/releases/tag/v0.91.1
-            Schema URI: https://github.com/lode-global/hay-spec/tree/v0.91.1/schema.yaml
+            Planned tag: v0.92.0 (not created)
+            Release notes: releases/v0.92.0.md (draft)
+            Canonical file: src/hay-spec.yaml
+            Generated reference: docs/index.md
+            JSON transcription: docs/source/hay-spec.json (not JSON Schema)

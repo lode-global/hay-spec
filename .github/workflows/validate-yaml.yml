@@ -15,6 +15,7 @@ on:
       - 'notes/nutrient-reporting-consistency.md'
       - 'docs/**'
       - 'requirements-docs.txt'
+      - 'releases/**'
   pull_request:
     paths:
       - '**.yaml'
@@ -28,6 +29,7 @@ on:
       - 'notes/nutrient-reporting-consistency.md'
       - 'docs/**'
       - 'requirements-docs.txt'
+      - 'releases/**'
 
 jobs:
   lint:
