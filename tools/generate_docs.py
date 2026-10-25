@@ -11,10 +11,10 @@ import yaml
 
 try:
     from .validate_spec import inspect_spec, load_spec
-    from .field_guides import guide, guide_index
+    from .field_guides import guide, guide_index, home_page
 except ImportError:
     from validate_spec import inspect_spec, load_spec
-    from field_guides import guide, guide_index
+    from field_guides import guide, guide_index, home_page
 
 
 CHILDREN = ('fields', 'components', 'groups', 'subsections')
@@ -193,7 +193,8 @@ def outputs(source, display=None):
     front = {k: v for k, v in spec.items() if k != 'sections'}
     intro += ['\n## Source front matter\n', '```yaml\n' + yaml.safe_dump(
         front, sort_keys=False, allow_unicode=True, width=90) + '```\n']
-    pages['index.md'] = '\n'.join(intro)
+    pages['technical/index.md'] = '\n'.join(intro).replace('](source/', '](../source/').replace('](fields/', '](../fields/')
+    pages['index.md'] = home_page(spec)
     if any(s['id'] == 'metadata' for s in spec['sections']):
         notes = Path(__file__).resolve().parents[1] / 'notes'
         pages['history/reconciliation.md'] = (

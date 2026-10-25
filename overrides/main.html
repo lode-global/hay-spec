@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+{% if not page.is_homepage %}
+<nav class="lode-page-actions" aria-label="Specification navigation and downloads">
+  <a href="{{ 'index.html' | url }}">Field guides</a>
+  <a href="{{ 'technical/' | url }}">Technical reference</a>
+  <a href="{{ 'source/hay-spec.yaml' | url }}" download="hay-spec.yaml">Download YAML</a>
+  <a href="{{ 'source/hay-spec.json' | url }}" download="hay-spec.json">Download JSON</a>
+</nav>
+{% endif %}
+{{ super() }}
+{% endblock %}

@@ -31,9 +31,9 @@ class NutrientGuide(unittest.TestCase):
             self.assertEqual((ROOT / name).read_bytes(), subprocess.check_output(
                 ['git', 'show', f'{BASE}:{name}'], cwd=ROOT))
         for name in self.pages:
-            if name.startswith('fields/') or name == 'index.md':
-                self.assertEqual(self.pages[name], subprocess.check_output(
-                    ['git', 'show', f'{BASE}:docs/{name}'], cwd=ROOT, text=True))
+            if name.startswith('fields/') or name == 'technical/index.md':
+                self.assertEqual(self.pages[name].replace("](../source/", "](source/").replace("](../fields/", "](fields/"), subprocess.check_output(
+                    ['git', 'show', f'{BASE}:docs/{"index.md" if name == "technical/index.md" else name}'], cwd=ROOT, text=True))
 
     def test_visual_groups_preserve_flat_fields_and_source_order(self):
         root = self.data['root']

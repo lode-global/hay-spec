@@ -1,8 +1,8 @@
 ---
-site_name: Hay Description Specification
+site_name: Lode · Hay Description Specification
 nav:
-  - Overview: index.md
-  - Field guides:
+  - Field guides: index.md
+  - Browse sections:
       - All sections: guides/index.html
       - Traceability: guides/traceability.html
       - Stand Composition and Agronomic Characteristics: guides/stand.html
@@ -16,7 +16,8 @@ nav:
       - Nutrient analysis: guides/nutrient_analysis.html
       - Metadata and Supplemental Information: guides/metadata.html
   - Reconciled history: history/reconciliation.md
-  - Field reference:
+  - Technical reference:
+      - Overview: technical/index.md
       - Traceability: fields/traceability.md
       - Stand: fields/stand.md
       - Location: fields/location.md
@@ -30,6 +31,8 @@ nav:
       - Metadata: fields/metadata.md
 theme:
   name: material
+  custom_dir: overrides
+  font: false
   features:
     - navigation.tabs
     - navigation.top
@@ -44,3 +47,8 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed
   - pymdownx.emoji
+
+extra_css:
+  - assets/stylesheets/lode.css
+extra_javascript:
+  - assets/javascripts/legacy-overview.js
