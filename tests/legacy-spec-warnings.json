@@ -1,0 +1,62 @@
+[
+  {
+    "code": "legacy_identifier",
+    "path": "/sections/0/fields/2/components/0",
+    "message": "lot_identifier_external.value",
+    "severity": "warning"
+  },
+  {
+    "code": "legacy_identifier",
+    "path": "/sections/0/fields/2/components/1",
+    "message": "lot_identifier_external.issuer",
+    "severity": "warning"
+  },
+  {
+    "code": "legacy_enum_literal",
+    "path": "/sections/8/fields/23",
+    "message": "field | tarp-covered | open shed | enclosed barn | unknown",
+    "severity": "warning"
+  },
+  {
+    "code": "legacy_enum_literal",
+    "path": "/sections/8/fields/24",
+    "message": "ground | pallets | wood | concrete | other",
+    "severity": "warning"
+  },
+  {
+    "code": "legacy_enum_literal",
+    "path": "/sections/8/fields/25",
+    "message": "natural ventilation | forced ventilation | enclosed with limited airflow | unknown",
+    "severity": "warning"
+  },
+  {
+    "code": "legacy_enum_literal",
+    "path": "/sections/8/fields/26",
+    "message": "true | false | unknown",
+    "severity": "warning"
+  },
+  {
+    "code": "legacy_enum_literal",
+    "path": "/sections/8/fields/27",
+    "message": "true | false | unknown",
+    "severity": "warning"
+  },
+  {
+    "code": "legacy_identifier",
+    "path": "/sections/9/fields/34",
+    "message": "soluble_protein_%_cp",
+    "severity": "warning"
+  },
+  {
+    "code": "legacy_identifier",
+    "path": "/sections/9/fields/35",
+    "message": "degradable_protein_%_cp",
+    "severity": "warning"
+  },
+  {
+    "code": "duplicate_identifier",
+    "path": "/sections/9/fields",
+    "message": "dry_matter: 2 definitions",
+    "severity": "warning"
+  }
+]
