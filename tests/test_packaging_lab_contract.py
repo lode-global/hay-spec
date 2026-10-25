@@ -69,7 +69,7 @@ class PackagingLabContract(unittest.TestCase):
     def test_documented_examples_match_declared_fields_and_enums(self):
         notes = (ROOT / 'notes/packaging-lab-provenance.md').read_text()
         examples = re.findall(r'```yaml\n(.*?)```', notes, re.S)
-        self.assertEqual(len(examples), 3)
+        self.assertEqual(len(examples), 4)
         fields = {**self.pack, **self.lab}
         fields.update({f['id']: f for f in self.sections['harvest']['fields']})
         for example in examples:
@@ -87,6 +87,21 @@ class PackagingLabContract(unittest.TestCase):
             if 'lab_sample_id' in record:
                 self.assertIsInstance(record['lab_sample_id'], str)
                 self.assertTrue(record['lab_sample_id'].startswith('000'))
+
+    def test_legacy_round_height_is_not_an_axis_alias(self):
+        notes = (ROOT / 'notes/packaging-lab-provenance.md').read_text()
+        examples = [yaml.safe_load(s) for s in
+                    re.findall(r'```yaml\n(.*?)```', notes, re.S)]
+        legacy = next(r for r in examples
+                      if r.get('bale_shape') == 'round' and 'bale_dimension_height' in r)
+        # A historical vertical measurement may be diameter rather than axial
+        # length. Keep an example that cannot pass an assumed height=axis rule.
+        self.assertEqual(legacy['bale_dimension_height'], legacy['bale_dimension_diameter'])
+        self.assertNotEqual(legacy['bale_dimension_height'], legacy['bale_dimension_axis'])
+        new_round = next(r for r in examples if r.get('bale_shape') == 'round'
+                         and 'bale_dimension_height' not in r)
+        self.assertIn('bale_dimension_axis', new_round)
+        self.assertNotIn('bale_dimension_length', new_round)
 
 
 if __name__ == '__main__':

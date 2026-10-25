@@ -1571,11 +1571,16 @@ sections:
         valid_values: A positive decimal value representing the height of the bale, in the units specified by `bale_dimension_units`.
         description: >
           Height of a rectangular bale in its recorded storage or transport orientation.
-          For round bales, the legacy height value represents the cylinder axis length,
-          regardless of whether the cylinder is standing or lying on its side.
+          For round bales, this is a legacy measurement with unspecified orientation.
+          It must not be assumed to represent either diameter or cylinder axis length.
         details: |
-          Enter the rectangular bale height in its recorded orientation. For round bales,
-          prefer bale_dimension_axis; legacy height measurements describe the axis length.
+          Enter the rectangular bale height in its recorded orientation.
+          For new round-bale records, omit height and report bale_dimension_diameter
+          and bale_dimension_axis instead. Preserve height in historical records,
+          but do not copy it into either explicit field unless source documentation
+          identifies the measured direction. Do not infer that direction from equal
+          values, relative sizes, or the bale's current storage orientation.
+          A legacy height and an explicit axis may differ without a contradiction.
           Preserve the precision of the reported measurement.
 
           This field is important for planning stacking and clearance requirements in storage facilities.
@@ -1615,8 +1620,10 @@ sections:
           Length of a round bale along its cylinder axis, expressed in
           bale_dimension_units. Applicable only when bale_shape is round.
           This is independent of the bale's standing or lying orientation.
-          If legacy bale_dimension_height is also supplied for a round bale,
-          both values must describe the same axis length after unit conversion.
+          Measure along the cylinder from one circular end face to the other;
+          diameter is measured across a circular end face. Do not populate axis
+          from legacy height or length without source confirmation of direction.
+          Axis is not constrained to equal legacy height or diameter.
           Omit this field for rectangular or other bale shapes.
 
       - id: bale_dimension_units
@@ -1643,13 +1650,14 @@ sections:
       # - If `hay_packaging_history` is `rebaled` or `repackaged`, then `average_bale_weight`
       #   and `bale_dimension_*` fields may differ significantly from typical field-scale values.
       #
-      # - If `bale_shape` is `round`, then `bale_dimension_diameter` is expected and
-      #   `bale_dimension_length` may be optional or ignored.
+      # - For new round-bale records, use diameter and axis. Preserve legacy height
+      #   and length, but do not use them to calculate volume without documented
+      #   measurement directions. Missing axis is permitted; volume then stays unknown.
       #
       # - If `bale_shape` is `rectangular`, then `bale_dimension_width`, `bale_dimension_height`,
-      #   and `bale_dimension_length` should be present; `bale_dimension_diameter` should be excluded.
+      #   and `bale_dimension_length` should be present; diameter and axis should be excluded.
       #
-      # - If `hay_compression` is `fully compressed`, then `bale_binding` is likely `plastic strap`
+      # - If `hay_compression` is `fully compressed`, then `bale_binding_material` is likely `plastic strap`
       #   or `wire`, and bale weight may exceed standard values for the declared shape and dimensions.
 
   - id: physical_characteristics

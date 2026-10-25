@@ -19,9 +19,14 @@ Omission means not reported, not zero.
 
 Rectangular dimensions retain the released orientation-based conventions.
 Round bales gain `bale_dimension_axis`. Prefer diameter and axis for new round
-bale records. Legacy round width means diameter and legacy round height means
-axis length. When both old and new measurements are provided, they must agree
-after conversion. Do not silently reinterpret old records as sorted dimensions.
+bale records. Legacy round width means diameter as documented in v0.91.1.
+Legacy round height has unspecified orientation: a vertical measurement can
+describe diameter on a lying bale or axis length on a standing bale. Preserve
+it but never infer an explicit diameter or axis from it without source evidence.
+The same caution applies to legacy round length. Do not infer direction from
+equal values, relative sizes, or current orientation. New round-bale records
+omit height and length; diameter and axis do not depend on storage orientation.
+Missing axis remains permitted, but volume cannot be derived without it.
 
 Examples (record fragments, not complete hay records):
 
@@ -44,6 +49,19 @@ bale_dimension_axis: 120
 bale_dimension_units: centimeters
 average_bale_weight: 500
 bale_weight_units: kilograms
+```
+
+This historical record is valid even though height and axis differ. Its legacy
+height has no documented direction and is retained only as source information;
+the independently measured diameter and axis describe the cylinder geometry.
+
+```yaml
+---
+bale_shape: round
+bale_dimension_height: 150
+bale_dimension_diameter: 150
+bale_dimension_axis: 120
+bale_dimension_units: centimeters
 ```
 
 ## Laboratory provenance
@@ -75,13 +93,14 @@ No laboratory registry requirement, nutrient ranges, nutrient data types,
 handling-history replacement, enum renaming, numeric IDs, or general field
 metadata refactor is included. Existing laboratory selection behavior is kept.
 
-## Validation and remaining review
+## Validation and release
 
 Run `python3 -m unittest discover -s tests -v` with PyYAML installed, followed by
 `yamllint -c .yamllint .`. The focused tests protect the specification contract;
 they are not a general hay-record validator. YAML lint establishes formatting
 and syntax, not scientific validity.
 
-Before release, maintainers should confirm the legacy round-height interpretation
-with any existing implementations and choose the release number. Keep v0.91.1
-metadata unchanged until that release is prepared.
+The round-height migration rule deliberately makes no assumptions about existing
+implementations. Source evidence is required before converting ambiguous legacy
+measurements. Maintainers still choose the release number; keep v0.91.1 metadata
+unchanged until that release is prepared.
