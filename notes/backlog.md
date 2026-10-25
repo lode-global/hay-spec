@@ -1,8 +1,13 @@
 # Hay specification carry-forward backlog
 
-Recorded after replacing the principal work in PR #1 through PRs #4, #5, and #6.
+Recorded after replacing the useful work in [PR #1](https://github.com/lode-global/hay-spec/pull/1)
+through merged [PR #4](https://github.com/lode-global/hay-spec/pull/4),
+[PR #5](https://github.com/lode-global/hay-spec/pull/5),
+[PR #6](https://github.com/lode-global/hay-spec/pull/6), and
+[PR #7](https://github.com/lode-global/hay-spec/pull/7).
 These are ideas for separately reviewed changes, not accepted field definitions
-or authorization to migrate records. PR #1 remains open pending replacement review.
+or authorization to migrate records. Replacement review is complete; PR #1 is
+superseded. Its remaining useful ideas are recorded below. Do not merge the old branch.
 
 ## Compatibility migrations
 
@@ -34,8 +39,8 @@ or authorization to migrate records. PR #1 remains open pending replacement revi
 - Select the next release number and update publication metadata and release notes
   together; generated current-source docs do not themselves publish a release.
 - Decide whether and where to deploy the documentation site.
-- Once replacement review is complete, close PR #1 as superseded with links to the
-  replacement PRs and this backlog. Retain its history; do not merge the old branch.
+- Preserve PR #1 as historical context for the merged replacements and this backlog;
+  future work should start from current main rather than merge the old branch.
 
 Do not carry forward the old draft's arbitrary nutrient limits, unreviewed type
 changes, mandatory unavailable registries, older lint configuration, or replacement
