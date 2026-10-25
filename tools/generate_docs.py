@@ -11,10 +11,10 @@ import yaml
 
 try:
     from .validate_spec import inspect_spec, load_spec
-    from .traceability_guide import guide
+    from .field_guides import guide, guide_index
 except ImportError:
     from validate_spec import inspect_spec, load_spec
-    from traceability_guide import guide
+    from field_guides import guide, guide_index
 
 
 CHILDREN = ('fields', 'components', 'groups', 'subsections')
@@ -194,7 +194,8 @@ def outputs(source, display=None):
     intro += ['\n## Source front matter\n', '```yaml\n' + yaml.safe_dump(
         front, sort_keys=False, allow_unicode=True, width=90) + '```\n']
     pages['index.md'] = '\n'.join(intro)
-    for section_id in ('traceability', 'nutrient_analysis'):
+    pages['guides/index.html'] = guide_index(spec)
+    for section_id in (section['id'] for section in spec['sections']):
         prototype = guide(spec, display, section_id)
         if prototype is not None:
             pages[f'guides/{section_id}.html'] = prototype
@@ -222,9 +223,10 @@ def main():
             else:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(text, encoding='utf-8')
-        for path in (args.output / 'fields').glob('*.md'):
-            if path.relative_to(args.output).as_posix() not in pages:
-                stale.append(path.relative_to(args.output).as_posix())
+        for directory, pattern in (('fields', '*.md'), ('guides', '*.html')):
+            for path in (args.output / directory).glob(pattern):
+                if path.relative_to(args.output).as_posix() not in pages:
+                    stale.append(path.relative_to(args.output).as_posix())
         if stale:
             print('Stale or unexpected generated pages: ' + ', '.join(stale), file=sys.stderr)
             return 1

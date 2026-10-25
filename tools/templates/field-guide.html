@@ -315,6 +315,7 @@
     <header>
       <div class="brand">LODE / HAY DESCRIPTION SPECIFICATION</div>
       <nav aria-label="Documentation">
+        <a href="index.html">All field guides</a>
         <a href="../index.html">Specification overview</a
         ><a href="__REFERENCE__">Full __SECTION_TITLE__ reference</a>
       </nav>
@@ -401,18 +402,25 @@
             ? "Documentation marker · no stored value"
             : node === root
               ? "Documentation section"
-              : node.source.data_type === "object[]"
-                ? "Repeated object · list entries"
-                : node.source.data_type === "component"
-                  ? "Component · structured block"
-                  : {
-                      string: "Text",
-                      boolean: "Boolean",
-                      enum: "Enumeration",
-                      float: "Number",
-                      int: "Whole number",
-                      datetime: "Date",
-                    }[node.source.data_type] || node.source.data_type;
+              : node.documentary
+                ? "Documentation subsection"
+                : node.source.data_type === "object[]"
+                  ? "Repeated object · list entries"
+                  : node.source.data_type === "list" &&
+                      node.source.item_type === "component"
+                    ? "Repeated component list · entries"
+                    : node.source.data_type === "component"
+                      ? "Component · structured block"
+                      : {
+                          string: "Text",
+                          boolean: "Boolean",
+                          enum: "Enumeration",
+                          float: "Number",
+                          int: "Whole number",
+                          datetime: "Date",
+                          "string[]": "List of text",
+                          "enum (multi-select)": "Multi-select enumeration",
+                        }[node.source.data_type] || node.source.data_type;
       }
       function selectButton(node) {
         const b = el("button", node.title);
@@ -429,9 +437,9 @@
         );
       }
       function revealOutline(key, includeOwnGroup = false, scroll = false) {
-        const selected = Array.from(outline.querySelectorAll("[data-key]")).find(
-          (item) => item.dataset.key === key,
-        );
+        const selected = Array.from(
+          outline.querySelectorAll("[data-key]"),
+        ).find((item) => item.dataset.key === key);
         let ancestor = selected?.parentElement;
         if (selected?.tagName === "SUMMARY" && !includeOwnGroup)
           ancestor = ancestor?.parentElement;
@@ -457,7 +465,8 @@
             count++;
           if (node.children.length) {
             const box = el("details");
-            box.open = expandAll || !data.nutrient || node === root || Boolean(query);
+            box.open =
+              expandAll || !data.nutrient || node === root || Boolean(query);
             const summary = el("summary", node.title);
             summary.dataset.key = node.key;
             summary.append(el("span", kind(node), "kind"));
@@ -549,7 +558,8 @@
         if (
           node !== root &&
           !node.presentation &&
-          node.source.data_type !== "section"
+          node.source.data_type !== "section" &&
+          !node.documentary
         )
           facts.append(
             el(
@@ -563,7 +573,23 @@
             ),
           );
         detail.append(facts);
-        block("Definition", node.source.definition || node.source.description);
+        block(
+          node.source.definition ? "Definition" : "Description",
+          node.source.definition || node.source.description,
+        );
+        if (node.source.definition)
+          block("Description", node.source.description);
+        block("Details", node.source.details);
+        block("Narration", node.source.narration);
+        if (node.source.id && node.source.name)
+          detail.append(
+            el(
+              "p",
+              "The legacy name is a compatibility alias for this same field: " +
+                node.source.name,
+              "fine",
+            ),
+          );
         if (node === root) detail.append(el("p", data.introCard, "callout"));
         if (data.notice) detail.append(el("p", data.notice, "callout"));
         block("Guidance", node.source.guidance);
@@ -596,6 +622,21 @@
             ),
           );
           detail.append(pre);
+          if (
+            Array.isArray(node.source.valid_values) &&
+            node.source.valid_values.some(
+              (value) =>
+                typeof value === "string" &&
+                (value.includes("|") || value.includes("`")),
+            )
+          )
+            detail.append(
+              el(
+                "p",
+                "Legacy literal values are reproduced exactly; they are not split or cleaned.",
+                "fine",
+              ),
+            );
         }
         if (node.source.valid_range !== undefined) {
           detail.append(el("h3", "Declared numeric bounds"));
@@ -614,6 +655,10 @@
                 "title",
                 "definition",
                 "description",
+                "details",
+                "narration",
+                "items",
+                "examples",
                 "guidance",
                 "notes",
                 "references",
@@ -637,6 +682,26 @@
           detail.append(more);
         }
         if (node.source.notes) block("Notes", node.source.notes.join("\n\n"));
+        if (Array.isArray(node.source.items)) {
+          detail.append(el("h3", "Documentation text"));
+          node.source.items.forEach((item) =>
+            detail.append(
+              el(
+                "p",
+                typeof item === "string" ? item : JSON.stringify(item, null, 2),
+                "definition",
+              ),
+            ),
+          );
+        }
+        if (Array.isArray(node.source.examples)) {
+          detail.append(el("h3", "Source examples"));
+          node.source.examples.forEach((text) => {
+            const pre = el("pre");
+            pre.append(el("code", text));
+            detail.append(pre);
+          });
+        }
         const example = node.example || parents.get(key)?.example;
         if (example) {
           detail.append(
@@ -660,9 +725,13 @@
                 : node === root
                   ? data.nutrient
                     ? "Navigation groups"
-                    : "Fields in this section"
+                    : data.metadata
+                      ? "Documentation subsections"
+                      : "Fields in this section"
                   : "Members" +
-                    (node.source.data_type === "object[]"
+                    (node.source.data_type === "object[]" ||
+                    (node.source.data_type === "list" &&
+                      node.source.item_type === "component")
                       ? " of each entry"
                       : ""),
             ),
@@ -690,7 +759,11 @@
           node.source.references.forEach((ref) => {
             const p = el(
               "p",
-              ref.title + (ref.author ? " — " + ref.author : ""),
+              ref.title +
+                ([ref.author, ref.publisher].filter(Boolean).length
+                  ? " — " +
+                    [ref.author, ref.publisher].filter(Boolean).join(" · ")
+                  : ""),
             );
             if (/^https?:\/\//.test(ref.url || "")) {
               const link = el("a", " Read source");

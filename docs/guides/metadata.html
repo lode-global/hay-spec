@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Metadata and Supplemental Information field guide · Lode</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #19352c;
+        --muted: #52655c;
+        --line: #d6ddd3;
+        --paper: #fbfcf8;
+        --green: #24583f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f0f2e9;
+        color: var(--ink);
+        font:
+          16px/1.6 system-ui,
+          sans-serif;
+      }
+      a {
+        color: #20513d;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      a:focus-visible,
+      button:focus-visible,
+      summary:focus-visible,
+      input:focus-visible {
+        outline: 3px solid #98621b;
+        outline-offset: 3px;
+      }
+      .skip {
+        position: absolute;
+        left: 16px;
+        top: -60px;
+        background: white;
+        padding: 8px;
+        z-index: 5;
+      }
+      .skip:focus {
+        top: 8px;
+      }
+      header {
+        background: #19352c;
+        color: #fafcf4;
+        padding: 22px max(24px, calc((100vw - 1240px) / 2));
+      }
+      header a {
+        color: #e3eddf;
+      }
+      header .brand {
+        letter-spacing: 0.18em;
+        font-size: 13px;
+        font-weight: 750;
+      }
+      header nav {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+        font-size: 14px;
+      }
+      .wrap {
+        max-width: 1240px;
+        margin: auto;
+        padding: 32px 24px;
+      }
+      .intro {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+      h1 {
+        font-size: clamp(30px, 4vw, 44px);
+        letter-spacing: -0.04em;
+        line-height: 1.15;
+        margin: 6px 0 14px;
+      }
+      h2 {
+        font-size: 28px;
+        line-height: 1.25;
+        margin: 12px 0;
+      }
+      h3 {
+        font-size: 17px;
+        margin: 26px 0 8px;
+      }
+      p {
+        margin: 10px 0;
+      }
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 12px;
+        font-weight: 750;
+        color: var(--muted);
+      }
+      .intro p {
+        max-width: 720px;
+        color: var(--muted);
+      }
+      .badge {
+        display: inline-block;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 3px 9px;
+        font-size: 12px;
+        background: #f0f4ea;
+        white-space: nowrap;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 320px minmax(0, 1fr);
+        gap: 24px;
+        align-items: start;
+      }
+      aside,
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--paper);
+        box-shadow: 0 4px 14px #19352c05;
+      }
+      aside {
+        padding: 20px;
+        position: sticky;
+        top: 16px;
+        max-height: calc(100vh - 32px);
+        overflow: auto;
+      }
+      label {
+        font-size: 13px;
+        font-weight: 650;
+      }
+      input {
+        display: block;
+        width: 100%;
+        border: 1px solid #9eafa0;
+        padding: 10px;
+        border-radius: 6px;
+        margin: 6px 0 14px;
+        background: white;
+        color: var(--ink);
+      }
+      .outline ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .outline ul ul {
+        margin-left: 10px;
+        padding-left: 12px;
+        border-left: 1px solid var(--line);
+      }
+      .outline button,
+      .outline summary {
+        display: block;
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        padding: 9px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      .outline summary {
+        display: list-item;
+        cursor: pointer;
+        list-style-position: inside;
+      }
+      .outline button:hover,
+      .outline summary:hover {
+        background: #eef2e7;
+      }
+      .outline [aria-current="true"] {
+        background: #dfead7;
+        font-weight: 700;
+      }
+      .kind {
+        display: block;
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+      .card {
+        padding: 30px;
+        min-width: 0;
+      }
+      .breadcrumbs {
+        font-size: 13px;
+        color: var(--muted);
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .breadcrumbs button,
+      .related button {
+        border: 0;
+        background: none;
+        padding: 0;
+        color: #20513d;
+        text-decoration: underline;
+      }
+      .identifier {
+        font-size: 13px;
+        overflow-wrap: anywhere;
+        color: var(--muted);
+      }
+      code {
+        font-family: ui-monospace, monospace;
+        font-size: 0.9em;
+      }
+      pre {
+        background: #eef2e7;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 16px;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        font-size: 14px;
+      }
+      .definition {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      .facts {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 18px 0;
+      }
+      .callout {
+        padding: 14px 16px;
+        border-left: 3px solid #829966;
+        background: #f0f4ea;
+        font-size: 14px;
+        margin: 20px 0;
+      }
+      .related {
+        display: flex;
+        gap: 8px 18px;
+        flex-wrap: wrap;
+      }
+      .children {
+        display: grid;
+        gap: 8px;
+      }
+      .children button {
+        text-align: left;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: white;
+        padding: 12px;
+        color: var(--ink);
+      }
+      .children small {
+        display: block;
+        color: var(--muted);
+      }
+      .fine {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        margin-top: 24px;
+        padding-top: 16px;
+      }
+      .hidden,
+      [hidden] {
+        display: none !important;
+      }
+      @media (max-width: 760px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          position: static;
+          max-height: none;
+        }
+        .wrap {
+          padding: 24px 16px;
+        }
+        .card {
+          padding: 20px;
+        }
+        .intro {
+          display: block;
+        }
+        .intro > .badge {
+          margin-top: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#detail">Skip to field details</a>
+    <header>
+      <div class="brand">LODE / HAY DESCRIPTION SPECIFICATION</div>
+      <nav aria-label="Documentation">
+        <a href="index.html">All field guides</a>
+        <a href="../index.html">Specification overview</a
+        ><a href="../fields/metadata/">Full Metadata and Supplemental Information reference</a>
+      </nav>
+    </header>
+    <main class="wrap">
+      <div class="intro">
+        <div>
+          <div class="eyebrow">Field guide · Review prototype</div>
+          <h1>Metadata and Supplemental Information</h1>
+          <p>Explore the specification’s authorship, licensing, history, and publication context.</p>
+        </div>
+        <span class="badge" id="version"></span>
+      </div>
+      <div class="layout">
+        <aside aria-label="Metadata and Supplemental Information outline">
+          <label for="search">Find a field</label
+          ><input
+            id="search"
+            type="search"
+            placeholder="Name or exact identifier…"
+            autocomplete="off"
+          />
+          <p class="fine" id="results" role="status"></p>
+          <nav class="outline" id="outline" aria-label="Fields"></nav>
+          <p class="fine">
+            Section / navigation group = documentation organization.<br />Component
+            = one structured block.<br />Repeated object = one entry per item.
+          </p>
+          <button id="reset" type="button">
+            Clear search &amp; expand all
+          </button>
+        </aside>
+        <section
+          id="detail"
+          class="card"
+          tabindex="-1"
+          aria-labelledby="field-title"
+        ></section>
+      </div>
+      <footer class="fine">
+        Read-only presentation prototype. Section and navigation-group
+        breadcrumbs describe the documentation hierarchy, not a new record
+        envelope. Existing identifiers and record structures are preserved.
+        Examples are fragments, not complete records or validation results.
+      </footer>
+    </main>
+    <noscript
+      ><p class="wrap">
+        This interactive prototype needs JavaScript.
+        <a href="../fields/metadata/">Read the complete Metadata and Supplemental Information reference</a
+        >.
+      </p></noscript
+    >
+    <script id="guide-data" type="application/json">
+      {"version": "0.92.0", "publication": "unreleased", "root": {"key": "metadata", "id": "metadata", "title": "Metadata and Supplemental Information", "anchor": "node-sections-10", "source": {"id": "metadata", "title": "Metadata and Supplemental Information", "description": "This final section consolidates supporting material related to authorship, licensing, documentation history, contact information, and reference sources. It is intended for readers who seek attribution details, wish to contribute to the standard, or need context regarding its provenance and maintenance.\n", "subsections": [{"id": "acknowledgements", "title": "Acknowledgements", "description": "This specification draws upon the insight, work, and feedback of many individuals and organizations across the forage, livestock, and agricultural research communities. While the final structure and content reflect the judgment of the authors, the following contributors and sources provided invaluable perspective, data, and expertise throughout its development.\n", "items": ["County extension agents across Texas, Kentucky, New Mexico, and California who provided field-level insight\ninto hay production practices and buyer needs.\n", "University faculty and forage specialists whose published research and personal correspondence\nshaped key definitions and data models.\n", "Hay testing laboratories and forage analysis professionals whose sample reports and reference values\nguided the formation of nutrient analysis and traceability fields.\n", "Ranchers, hay producers, merchants, and buyers who reviewed early drafts and offered practical feedback\nbased on real-world use cases and market conditions.\n", "Members of the National Forage Testing Association (NFTA) and American Forage and Grassland Council (AFGC)\nfor their standards, publications, and advocacy for consistent forage quality reporting.\n"]}, {"id": "licensing_notice", "title": "Licensing Notice", "description": "This specification is provided for public use and may be implemented freely by producers, buyers, software developers, and standards organizations under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0).\nUnder this license, you are free to:\n- Share - copy and redistribute the material in any medium or format - Adapt - remix, transform, and build upon the material for any purpose, even commercially\nUnder the following terms:\n- Attribution - You must give appropriate credit, provide a link to the license, and indicate if changes\n  were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses\n  you or your use.\n\nTo contribute improvements or extensions to this specification, or to report implementation experiences, please contact the maintainers via email at standards@lode.global.\n"}, {"id": "contact", "title": "Contact", "description": "This specification is published by Lode, a provider of information, logistics, and trading support for agricultural commodities.\nFor questions, feedback, or to request implementation guidance, please contact:\nLode Standards Team Email: standards@lode.global Web: https://lode.global\nWe welcome inquiries from producers, merchants, buyers, researchers, industry groups, and software providers seeking to adopt or integrate this standard.\n"}, {"id": "version_history", "title": "Version History", "description": "This section documents changes across published versions. Historical notes are retained as originally recorded, not as a verified field inventory.\n", "items": ["v0.92.0 (2026-10-25) - Compatible reporting and documentation improvements.\n- Added packaging id aliases and explicit round-bale axis, preserving legacy measurements.\n- Added optional laboratory provenance and laboratory moisture reporting.\n- Consolidated duplicate dry_matter definitions without changing the record key.\n- Added optional handling-event definitions and explicit field interpretation conventions.\n- Added structural checks, regression tests, generated Markdown/JSON reference, and strict site build.\n- Superseded PR #1 through reviewed PRs #4-#7; remaining ideas are recorded in the backlog.\n- Protein keys, existing enum spellings, stored values, and data types remain unchanged.\n", "v0.91.1 (2025-08-31) — Metadata corrections and YAML validation/style fixes.\n- Added top-level published_on and normalized document metadata.\n- Removed spaces inside {}, [] and fixed indentation per linter rules.\n- Added document-start marker (---) and resolved minor parsing warnings.\n- No schema changes to fields compared to v0.91.0.\n", "v0.91.0 (2025-08-31) — Start of the v0.91 series.\n- Initiated DRY refactor; clarified section/group structure and naming.\n- Enforced ASCII-only content; added/clarified unit handling and encoding policies.\n- Introduced human-readable version history and document metadata conventions.\n- Refactored fertilizer inputs to fertilizer_application (object[]) replacing prior timing/rates groups.\n- Refactored organic_amendments to object[] structure for consistency.\n- Reworked stand section structure and composition fields for clarity and validation.\n- Converted harvest_date_start and harvest_date_end to datetime precision.\n- Began dual reporting patterns for nutrient analysis (dry matter and as-fed object fields).\n- Added lab processing fields (lab_sample_id, lab_report_reference, lab_quality_code, etc.).\n- Standardized use of valid_range for numeric fields and enum_select_mode for multi-select behavior.\n", "v0.90.0 (2025-05-05) — Initial draft of the hay specification prepared by the Lode Standards Team.\n"]}, {"id": "document_metadata", "title": "Document Metadata", "description": "Human-readable metadata for managing this specification across platforms.\n", "items": ["Title: Hay Description Specification\nVersion: 0.92.0\nPublication: Unreleased additions since v0.92.0\nPrepared on: 2026-10-24\nPublished on: 2026-10-25\nStatus: Draft\nMaintainer: standards@lode.global\nLicense: CC BY 4.0\nSource: https://github.com/lode-global/hay-spec\nRelease: https://github.com/lode-global/hay-spec/releases/tag/v0.92.0\nRelease notes: https://github.com/lode-global/hay-spec/blob/v0.92.0/releases/v0.92.0.md\nCanonical file: src/hay-spec.yaml\nGenerated reference: docs/index.md\nJSON transcription: docs/source/hay-spec.json (not JSON Schema)\n"]}]}, "example": null, "documentary": true, "related": [], "children": [{"key": "metadata/acknowledgements", "id": "acknowledgements", "title": "Acknowledgements", "anchor": "node-sections-10-subsections-0", "source": {"id": "acknowledgements", "title": "Acknowledgements", "description": "This specification draws upon the insight, work, and feedback of many individuals and organizations across the forage, livestock, and agricultural research communities. While the final structure and content reflect the judgment of the authors, the following contributors and sources provided invaluable perspective, data, and expertise throughout its development.\n", "items": ["County extension agents across Texas, Kentucky, New Mexico, and California who provided field-level insight\ninto hay production practices and buyer needs.\n", "University faculty and forage specialists whose published research and personal correspondence\nshaped key definitions and data models.\n", "Hay testing laboratories and forage analysis professionals whose sample reports and reference values\nguided the formation of nutrient analysis and traceability fields.\n", "Ranchers, hay producers, merchants, and buyers who reviewed early drafts and offered practical feedback\nbased on real-world use cases and market conditions.\n", "Members of the National Forage Testing Association (NFTA) and American Forage and Grassland Council (AFGC)\nfor their standards, publications, and advocacy for consistent forage quality reporting.\n"]}, "example": null, "documentary": true, "related": [], "children": []}, {"key": "metadata/licensing_notice", "id": "licensing_notice", "title": "Licensing Notice", "anchor": "node-sections-10-subsections-1", "source": {"id": "licensing_notice", "title": "Licensing Notice", "description": "This specification is provided for public use and may be implemented freely by producers, buyers, software developers, and standards organizations under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0).\nUnder this license, you are free to:\n- Share - copy and redistribute the material in any medium or format - Adapt - remix, transform, and build upon the material for any purpose, even commercially\nUnder the following terms:\n- Attribution - You must give appropriate credit, provide a link to the license, and indicate if changes\n  were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses\n  you or your use.\n\nTo contribute improvements or extensions to this specification, or to report implementation experiences, please contact the maintainers via email at standards@lode.global.\n"}, "example": null, "documentary": true, "related": [], "children": []}, {"key": "metadata/contact", "id": "contact", "title": "Contact", "anchor": "node-sections-10-subsections-2", "source": {"id": "contact", "title": "Contact", "description": "This specification is published by Lode, a provider of information, logistics, and trading support for agricultural commodities.\nFor questions, feedback, or to request implementation guidance, please contact:\nLode Standards Team Email: standards@lode.global Web: https://lode.global\nWe welcome inquiries from producers, merchants, buyers, researchers, industry groups, and software providers seeking to adopt or integrate this standard.\n"}, "example": null, "documentary": true, "related": [], "children": []}, {"key": "metadata/version_history", "id": "version_history", "title": "Version History", "anchor": "node-sections-10-subsections-3", "source": {"id": "version_history", "title": "Version History", "description": "This section documents changes across published versions. Historical notes are retained as originally recorded, not as a verified field inventory.\n", "items": ["v0.92.0 (2026-10-25) - Compatible reporting and documentation improvements.\n- Added packaging id aliases and explicit round-bale axis, preserving legacy measurements.\n- Added optional laboratory provenance and laboratory moisture reporting.\n- Consolidated duplicate dry_matter definitions without changing the record key.\n- Added optional handling-event definitions and explicit field interpretation conventions.\n- Added structural checks, regression tests, generated Markdown/JSON reference, and strict site build.\n- Superseded PR #1 through reviewed PRs #4-#7; remaining ideas are recorded in the backlog.\n- Protein keys, existing enum spellings, stored values, and data types remain unchanged.\n", "v0.91.1 (2025-08-31) — Metadata corrections and YAML validation/style fixes.\n- Added top-level published_on and normalized document metadata.\n- Removed spaces inside {}, [] and fixed indentation per linter rules.\n- Added document-start marker (---) and resolved minor parsing warnings.\n- No schema changes to fields compared to v0.91.0.\n", "v0.91.0 (2025-08-31) — Start of the v0.91 series.\n- Initiated DRY refactor; clarified section/group structure and naming.\n- Enforced ASCII-only content; added/clarified unit handling and encoding policies.\n- Introduced human-readable version history and document metadata conventions.\n- Refactored fertilizer inputs to fertilizer_application (object[]) replacing prior timing/rates groups.\n- Refactored organic_amendments to object[] structure for consistency.\n- Reworked stand section structure and composition fields for clarity and validation.\n- Converted harvest_date_start and harvest_date_end to datetime precision.\n- Began dual reporting patterns for nutrient analysis (dry matter and as-fed object fields).\n- Added lab processing fields (lab_sample_id, lab_report_reference, lab_quality_code, etc.).\n- Standardized use of valid_range for numeric fields and enum_select_mode for multi-select behavior.\n", "v0.90.0 (2025-05-05) — Initial draft of the hay specification prepared by the Lode Standards Team.\n"]}, "example": null, "documentary": true, "related": [], "children": []}, {"key": "metadata/document_metadata", "id": "document_metadata", "title": "Document Metadata", "anchor": "node-sections-10-subsections-4", "source": {"id": "document_metadata", "title": "Document Metadata", "description": "Human-readable metadata for managing this specification across platforms.\n", "items": ["Title: Hay Description Specification\nVersion: 0.92.0\nPublication: Unreleased additions since v0.92.0\nPrepared on: 2026-10-24\nPublished on: 2026-10-25\nStatus: Draft\nMaintainer: standards@lode.global\nLicense: CC BY 4.0\nSource: https://github.com/lode-global/hay-spec\nRelease: https://github.com/lode-global/hay-spec/releases/tag/v0.92.0\nRelease notes: https://github.com/lode-global/hay-spec/blob/v0.92.0/releases/v0.92.0.md\nCanonical file: src/hay-spec.yaml\nGenerated reference: docs/index.md\nJSON transcription: docs/source/hay-spec.json (not JSON Schema)\n"]}, "example": null, "documentary": true, "related": [], "children": []}]}, "sectionId": "metadata", "nutrient": false, "metadata": true, "reference": "../fields/metadata/", "introCard": "Browse the documentation subsections. These describe the specification, not fields in a hay record.", "notice": null}
+    </script>
+    <script>
+      "use strict";
+      const data = JSON.parse(
+          document.getElementById("guide-data").textContent,
+        ),
+        root = data.root;
+      const nodes = new Map(),
+        parents = new Map(),
+        outline = document.getElementById("outline"),
+        detail = document.getElementById("detail"),
+        search = document.getElementById("search");
+      function index(node, parent) {
+        nodes.set(node.key, node);
+        if (parent) parents.set(node.key, parent);
+        node.children.forEach((child) => index(child, node));
+      }
+      index(root);
+      function el(tag, text, cls) {
+        const item = document.createElement(tag);
+        if (text !== undefined) item.textContent = text;
+        if (cls) item.className = cls;
+        return item;
+      }
+      function kind(node) {
+        return node.presentation
+          ? "Navigation group · display only"
+          : node.source.data_type === "section"
+            ? "Documentation marker · no stored value"
+            : node === root
+              ? "Documentation section"
+              : node.documentary
+                ? "Documentation subsection"
+                : node.source.data_type === "object[]"
+                  ? "Repeated object · list entries"
+                  : node.source.data_type === "list" &&
+                      node.source.item_type === "component"
+                    ? "Repeated component list · entries"
+                    : node.source.data_type === "component"
+                      ? "Component · structured block"
+                      : {
+                          string: "Text",
+                          boolean: "Boolean",
+                          enum: "Enumeration",
+                          float: "Number",
+                          int: "Whole number",
+                          datetime: "Date",
+                          "string[]": "List of text",
+                          "enum (multi-select)": "Multi-select enumeration",
+                        }[node.source.data_type] || node.source.data_type;
+      }
+      function selectButton(node) {
+        const b = el("button", node.title);
+        b.type = "button";
+        b.dataset.key = node.key;
+        b.append(el("span", kind(node), "kind"));
+        b.addEventListener("click", () => select(node.key, true));
+        return b;
+      }
+      function matches(node, query) {
+        return (
+          (node.title + " " + (node.id || "")).toLowerCase().includes(query) ||
+          node.children.some((c) => matches(c, query))
+        );
+      }
+      function revealOutline(key, includeOwnGroup = false, scroll = false) {
+        const selected = Array.from(
+          outline.querySelectorAll("[data-key]"),
+        ).find((item) => item.dataset.key === key);
+        let ancestor = selected?.parentElement;
+        if (selected?.tagName === "SUMMARY" && !includeOwnGroup)
+          ancestor = ancestor?.parentElement;
+        while (ancestor) {
+          if (ancestor.tagName === "DETAILS") ancestor.open = true;
+          ancestor = ancestor.parentElement;
+        }
+        if (selected && data.nutrient && scroll)
+          selected.scrollIntoView({ block: "nearest" });
+      }
+      function renderOutline(expandAll = false) {
+        outline.replaceChildren();
+        const query = search.value.trim().toLowerCase();
+        let count = 0;
+        const list = el("ul");
+        function branch(node) {
+          if (query && !matches(node, query)) return null;
+          const li = el("li");
+          if (
+            !query ||
+            (node.title + " " + (node.id || "")).toLowerCase().includes(query)
+          )
+            count++;
+          if (node.children.length) {
+            const box = el("details");
+            box.open =
+              expandAll || !data.nutrient || node === root || Boolean(query);
+            const summary = el("summary", node.title);
+            summary.dataset.key = node.key;
+            summary.append(el("span", kind(node), "kind"));
+            summary.addEventListener("click", () => select(node.key, false));
+            box.append(summary);
+            const children = el("ul");
+            node.children.forEach((c) => {
+              const item = branch(c);
+              if (item) children.append(item);
+            });
+            box.append(children);
+            li.append(box);
+          } else li.append(selectButton(node));
+          return li;
+        }
+        const item = branch(root);
+        if (item) list.append(item);
+        outline.append(list);
+        document.getElementById("results").textContent = query
+          ? count
+            ? count + " matching fields or sections"
+            : "No matching fields. Clear the search to browse."
+          : Array.from(nodes.values()).filter((n) => !n.presentation).length +
+            " source fields and sections · expand to explore";
+        markCurrent();
+        // Rebuilding the unfiltered outline must not hide the open field card.
+        if (!query) revealOutline(current);
+      }
+      let current = root.key;
+      function markCurrent() {
+        outline.querySelectorAll("[data-key]").forEach((e) => {
+          if (e.dataset.key === current) e.setAttribute("aria-current", "true");
+          else e.removeAttribute("aria-current");
+        });
+      }
+      function block(title, text) {
+        if (!text) return;
+        detail.append(el("h3", title));
+        detail.append(el("p", text, "definition"));
+      }
+      function select(key, focus, historyMode = "push") {
+        const node = nodes.get(key);
+        if (!node) return;
+        current = key;
+        // Related links may target a field excluded by the active search.
+        if (
+          focus &&
+          !Array.from(outline.querySelectorAll("[data-key]")).some(
+            (item) => item.dataset.key === key,
+          )
+        ) {
+          search.value = "";
+          renderOutline();
+        }
+        detail.replaceChildren();
+        const chain = [];
+        let cursor = node;
+        while (cursor) {
+          chain.unshift(cursor);
+          cursor = parents.get(cursor.key);
+        }
+        const crumbs = el("nav", undefined, "breadcrumbs");
+        crumbs.setAttribute("aria-label", "Documentation location");
+        chain.forEach((entry, i) => {
+          if (i) crumbs.append(el("span", "›"));
+          if (entry === node) crumbs.append(el("span", entry.title));
+          else {
+            const b = el("button", entry.title);
+            b.type = "button";
+            b.addEventListener("click", () => select(entry.key, true));
+            crumbs.append(b);
+          }
+        });
+        const heading = el("h2", node.title);
+        heading.id = "field-title";
+        detail.append(
+          crumbs,
+          heading,
+          el(
+            "p",
+            node.presentation
+              ? "Navigation only · not a record key"
+              : "Identifier: " + node.id,
+            "identifier",
+          ),
+        );
+        const facts = el("div", undefined, "facts");
+        facts.append(el("span", kind(node), "badge"));
+        if (
+          node !== root &&
+          !node.presentation &&
+          node.source.data_type !== "section" &&
+          !node.documentary
+        )
+          facts.append(
+            el(
+              "span",
+              node.source.required === false
+                ? "Optional"
+                : node.source.required === true
+                  ? "Required"
+                  : "Requirements: see definition",
+              "badge",
+            ),
+          );
+        detail.append(facts);
+        block(
+          node.source.definition ? "Definition" : "Description",
+          node.source.definition || node.source.description,
+        );
+        if (node.source.definition)
+          block("Description", node.source.description);
+        block("Details", node.source.details);
+        block("Narration", node.source.narration);
+        if (node.source.id && node.source.name)
+          detail.append(
+            el(
+              "p",
+              "The legacy name is a compatibility alias for this same field: " +
+                node.source.name,
+              "fine",
+            ),
+          );
+        if (node === root) detail.append(el("p", data.introCard, "callout"));
+        if (data.notice) detail.append(el("p", data.notice, "callout"));
+        block("Guidance", node.source.guidance);
+        if (parents.get(key)?.id === "source_fields")
+          detail.append(
+            el(
+              "p",
+              "Entry rule: supply a nonblank field name or field identifier. Identifier scope alone is insufficient. Omit unavailable components.",
+              "callout",
+            ),
+          );
+        if (node.source.valid_values !== undefined) {
+          detail.append(
+            el(
+              "h3",
+              Array.isArray(node.source.valid_values)
+                ? "Declared values"
+                : "Source value guidance",
+            ),
+          );
+          const pre = el("pre");
+          pre.append(
+            el(
+              "code",
+              Array.isArray(node.source.valid_values)
+                ? node.source.valid_values
+                    .map((v) => JSON.stringify(v))
+                    .join("\n")
+                : node.source.valid_values,
+            ),
+          );
+          detail.append(pre);
+          if (
+            Array.isArray(node.source.valid_values) &&
+            node.source.valid_values.some(
+              (value) =>
+                typeof value === "string" &&
+                (value.includes("|") || value.includes("`")),
+            )
+          )
+            detail.append(
+              el(
+                "p",
+                "Legacy literal values are reproduced exactly; they are not split or cleaned.",
+                "fine",
+              ),
+            );
+        }
+        if (node.source.valid_range !== undefined) {
+          detail.append(el("h3", "Declared numeric bounds"));
+          const bounds = el("pre");
+          bounds.append(
+            el("code", JSON.stringify(node.source.valid_range, null, 2)),
+          );
+          detail.append(bounds);
+        }
+        const other = Object.fromEntries(
+          Object.entries(node.source).filter(
+            ([key]) =>
+              ![
+                "id",
+                "name",
+                "title",
+                "definition",
+                "description",
+                "details",
+                "narration",
+                "items",
+                "examples",
+                "guidance",
+                "notes",
+                "references",
+                "valid_values",
+                "valid_range",
+                "fields",
+                "components",
+                "groups",
+                "subsections",
+                "data_type",
+                "required",
+              ].includes(key),
+          ),
+        );
+        if (Object.keys(other).length) {
+          const more = el("details"),
+            label = el("summary", "Additional source metadata"),
+            pre = el("pre");
+          pre.append(el("code", JSON.stringify(other, null, 2)));
+          more.append(label, pre);
+          detail.append(more);
+        }
+        if (node.source.notes) block("Notes", node.source.notes.join("\n\n"));
+        if (Array.isArray(node.source.items)) {
+          detail.append(el("h3", "Documentation text"));
+          node.source.items.forEach((item) =>
+            detail.append(
+              el(
+                "p",
+                typeof item === "string" ? item : JSON.stringify(item, null, 2),
+                "definition",
+              ),
+            ),
+          );
+        }
+        if (Array.isArray(node.source.examples)) {
+          detail.append(el("h3", "Source examples"));
+          node.source.examples.forEach((text) => {
+            const pre = el("pre");
+            pre.append(el("code", text));
+            detail.append(pre);
+          });
+        }
+        const example = node.example || parents.get(key)?.example;
+        if (example) {
+          detail.append(
+            el(
+              "h3",
+              node.example
+                ? "Example fragment"
+                : "Example in its parent component",
+            ),
+          );
+          const pre = el("pre");
+          pre.append(el("code", example));
+          detail.append(pre);
+        }
+        if (node.children.length) {
+          detail.append(
+            el(
+              "h3",
+              node.presentation
+                ? "Fields in this navigation group"
+                : node === root
+                  ? data.nutrient
+                    ? "Navigation groups"
+                    : data.metadata
+                      ? "Documentation subsections"
+                      : "Fields in this section"
+                  : "Members" +
+                    (node.source.data_type === "object[]" ||
+                    (node.source.data_type === "list" &&
+                      node.source.item_type === "component")
+                      ? " of each entry"
+                      : ""),
+            ),
+          );
+          const children = el("div", undefined, "children");
+          node.children.forEach((c) => children.append(selectButton(c)));
+          detail.append(children);
+        }
+        const related = node.related.map((k) => nodes.get(k)).filter(Boolean);
+        if (related.length) {
+          detail.append(el("h3", "Read alongside"));
+          const links = el("div", undefined, "related");
+          related.forEach((n) => links.append(selectButton(n)));
+          detail.append(links);
+          detail.append(
+            el(
+              "p",
+              "These are related concepts, not inferred values or automatic dependencies.",
+              "fine",
+            ),
+          );
+        }
+        if (node.source.references) {
+          detail.append(el("h3", "References"));
+          node.source.references.forEach((ref) => {
+            const p = el(
+              "p",
+              ref.title +
+                ([ref.author, ref.publisher].filter(Boolean).length
+                  ? " — " +
+                    [ref.author, ref.publisher].filter(Boolean).join(" · ")
+                  : ""),
+            );
+            if (/^https?:\/\//.test(ref.url || "")) {
+              const link = el("a", " Read source");
+              link.href = ref.url;
+              p.append(link);
+            }
+            detail.append(p);
+          });
+        }
+        const a = el("a", "Read this definition in the full reference");
+        a.href = data.reference + "#" + node.anchor;
+        detail.append(el("hr"), a);
+        const hash = "#" + encodeURIComponent(key);
+        if (location.hash !== hash && historyMode !== "none") {
+          if (historyMode === "replace") history.replaceState(null, "", hash);
+          else history.pushState(null, "", hash);
+        }
+        markCurrent();
+        revealOutline(key, focus, true);
+        if (focus) detail.focus();
+      }
+      document.querySelector(".skip").addEventListener("click", (event) => {
+        // Move focus without creating a non-field entry in browser history.
+        event.preventDefault();
+        detail.focus();
+      });
+      search.addEventListener("input", () => renderOutline());
+      document.getElementById("reset").addEventListener("click", () => {
+        search.value = "";
+        renderOutline(true);
+        search.focus();
+      });
+      function restoreLocation() {
+        // The skip link is an ordinary in-page destination, not a field key.
+        if (location.hash === "#detail") return;
+        let key = root.key;
+        try {
+          const requested = decodeURIComponent(location.hash.slice(1));
+          if (nodes.has(requested)) key = requested;
+        } catch {}
+        if (key !== current) select(key, true, "none");
+      }
+      window.addEventListener("popstate", restoreLocation);
+      window.addEventListener("hashchange", restoreLocation);
+      document.getElementById("version").textContent =
+        "Source " +
+        data.version +
+        " · " +
+        (data.publication === "published"
+          ? "Published snapshot"
+          : "Unreleased working reference");
+      renderOutline();
+      let initial = root.key;
+      try {
+        const requested = decodeURIComponent(location.hash.slice(1));
+        if (nodes.has(requested)) initial = requested;
+      } catch {}
+      select(initial, false, "replace");
+    </script>
+  </body>
+</html>

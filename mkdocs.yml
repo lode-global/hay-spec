@@ -3,8 +3,18 @@ site_name: Hay Description Specification
 nav:
   - Overview: index.md
   - Field guides:
+      - All sections: guides/index.html
       - Traceability: guides/traceability.html
-      - Nutrient Analysis: guides/nutrient_analysis.html
+      - Stand Composition and Agronomic Characteristics: guides/stand.html
+      - Field Location and Growing Environment: guides/location.html
+      - Soil and Field Management: guides/soil.html
+      - Intended Use and Market Context: guides/intended_use.html
+      - In-Season Crop Management: guides/crop_management.html
+      - Harvest-Level Data: guides/harvest.html
+      - Hay packaging: guides/packaging.html
+      - Physical Characteristics and Condition: guides/physical_characteristics.html
+      - Nutrient analysis: guides/nutrient_analysis.html
+      - Metadata and Supplemental Information: guides/metadata.html
   - Field reference:
       - Traceability: fields/traceability.md
       - Stand: fields/stand.md
