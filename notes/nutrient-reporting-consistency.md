@@ -1,7 +1,11 @@
-# Nutrient reporting consistency (unreleased)
+# Nutrient reporting consistency (v0.92.0)
 
-This proposal follows PRs #4, #5, and #6. PR #1 remains open until the replacement
-work has been reviewed. It adds no protein identifier aliases or record migration.
+Implementation notes for v0.92.0, published October 25, 2026. These notes
+record the scoped development decisions; see [release notes](../releases/v0.92.0.md)
+for the final publication record.
+
+This work followed PRs #4, #5, and #6. PR #1 is closed as superseded after
+replacement review. No protein identifier aliases or record migration were added.
 
 ## Moisture and dry matter
 
@@ -54,4 +58,5 @@ Compatibility tests compare against merged PR #6 and allow only the optional
 moisture definition, removal of the first duplicate, and additional dry-matter
 guidance. The legacy warning baseline drops only the resolved duplicate-ID
 finding; its nine naming and enum findings remain. Generated docs and their YAML
-and JSON copies are regenerated and checked in CI. No release metadata is bumped.
+and JSON copies are regenerated and checked in CI. Final publication metadata
+is recorded in v0.92.0.

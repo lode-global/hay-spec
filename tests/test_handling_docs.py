@@ -73,11 +73,14 @@ class HandlingDocs(unittest.TestCase):
     def test_output_is_deterministic(self):
         self.assertEqual(outputs(self.source), self.pages)
 
-    def test_every_section_identifies_unreleased_source_status(self):
+    def test_every_section_identifies_source_publication_status(self):
         pages = [text for name, text in self.pages.items() if name.startswith('fields/')]
         self.assertEqual(len(pages), len(self.spec['sections']))
         for page in pages:
-            self.assertIn('**Current-source reference, including unreleased additions.**', page)
+            label = ('**Published specification reference.**'
+                     if self.spec.get('publication_status') == 'published' else
+                     '**Current-source reference, including unreleased additions.**')
+            self.assertIn(label, page)
             self.assertIn(f'Source version: {self.spec["version"]}; status: draft.', page)
             self.assertIn('../index.md', page)
 

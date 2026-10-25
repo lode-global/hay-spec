@@ -1,9 +1,9 @@
 {
   "title": "Hay Description Specification",
   "version": "0.92.0",
-  "publication_status": "unreleased",
+  "publication_status": "published",
   "prepared_on": "2026-10-24",
-  "published_on": null,
+  "published_on": "2026-10-25",
   "status": "draft",
   "publisher": "Lode",
   "description": "A structured data model for describing hay in a standardized, machine-readable format. Developed to improve clarity, consistency, and efficiency in how hay is characterized, traded, and analyzed-whether in domestic or international markets.\n",
@@ -1753,9 +1753,9 @@
         {
           "id": "version_history",
           "title": "Version History",
-          "description": "This section documents published versions and the explicitly unreleased next version. Historical notes are retained as originally recorded, not as a verified field inventory.\n",
+          "description": "This section documents changes across published versions. Historical notes are retained as originally recorded, not as a verified field inventory.\n",
           "items": [
-            "v0.92.0 (unreleased; prepared 2026-10-24) - Compatible reporting and documentation improvements.\n- Added packaging id aliases and explicit round-bale axis, preserving legacy measurements.\n- Added optional laboratory provenance and laboratory moisture reporting.\n- Consolidated duplicate dry_matter definitions without changing the record key.\n- Added optional handling-event definitions and explicit field interpretation conventions.\n- Added structural checks, regression tests, generated Markdown/JSON reference, and strict site build.\n- Superseded PR #1 through reviewed PRs #4-#7; remaining ideas are recorded in the backlog.\n- Protein keys, existing enum spellings, stored values, and data types remain unchanged.\n",
+            "v0.92.0 (2026-10-25) - Compatible reporting and documentation improvements.\n- Added packaging id aliases and explicit round-bale axis, preserving legacy measurements.\n- Added optional laboratory provenance and laboratory moisture reporting.\n- Consolidated duplicate dry_matter definitions without changing the record key.\n- Added optional handling-event definitions and explicit field interpretation conventions.\n- Added structural checks, regression tests, generated Markdown/JSON reference, and strict site build.\n- Superseded PR #1 through reviewed PRs #4-#7; remaining ideas are recorded in the backlog.\n- Protein keys, existing enum spellings, stored values, and data types remain unchanged.\n",
             "v0.91.1 (2025-08-31) — Metadata corrections and YAML validation/style fixes.\n- Added top-level published_on and normalized document metadata.\n- Removed spaces inside {}, [] and fixed indentation per linter rules.\n- Added document-start marker (---) and resolved minor parsing warnings.\n- No schema changes to fields compared to v0.91.0.\n",
             "v0.91.0 (2025-08-31) — Start of the v0.91 series.\n- Initiated DRY refactor; clarified section/group structure and naming.\n- Enforced ASCII-only content; added/clarified unit handling and encoding policies.\n- Introduced human-readable version history and document metadata conventions.\n- Refactored fertilizer inputs to fertilizer_application (object[]) replacing prior timing/rates groups.\n- Refactored organic_amendments to object[] structure for consistency.\n- Reworked stand section structure and composition fields for clarity and validation.\n- Converted harvest_date_start and harvest_date_end to datetime precision.\n- Began dual reporting patterns for nutrient analysis (dry matter and as-fed object fields).\n- Added lab processing fields (lab_sample_id, lab_report_reference, lab_quality_code, etc.).\n- Standardized use of valid_range for numeric fields and enum_select_mode for multi-select behavior.\n",
             "v0.90.0 (2025-05-05) — Initial draft of the hay specification prepared by the Lode Standards Team.\n"
@@ -1766,7 +1766,7 @@
           "title": "Document Metadata",
           "description": "Human-readable metadata for managing this specification across platforms.\n",
           "items": [
-            "Title: Hay Description Specification\nVersion: 0.92.0\nPublication: Unreleased; no tag or GitHub release created\nPrepared on: 2026-10-24\nPublished on: Not yet published\nStatus: Draft\nMaintainer: standards@lode.global\nLicense: CC BY 4.0\nSource: https://github.com/lode-global/hay-spec\nPlanned tag: v0.92.0 (not created)\nRelease notes: releases/v0.92.0.md (draft)\nCanonical file: src/hay-spec.yaml\nGenerated reference: docs/index.md\nJSON transcription: docs/source/hay-spec.json (not JSON Schema)\n"
+            "Title: Hay Description Specification\nVersion: 0.92.0\nPublication: Published\nPrepared on: 2026-10-24\nPublished on: 2026-10-25\nStatus: Draft\nMaintainer: standards@lode.global\nLicense: CC BY 4.0\nSource: https://github.com/lode-global/hay-spec\nRelease: https://github.com/lode-global/hay-spec/releases/tag/v0.92.0\nRelease notes: https://github.com/lode-global/hay-spec/blob/v0.92.0/releases/v0.92.0.md\nCanonical file: src/hay-spec.yaml\nGenerated reference: docs/index.md\nJSON transcription: docs/source/hay-spec.json (not JSON Schema)\n"
           ]
         }
       ]

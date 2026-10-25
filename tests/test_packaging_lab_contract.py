@@ -72,10 +72,10 @@ class PackagingLabContract(unittest.TestCase):
                 self.assertEqual([f for f in new_fields if f['id'] in old_ids],
                                  old['fields'])
 
-    def test_release_preparation_is_explicitly_unpublished(self):
+    def test_release_publication_metadata(self):
         self.assertEqual(self.spec['version'], '0.92.0')
-        self.assertIsNone(self.spec['published_on'])
-        self.assertEqual(self.spec['publication_status'], 'unreleased')
+        self.assertEqual(self.spec['published_on'], '2026-10-25')
+        self.assertEqual(self.spec['publication_status'], 'published')
 
     def test_documented_examples_match_declared_fields_and_enums(self):
         notes = (ROOT / 'notes/packaging-lab-provenance.md').read_text()

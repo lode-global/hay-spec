@@ -36,8 +36,8 @@ superseded. Its remaining useful ideas are recorded below. Do not merge the old 
 ## Maintenance and release
 
 - Reconcile historical version-history claims with actual field definitions.
-- Select the next release number and update publication metadata and release notes
-  together; generated current-source docs do not themselves publish a release.
+- v0.92.0 records the completed publication preparation. For future releases,
+  update version, publication metadata, release notes, and generated docs together.
 - Decide whether and where to deploy the documentation site.
 - Preserve PR #1 as historical context for the merged replacements and this backlog;
   future work should start from current main rather than merge the old branch.

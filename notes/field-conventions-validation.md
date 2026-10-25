@@ -1,4 +1,8 @@
-# Field conventions and validation (unreleased)
+# Field conventions and validation (v0.92.0)
+
+Implementation notes for v0.92.0, published October 25, 2026. These notes
+record the scoped development decisions; see [release notes](../releases/v0.92.0.md)
+for the final publication record.
 
 This replacement follows merged PR #4 and recovers the useful conventions from
 PR #1 without replacing existing field definitions. PR #1 remains open.
@@ -63,5 +67,5 @@ Consumers should surface ambiguities instead of selecting a duplicate definition
 or automatically splitting stored enum strings. A later migration must specify
 how old values map to corrected definitions and how conflicts are handled.
 
-This change adds structure checks, not a complete formal schema or a new release.
-Release metadata remains unchanged until maintainers prepare the next release.
+These structure checks are not a complete formal schema. Publication metadata
+is recorded in the v0.92.0 release.

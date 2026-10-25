@@ -17,24 +17,24 @@ This specification provides a consistent vocabulary and data model for capturing
 The canonical source of truth is the YAML file in this repository.
 
 - [View the YAML specification](./src/hay-spec.yaml)
-- [Latest release: v0.91.1](https://github.com/lode-global/hay-spec/releases/tag/v0.91.1)
+- [Latest release: v0.92.0](https://github.com/lode-global/hay-spec/releases/tag/v0.92.0)
 - [All releases](https://github.com/lode-global/hay-spec/releases)
 
 ## Status
 
-- **Source version:** v0.92.0 (unreleased; specification remains Draft)
-- **Latest published:** [v0.91.1](https://github.com/lode-global/hay-spec/releases/tag/v0.91.1)
-- **Prepared release notes:** [v0.92.0](./releases/v0.92.0.md)
+- **Source version:** v0.92.0 (published October 25, 2026; specification remains Draft)
+- **Latest published:** [v0.92.0](https://github.com/lode-global/hay-spec/releases/tag/v0.92.0)
+- **Release notes:** [v0.92.0](./releases/v0.92.0.md)
 - **License:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 - **Maintainer:** [standards@lode.global](mailto:standards@lode.global)
 
-## Prepared release: v0.92.0 (unreleased)
+## Release summary: v0.92.0
 
 This minor version adds optional reporting fields, compatibility conventions,
 validation tooling, and generated documentation. Existing identifiers and values
 remain compatible; the duplicate dry-matter definition is consolidated.
-See the [draft release notes](./releases/v0.92.0.md) for changes, limitations, and
-publication steps. No tag or new GitHub release has been created.
+See the [release notes](./releases/v0.92.0.md) for changes, limitations, and
+publication details.
 
 ## Repository structure
 
@@ -73,7 +73,7 @@ To propose changes to the specification, open a GitHub issue or submit a pull re
 
 See the [carry-forward backlog](./notes/backlog.md) for remaining ideas from the
 older draft and the [nutrient compatibility notes](./notes/nutrient-reporting-consistency.md)
-for the current moisture/dry-matter proposal.
+for the moisture/dry-matter compatibility decisions.
 
 - 📌 [Contribution Guidelines](./CONTRIBUTING.md)
 - 📜 [Code of Conduct](./CODE_OF_CONDUCT.md)

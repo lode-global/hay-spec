@@ -1,7 +1,11 @@
-# Packaging and laboratory provenance (unreleased)
+# Packaging and laboratory provenance (v0.92.0)
 
-This proposal recovers a limited part of PR #1 on top of current main. It does
-not merge that branch, change the release version, or close PR #1.
+Implementation notes for v0.92.0, published October 25, 2026. These notes
+record the scoped development decisions; see [release notes](../releases/v0.92.0.md)
+for the final publication record.
+
+This work recovered a limited part of PR #1 on top of main. The old branch was
+not merged; PR #1 was later closed as superseded after PRs #4-#7 were reviewed.
 
 ## Compatibility and packaging
 
@@ -102,5 +106,4 @@ and syntax, not scientific validity.
 
 The round-height migration rule deliberately makes no assumptions about existing
 implementations. Source evidence is required before converting ambiguous legacy
-measurements. Maintainers still choose the release number; keep v0.91.1 metadata
-unchanged until that release is prepared.
+measurements. The final release metadata and publication date are recorded in v0.92.0.
