@@ -10,6 +10,10 @@ on:
       - 'notes/packaging-lab-provenance.md'
       - 'notes/field-conventions-validation.md'
       - 'tools/validate_spec.py'
+      - 'tools/generate_docs.py'
+      - 'notes/handling-history-docs.md'
+      - 'docs/**'
+      - 'requirements-docs.txt'
   pull_request:
     paths:
       - '**.yaml'
@@ -18,6 +22,10 @@ on:
       - 'notes/packaging-lab-provenance.md'
       - 'notes/field-conventions-validation.md'
       - 'tools/validate_spec.py'
+      - 'tools/generate_docs.py'
+      - 'notes/handling-history-docs.md'
+      - 'docs/**'
+      - 'requirements-docs.txt'
 
 jobs:
   lint:
@@ -34,7 +42,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install validation dependencies
-        run: pip install yamllint PyYAML
+        run: pip install yamllint -r requirements-docs.txt
 
       - name: Run yamllint
         run: yamllint -c .yamllint .
@@ -44,3 +52,9 @@ jobs:
 
       - name: Validate specification conventions
         run: python tools/validate_spec.py src/hay-spec.yaml --baseline tests/legacy-spec-warnings.json
+
+      - name: Verify generated documentation
+        run: python tools/generate_docs.py --check
+
+      - name: Build reference site
+        run: mkdocs build --strict

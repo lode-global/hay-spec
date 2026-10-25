@@ -49,6 +49,24 @@ hay-spec/
 
 ## Contributing
 
+### Current-source reference documentation
+
+[Browse the generated reference](./docs/index.md). It describes the current
+source tree, including unreleased additions; use the tagged releases above for
+published snapshots. YAML remains canonical. The generated JSON is a transcription,
+not a JSON Schema or a hay-record validator.
+
+To regenerate and check the reference locally:
+
+```sh
+python -m pip install -r requirements-docs.txt
+python tools/generate_docs.py
+python tools/generate_docs.py --check
+mkdocs build --strict
+```
+
+The build creates a local site only. It does not publish or deploy documentation.
+
 To propose changes to the specification, open a GitHub issue or submit a pull request.
 
 - 📌 [Contribution Guidelines](./CONTRIBUTING.md)

@@ -2233,6 +2233,69 @@ sections:
           This field supports enhanced traceability and allows buyers to assess how storage environments and
           handling practices may have influenced forage quality over time.
 
+        guidance: >
+          Optional history in chronological order to the extent known. Preserve
+          existing handling_events records and their free-text component values.
+          Partial histories and an empty list are permitted; do not invent missing
+          events, require a final stage, or impose a maximum number of events.
+          Event labels are optional. If supplied, initial belongs on the first event,
+          final on the last, with at most one of each. A single event may be labeled
+          final; it need not also carry initial. Intermediate labels may repeat.
+          Preserve legacy final_storage_structure, final_surface_type,
+          final_airflow_condition, restacked_since_baling, and visible_moisture_damage
+          independently. Do not synthesize, overwrite, or infer those summaries from
+          an incomplete history. If summaries and events disagree, preserve both and
+          flag the discrepancy for review. Their existing enums remain unchanged.
+        components:
+          - id: location_type
+            data_type: string
+            required: false
+            definition: >
+              Location category as reported, such as farm or dealer yard. Free text; no registry or
+              fixed vocabulary is required.
+          - id: storage_structure
+            data_type: string
+            required: false
+            definition: >
+              Structure used during this event, such as enclosed barn or tarp-covered. Free text;
+              do not copy into the legacy final summary without confirmation.
+          - id: surface_type
+            data_type: string
+            required: false
+            definition: >
+              Surface under the hay during this event, such as pallets or ground. Free text.
+          - id: airflow_condition
+            data_type: string
+            required: false
+            definition: >
+              Airflow during this event, such as natural ventilation or limited airflow. Free text.
+          - id: duration_estimate
+            data_type: string
+            required: false
+            definition: >
+              Reported duration, including approximate expressions such as 10-15 days or ~1 month.
+              Preserve uncertainty; do not convert to an exact duration.
+          - id: restacked
+            data_type: boolean
+            required: false
+            definition: >
+              Whether the hay was restacked during this event. Omission is not false and must not
+              be inferred from an unknown history.
+          - id: stage_label
+            data_type: enum
+            required: false
+            valid_values: [initial, intermediate, final]
+            definition: >
+              Optional initial, intermediate, or final label supplied by the source. Final means
+              the final known event as of this record, not proof that delivery has occurred.
+          - id: storage_degradation_visible
+            data_type: string[]
+            required: false
+            definition: >
+              Optional list of source-reported visible degradation observations for this event. Use
+              free-text entries; omission or an empty list does not prove that the hay was
+              inspected or undamaged.
+
         examples:
           - >
             handling_events:

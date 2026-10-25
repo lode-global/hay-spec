@@ -1,5 +1,19 @@
 ---
 site_name: Hay Description Specification
+nav:
+  - Overview: index.md
+  - Field reference:
+      - Traceability: fields/traceability.md
+      - Stand: fields/stand.md
+      - Location: fields/location.md
+      - Soil: fields/soil.md
+      - Intended use: fields/intended_use.md
+      - Crop management: fields/crop_management.md
+      - Harvest: fields/harvest.md
+      - Packaging: fields/packaging.md
+      - Physical characteristics: fields/physical_characteristics.md
+      - Nutrient analysis: fields/nutrient_analysis.md
+      - Metadata: fields/metadata.md
 theme:
   name: material
   features:
