@@ -20,6 +20,8 @@ class ReleasePreparation(unittest.TestCase):
         cls.spec = load_spec((ROOT / 'src/hay-spec.yaml').read_text())
         cls.previous = load_spec(subprocess.check_output([
             'git', 'show', f'{BASE}:src/hay-spec.yaml'], cwd=ROOT, text=True))
+        cls.published = load_spec(subprocess.check_output([
+            'git', 'show', 'v0.92.0:src/hay-spec.yaml'], cwd=ROOT, text=True))
         cls.metadata = {s['id']: s for section in cls.spec['sections']
                         if section['id'] == 'metadata' for s in section['subsections']}
 
@@ -27,11 +29,11 @@ class ReleasePreparation(unittest.TestCase):
         self.assertEqual(restore_previous_release_metadata(self.spec, self.previous), self.previous)
 
     def test_publication_metadata_has_actual_date(self):
-        self.assertEqual(self.spec['version'], '0.92.0')
-        self.assertEqual(self.spec['status'], 'draft')
-        self.assertEqual(self.spec['prepared_on'], '2026-10-24')
-        self.assertEqual(self.spec['publication_status'], 'unreleased')
-        self.assertEqual(self.spec['published_on'], '2026-10-25')
+        self.assertEqual(self.published['version'], '0.92.0')
+        self.assertEqual(self.published['status'], 'draft')
+        self.assertEqual(self.published['prepared_on'], '2026-10-24')
+        self.assertEqual(self.published['publication_status'], 'published')
+        self.assertEqual(self.published['published_on'], '2026-10-25')
 
     def test_history_preserves_prior_entries_and_dates_release(self):
         previous = next(s for section in self.previous['sections']

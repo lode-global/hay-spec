@@ -7,7 +7,9 @@ Older consumers must tolerate unknown optional fields to accept enriched records
 
 Use one entry per field. Each entry must provide a nonblank `field_name` or
 `field_identifier`; `field_identifier_scope` alone is insufficient. All supplied
-values are strings. Individual components are optional so a name-only reference
+values are nonblank strings. Omit unavailable components rather than sending
+nulls or blanks. A supplied collection must be a list of objects; null is not an
+empty list. Individual components are optional so a name-only reference
 or a source identifier without known scope can be retained. Preserve opaque
 identifiers exactly; do not convert numbers, trim punctuation, or merge references
 using names or unscoped identifiers. Supply issuer/namespace context where known.
@@ -48,6 +50,14 @@ source_fields:
     field_identifier_scope: Example Farm / field register
   - field_identifier: '001-A'
     field_identifier_scope: Neighbor Farm / field register
+```
+
+Single field with an unscoped identifier (keep leading zeros and do not infer scope):
+
+```yaml
+---
+source_fields:
+  - field_identifier: '00017'
 ```
 
 No details supplied:

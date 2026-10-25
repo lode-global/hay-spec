@@ -6,6 +6,7 @@ import subprocess
 import unittest
 
 from tools.validate_spec import load_spec
+from tools.generate_docs import outputs
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = '52377fae34c61cd6382a7fcdd7c952ad17a7a207'
@@ -50,11 +51,12 @@ class SourceFieldProvenance(unittest.TestCase):
     def test_examples_cover_legacy_single_multiple_and_empty(self):
         notes = (ROOT / 'notes/source-field-provenance.md').read_text()
         examples = [load_spec(x) for x in re.findall(r'```yaml\n(.*?)```', notes, re.S)]
-        self.assertEqual(len(examples), 4)
+        self.assertEqual(len(examples), 5)
         self.assertNotIn('source_fields', examples[0])
         self.assertEqual(len(examples[1]['source_fields']), 1)
         self.assertEqual(len(examples[2]['source_fields']), 2)
-        self.assertEqual(examples[3]['source_fields'], [])
+        self.assertEqual(examples[3]['source_fields'], [{'field_identifier': '00017'}])
+        self.assertEqual(examples[4]['source_fields'], [])
         for record in examples:
             for entry in record.get('source_fields', []):
                 self.assertTrue(entry.get('field_name') or entry.get('field_identifier'))
@@ -64,3 +66,15 @@ class SourceFieldProvenance(unittest.TestCase):
         self.assertEqual(entries[0]['field_identifier'], '001-A')
         self.assertEqual(entries[0]['field_identifier'], entries[1]['field_identifier'])
         self.assertNotEqual(entries[0]['field_identifier_scope'], entries[1]['field_identifier_scope'])
+
+    def test_working_tree_is_unreleased_without_changing_release_dates(self):
+        self.assertEqual(self.spec['publication_status'], 'unreleased')
+        for key in ('version', 'prepared_on', 'published_on'):
+            self.assertEqual(self.spec[key], self.previous[key])
+        source = (ROOT / 'src/hay-spec.yaml').read_text()
+        pages = outputs(source)
+        for name, text in pages.items():
+            if name.startswith('fields/'):
+                self.assertIn('including unreleased additions', text)
+                self.assertNotIn('**Published specification reference.**', text)
+        self.assertIn('Generated from the current source tree', pages['index.md'])

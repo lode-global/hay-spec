@@ -244,7 +244,9 @@ sections:
         guidance: >
           Omission or an empty list means no source-field details are supplied, not that
           the hay came from one field or that its origin is unknown. Include at least
-          a nonblank name or identifier in each supplied entry; do not use empty objects or
+          a nonblank name or identifier in each supplied entry. When supplied, the collection
+          must be a list of objects; null is not an empty list. Omit unavailable components
+          rather than supplying null or blank strings. Do not use empty objects or
           multi_field/multi-field sentinel values to represent multiple fields.
           A field name is a display label and need not be unique. Interpret an identifier
           only within its issuer or scope; without that context it is an unscoped source
