@@ -11,8 +11,10 @@ import yaml
 
 try:
     from .validate_spec import inspect_spec, load_spec
+    from .traceability_guide import guide
 except ImportError:
     from validate_spec import inspect_spec, load_spec
+    from traceability_guide import guide
 
 
 CHILDREN = ('fields', 'components', 'groups', 'subsections')
@@ -192,6 +194,9 @@ def outputs(source, display=None):
     intro += ['\n## Source front matter\n', '```yaml\n' + yaml.safe_dump(
         front, sort_keys=False, allow_unicode=True, width=90) + '```\n']
     pages['index.md'] = '\n'.join(intro)
+    prototype = guide(spec, display)
+    if prototype is not None:
+        pages['guides/traceability.html'] = prototype
     pages['source/hay-spec.yaml'] = source
     pages['source/hay-spec.json'] = transcription
     return pages
