@@ -6,10 +6,14 @@ on:
     paths:
       - '**.yaml'
       - '**.yml'
+      - 'tests/**'
+      - 'notes/packaging-lab-provenance.md'
   pull_request:
     paths:
       - '**.yaml'
       - '**.yml'
+      - 'tests/**'
+      - 'notes/packaging-lab-provenance.md'
 
 jobs:
   lint:
@@ -17,14 +21,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
-      - name: Install yamllint
-        run: pip install yamllint
+      - name: Install validation dependencies
+        run: pip install yamllint PyYAML
 
       - name: Run yamllint
         run: yamllint -c .yamllint .
+
+      - name: Check packaging and provenance contracts
+        run: python -m unittest discover -s tests -v
