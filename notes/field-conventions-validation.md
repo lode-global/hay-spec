@@ -33,13 +33,16 @@ yamllint -c .yamllint .
 
 The checker catches duplicate YAML keys before a parser can overwrite them,
 conflicting aliases, malformed field collections, duplicate enum values,
-invalid required flags, and inconsistent structured numeric bounds. It reports
+invalid required flags, malformed valid-values declarations, non-finite enum
+numbers, and inconsistent structured numeric bounds. It reports
 legacy naming, enum formatting, and same-scope duplicate identifiers separately.
 It does not interpret narrative constraints, check reference registry membership,
 or validate hay records, conditional requirements, dates, or scientific content.
 
 CI compares findings to an explicit baseline. New warnings and stale baseline
 entries fail the check; errors always fail and cannot be grandfathered. Baseline
+files must be lists of complete warning findings without duplicate entries.
+Malformed baseline files fail with a validation diagnostic. Baseline
 paths use list positions, so deliberate field reordering requires baseline review.
 Without `--baseline`, warnings are informational and structural errors still fail.
 

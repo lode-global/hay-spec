@@ -18,6 +18,10 @@ def unique_mapping(loader, node, deep=False):
     result = {}
     for key_node, value_node in node.value:
         key = loader.construct_object(key_node, deep=deep)
+        try:
+            hash(key)
+        except TypeError as exc:
+            raise ValueError('YAML mapping keys must be hashable scalars.') from exc
         if key in result:
             raise ValueError(f'duplicate YAML key: {key!r}')
         result[key] = loader.construct_object(value_node, deep=deep)
@@ -30,6 +34,27 @@ UniqueKeyLoader.add_constructor(
 
 def load_spec(text):
     return yaml.load(text, Loader=UniqueKeyLoader)
+
+
+def finite_number(value):
+    # Python integers have arbitrary precision; converting them to float just to
+    # check finiteness can overflow. Booleans are intentionally not numbers here.
+    return type(value) is int or (type(value) is float and math.isfinite(value))
+
+
+def load_baseline(text):
+    baseline = json.loads(text)
+    keys = {'code', 'path', 'message', 'severity'}
+    if not isinstance(baseline, list):
+        raise ValueError('Warning baseline must be a JSON list.')
+    for finding in baseline:
+        if (not isinstance(finding, dict) or set(finding) != keys
+                or any(not isinstance(v, str) for v in finding.values())
+                or finding['severity'] != 'warning'):
+            raise ValueError('Baseline entries must be complete warning findings.')
+    if len({json.dumps(f, sort_keys=True) for f in baseline}) != len(baseline):
+        raise ValueError('Warning baseline contains duplicate entries.')
+    return baseline
 
 
 def inspect_spec(spec):
@@ -60,23 +85,26 @@ def inspect_spec(spec):
             if 'required' in node and type(node['required']) is not bool:
                 report('required_type', here, 'required must be a boolean.')
             values = node.get('valid_values')
+            if 'valid_values' in node and not isinstance(values, (str, list)):
+                report('values_shape', here, 'valid_values must be prose or a list of scalars.')
             if isinstance(values, list):
                 tokens = []
                 for v in values:
                     if not isinstance(v, (str, bool, int, float)) or v is None:
                         report('enum_value_type', here, 'Enum entries must be scalar values.')
                         continue
+                    if type(v) is float and not math.isfinite(v):
+                        report('enum_value_number', here, 'Numeric enum values must be finite.')
                     tokens.append((type(v).__name__, str(v)))
                     if isinstance(v, str) and ('`' in v or '|' in v):
                         report('legacy_enum_literal', here, v, 'warning')
                 if len(tokens) != len(set(tokens)):
                     report('duplicate_enum', here, 'Duplicate enum entries.')
             bounds = node.get('valid_range')
-            if bounds is not None:
+            if 'valid_range' in node:
                 if not isinstance(bounds, dict) or not bounds or set(bounds) - {'min', 'max'}:
                     report('range_shape', here, 'Expected min and/or max bounds.')
-                elif any(type(v) not in (int, float) or not math.isfinite(v)
-                         for v in bounds.values()):
+                elif any(not finite_number(v) for v in bounds.values()):
                     report('range_number', here, 'Bounds must be finite numbers, not booleans.')
                 elif 'min' in bounds and 'max' in bounds and bounds['min'] > bounds['max']:
                     report('range_order', here, 'min exceeds max.')
@@ -103,7 +131,7 @@ def main():
     args = parser.parse_args()
     try:
         findings = inspect_spec(load_spec(args.spec.read_text()))
-        baseline = json.loads(args.baseline.read_text()) if args.baseline else []
+        baseline = load_baseline(args.baseline.read_text()) if args.baseline else []
     except (OSError, ValueError, yaml.YAMLError) as exc:
         print(f'Specification validation failed: {exc}', file=sys.stderr)
         return 1

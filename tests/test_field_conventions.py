@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 
-from tools.validate_spec import inspect_spec, load_spec
+from tools.validate_spec import inspect_spec, load_baseline, load_spec
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,6 +24,32 @@ class FieldConventions(unittest.TestCase):
     def test_duplicate_yaml_keys_are_not_silently_overwritten(self):
         with self.assertRaisesRegex(ValueError, 'duplicate YAML key'):
             load_spec('sections: []\nsections: []\n')
+
+    def test_unhashable_yaml_mapping_keys_report_a_validation_error(self):
+        with self.assertRaisesRegex(ValueError, 'mapping keys'):
+            load_spec('? [a, b]\n: value\n')
+
+    def test_malformed_baselines_are_rejected(self):
+        for baseline in [None, {}, 'warnings', [None], [{'code': 'partial'}]]:
+            with self.subTest(baseline=baseline), self.assertRaises(ValueError):
+                load_baseline(json.dumps(baseline))
+        finding = dict(code='x', path='/', message='example', severity='warning')
+        with self.assertRaisesRegex(ValueError, 'duplicate entries'):
+            load_baseline(json.dumps([finding, finding]))
+
+    def test_malformed_values_and_explicit_null_ranges_fail(self):
+        for value in [None, {}, 123, False]:
+            with self.subTest(value=value):
+                self.assertIn('values_shape', self.codes(
+                    self.field_spec(id='value', valid_values=value)))
+        self.assertIn('range_shape', self.codes(self.field_spec(
+            id='value', data_type='float', valid_range=None)))
+        self.assertIn('enum_value_number', self.codes(self.field_spec(
+            id='value', valid_values=[float('nan')])))
+
+    def test_large_integer_bounds_do_not_overflow(self):
+        self.assertEqual(inspect_spec(self.field_spec(
+            id='value', data_type='int', valid_range={'min': 0, 'max': 10 ** 400})), [])
 
     def test_mismatched_aliases_fail(self):
         self.assertIn('alias_mismatch', self.codes(
