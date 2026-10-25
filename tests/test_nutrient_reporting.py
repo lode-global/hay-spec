@@ -6,7 +6,7 @@ import re
 import subprocess
 import unittest
 
-from compatibility_helpers import restore_previous_nutrient_definitions
+from compatibility_helpers import restore_previous_nutrient_definitions, restore_previous_release_metadata
 from tools.generate_docs import outputs
 from tools.validate_spec import inspect_spec, load_spec
 
@@ -25,7 +25,7 @@ class NutrientReporting(unittest.TestCase):
                           if s['id'] == 'nutrient_analysis')['fields']
 
     def test_exact_scope_of_compatibility_changes(self):
-        current = copy.deepcopy(self.spec)
+        current = restore_previous_release_metadata(self.spec, self.previous)
         current['sections'] = restore_previous_nutrient_definitions(
             current['sections'], self.previous['sections'])
         self.assertEqual(current, self.previous)

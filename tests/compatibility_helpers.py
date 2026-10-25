@@ -2,6 +2,27 @@
 import copy
 
 
+def restore_previous_document_metadata(sections, previous_sections):
+    result = copy.deepcopy(sections)
+    current = next(s for s in result if s['id'] == 'metadata')
+    previous = next(s for s in previous_sections if s['id'] == 'metadata')
+    old = {s['id']: s for s in previous['subsections']}
+    current['subsections'] = [copy.deepcopy(old[s['id']])
+                              if s['id'] in {'version_history', 'document_metadata'} else s
+                              for s in current['subsections']]
+    return result
+
+
+def restore_previous_release_metadata(spec, previous):
+    result = copy.deepcopy(spec)
+    for key in ('version', 'published_on'):
+        result[key] = previous[key]
+    for key in ('prepared_on', 'publication_status'):
+        result.pop(key, None)
+    result['sections'] = restore_previous_document_metadata(result['sections'], previous['sections'])
+    return result
+
+
 def restore_previous_nutrient_definitions(sections, previous_sections):
     result = copy.deepcopy(sections)
     current = next(s for s in result if s['id'] == 'nutrient_analysis')

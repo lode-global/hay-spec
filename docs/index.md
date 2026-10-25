@@ -2,11 +2,11 @@
 
 # Hay Description Specification
 
-Source version: **0.91.1**; status: **draft**.
+Source version: **0.92.0**; status: **draft**.
 
 Generated from the current source tree; additions may be unreleased even when the source still carries the last release version.
 
-Source SHA-256: `cb9c0e1b5a8d49ef9c9dc9f8df8a4a7b6e011023363876f2de3725412c818c7e`
+Source SHA-256: `16bcd81de211eaa5f9c9256f80c79bdd4af62be26b34a7f9d6ead74900e319a1`
 
 [Canonical YAML copy](source/hay-spec.yaml) | [JSON transcription](source/hay-spec.json)
 
@@ -105,8 +105,10 @@ These are unresolved source findings, not corrections applied by the generator.
 
 ```yaml
 title: Hay Description Specification
-version: 0.91.1
-published_on: '2025-08-31'
+version: 0.92.0
+publication_status: unreleased
+prepared_on: '2026-10-24'
+published_on: null
 status: draft
 publisher: Lode
 description: 'A structured data model for describing hay in a standardized, machine-readable

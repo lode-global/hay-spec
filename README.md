@@ -22,17 +22,19 @@ The canonical source of truth is the YAML file in this repository.
 
 ## Status
 
-- **Current version:** [v0.91.1 (Draft)](https://github.com/lode-global/hay-spec/releases/tag/v0.91.1)
-- **Supersedes:** [v0.91.0](https://github.com/lode-global/hay-spec/releases/tag/v0.91.0)
+- **Source version:** v0.92.0 (unreleased; specification remains Draft)
+- **Latest published:** [v0.91.1](https://github.com/lode-global/hay-spec/releases/tag/v0.91.1)
+- **Prepared release notes:** [v0.92.0](./releases/v0.92.0.md)
 - **License:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 - **Maintainer:** [standards@lode.global](mailto:standards@lode.global)
 
-## Release summary (v0.91.1)
+## Prepared release: v0.92.0 (unreleased)
 
-- Corrected top-level metadata: `version: 0.91.1`, `published_on: "2025-08-31"`.
-- Added normalized `document_metadata` and human-readable `version_history`.
-- YAML validation and style fixes (document start `---`, brace/bracket spacing, indentation).
-- No schema changes to fields versus v0.91.0.
+This minor version adds optional reporting fields, compatibility conventions,
+validation tooling, and generated documentation. Existing identifiers and values
+remain compatible; the duplicate dry-matter definition is consolidated.
+See the [draft release notes](./releases/v0.92.0.md) for changes, limitations, and
+publication steps. No tag or new GitHub release has been created.
 
 ## Repository structure
 
@@ -40,8 +42,8 @@ The canonical source of truth is the YAML file in this repository.
 hay-spec/
 ├── src/                  # Source YAML specification (canonical)
 │   └── hay-spec.yaml
-├── docs/                 # MkDocs docs (if used)
-├── mkdocs.yml            # Documentation site config (if used)
+├── docs/                 # Generated reference and source transcriptions
+├── mkdocs.yml            # Documentation site configuration
 ├── .github/              # Actions and repo configuration
 ├── .yamllint             # Lint config
 └── .gitignore
@@ -78,4 +80,4 @@ for the current moisture/dry-matter proposal.
 
 ---
 
-_Lode Standards Team – 2025_
+_Lode Standards Team_
