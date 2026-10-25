@@ -8,6 +8,7 @@ import tempfile
 import unittest
 
 from tools.generate_docs import outputs
+from tools.field_guides import guide_index
 from tools.validate_spec import load_spec
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -113,3 +114,14 @@ class AllSectionGuides(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn('guides/retired.html', result.stderr)
             self.assertEqual(extra.read_text(), 'retired guide')
+
+    def test_overview_escapes_source_markup(self):
+        import copy
+        spec = copy.deepcopy(self.spec)
+        spec['sections'][0]['title'] = '<img src=x onerror=alert(1)>'
+        spec['sections'][0]['description'] = '<script>alert(1)</script>'
+        page = guide_index(spec)
+        self.assertIn('&lt;img src=x onerror=alert(1)&gt;', page)
+        self.assertIn('&lt;script&gt;alert(1)&lt;/script&gt;', page)
+        self.assertNotIn('<img src=x', page)
+        self.assertNotIn('<script>alert(1)', page)

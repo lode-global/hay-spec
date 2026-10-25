@@ -22,7 +22,9 @@ or certified by the guide.
 
 Definitions, descriptions, details, narration, guidance, source examples, notes,
 references, structured bounds, and additional metadata remain available on cards.
-Conditional enum/validation guidance is exposed as source metadata. Legacy enum
+Conditional options and source validation guidance are visible directly on the
+field card, retaining their source wording and conditions. Selected fields are
+revealed in long outlines across every section. Legacy enum
 literal strings containing pipes/backticks remain single literal entries; the UI
 never splits or cleans them. Repeated handling history remains independent of
 final-storage summaries. Packaging axis/height meaning remains in the existing

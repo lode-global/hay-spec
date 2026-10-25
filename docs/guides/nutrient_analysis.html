@@ -447,7 +447,7 @@
           if (ancestor.tagName === "DETAILS") ancestor.open = true;
           ancestor = ancestor.parentElement;
         }
-        if (selected && data.nutrient && scroll)
+        if (selected && scroll)
           selected.scrollIntoView({ block: "nearest" });
       }
       function renderOutline(expandAll = false) {
@@ -593,6 +593,17 @@
         if (node === root) detail.append(el("p", data.introCard, "callout"));
         if (data.notice) detail.append(el("p", data.notice, "callout"));
         block("Guidance", node.source.guidance);
+        block("Source validation guidance", node.source.validation_guidance);
+        if (node.source.conditional_enums) {
+          detail.append(el("h3", "Conditional options from the source"));
+          Object.entries(node.source.conditional_enums).forEach(([name, condition]) => {
+            detail.append(el("h4", name));
+            detail.append(el("p", "Applies to: " + condition.applies_to, "definition"));
+            const pre = el("pre");
+            pre.append(el("code", JSON.stringify(condition.values, null, 2)));
+            detail.append(pre);
+          });
+        }
         if (parents.get(key)?.id === "source_fields")
           detail.append(
             el(
@@ -660,6 +671,8 @@
                 "items",
                 "examples",
                 "guidance",
+                "validation_guidance",
+                "conditional_enums",
                 "notes",
                 "references",
                 "valid_values",
