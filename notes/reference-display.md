@@ -14,7 +14,9 @@ out-of-order navigation starts.
 Each nutrient group starts at an existing direct field and continues until the
 next group. Groups follow source order and add headings and linked contents only;
 they do not create record containers. All identifiers remain visible and existing
-explicit node anchors are retained. The canonical YAML and its JSON transcription
+explicit node anchors are retained. Source section markers serve as category
+headings where their labels match; individual nutrient headings remain available
+in the site contents panel. The canonical YAML and its JSON transcription
 are unchanged. Group names are navigation aids, not new scientific classifications.
 
 Edit this configuration and run `python tools/generate_docs.py`, followed by

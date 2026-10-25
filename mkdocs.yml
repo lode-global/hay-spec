@@ -23,7 +23,7 @@ theme:
 markdown_extensions:
   - toc:
       permalink: true
-      toc_depth: 2
+      toc_depth: 3
   - admonition
   - codehilite
   - pymdownx.details

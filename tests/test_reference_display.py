@@ -4,6 +4,9 @@ from pathlib import Path
 import re
 import unittest
 
+import markdown
+import yaml
+
 from tools.generate_docs import CHILDREN, outputs, validate_display
 from tools.validate_spec import load_spec
 
@@ -81,3 +84,19 @@ class ReferenceDisplayTests(unittest.TestCase):
                     groups.pop(0)
                 with self.assertRaises(ValueError):
                     validate_display(self.spec, display)
+
+    def test_category_headings_are_not_repeated(self):
+        page = outputs(self.source, self.display)['fields/nutrient_analysis.md']
+        for group in self.display['nutrient_groups']:
+            headings = re.findall(r'^#{2,3} (.+)$', page, re.MULTILINE)
+            self.assertEqual(headings.count(group['title']), 1)
+
+    def test_site_contents_includes_individual_nutrients(self):
+        page = outputs(self.source, self.display)['fields/nutrient_analysis.md']
+        config = yaml.safe_load((ROOT / 'mkdocs.yml').read_text())
+        toc = next(item['toc'] for item in config['markdown_extensions']
+                   if isinstance(item, dict) and 'toc' in item)
+        renderer = markdown.Markdown(extensions=['toc'], extension_configs={'toc': toc})
+        renderer.convert(page)
+        self.assertIn('Soluble protein (% of CP)', renderer.toc)
+        self.assertIn('NRC 2001 energy', renderer.toc)

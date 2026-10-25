@@ -392,11 +392,9 @@ valid_values: A positive decimal value representing the Relative Forage Quality 
 
 <a id="nav-nrc-energy"></a>
 
-## NRC 2001 energy
-
 <a id="node-sections-9-fields-17"></a>
 
-### NRC 2001 energy
+## NRC 2001 energy
 
 Identifier: `nrc_2001_energy`
 
@@ -654,11 +652,9 @@ valid_values: 'A positive decimal value representing the Total Digestible Nutrie
 
 <a id="nav-protein"></a>
 
-## Protein and fractions
-
 <a id="node-sections-9-fields-29"></a>
 
-### Protein and fractions
+## Protein and fractions
 
 Identifier: `protein_and_fractions`
 
@@ -838,11 +834,9 @@ valid_values: 'A positive decimal value representing the neutral detergent insol
 
 <a id="nav-amino-acids"></a>
 
-## Amino acids
-
 <a id="node-sections-9-fields-37"></a>
 
-### Amino acids
+## Amino acids
 
 Identifier: `amino_acids`
 
@@ -899,11 +893,9 @@ valid_values: 'A positive decimal value representing the methionine content of t
 
 <a id="nav-carbohydrates"></a>
 
-## Carbohydrates
-
 <a id="node-sections-9-fields-40"></a>
 
-### Carbohydrates
+## Carbohydrates
 
 Identifier: `carbohydrates`
 
@@ -1049,11 +1041,9 @@ valid_values: 'A positive decimal value representing the water-soluble carbohydr
 
 <a id="nav-fat"></a>
 
-## Fat
-
 <a id="node-sections-9-fields-47"></a>
 
-### Fat
+## Fat
 
 Identifier: `fat`
 
@@ -1134,11 +1124,9 @@ valid_values: 'A positive decimal value representing the rumen unsaturated fatty
 
 <a id="nav-digestibility"></a>
 
-## Energy and digestibility
-
 <a id="node-sections-9-fields-51"></a>
 
-### Energy and digestibility
+## Energy and digestibility
 
 Identifier: `energy_and_digestibility`
 
@@ -1264,11 +1252,9 @@ valid_values: 'A positive decimal value representing the digestible energy (DE) 
 
 <a id="nav-minerals"></a>
 
-## Minerals
-
 <a id="node-sections-9-fields-57"></a>
 
-### Minerals
+## Minerals
 
 Identifier: `minerals`
 

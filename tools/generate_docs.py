@@ -54,10 +54,19 @@ def render_node(node, path, depth=2, display=None, scope=None):
     for key in CHILDREN:
         for i, child in enumerate(node.get(key, [])):
             group = starts.get(child.get('id')) if key == 'fields' else None
-            if group:
+            # Reuse a source section marker as the navigation heading instead of
+            # repeating the same category immediately above it.
+            child_scope = '/'.join([*scope, child.get('id', child.get('name', 'unnamed'))])
+            child_title = child.get('title', display.get('titles', {}).get(child_scope))
+            reuse_heading = (group and child.get('data_type') == 'section'
+                             and child_title == group['title'])
+            if group and reuse_heading:
+                output.append(f'<a id="nav-{group["anchor"]}"></a>\n')
+            elif group:
                 output.append(f'<a id="nav-{group["anchor"]}"></a>\n\n## {group["title"]}\n')
             output.append(render_node(child, [*path, key, i],
-                                      depth + 2 if groups and key == 'fields' else depth + 1,
+                                      (depth + 1 if reuse_heading else depth + 2)
+                                      if groups and key == 'fields' else depth + 1,
                                       display, scope))
     return '\n'.join(output)
 
