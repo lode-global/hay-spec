@@ -1,5 +1,6 @@
 """Release preparation updates metadata, never scientific field definitions."""
 import json
+import re
 from pathlib import Path
 import subprocess
 import unittest
@@ -59,6 +60,22 @@ class ReleasePreparation(unittest.TestCase):
         self.assertIn('**Latest published:** [v0.91.1]', readme)
         self.assertIn('Draft release notes — unreleased', notes)
         self.assertIn('same sample/basis', notes)
+
+    def test_release_note_links_survive_copy_to_github_release(self):
+        notes = (ROOT / 'releases/v0.92.0.md').read_text()
+        links = re.findall(r'\]\(([^)]+)\)', notes)
+        self.assertTrue(links)
+        self.assertTrue(all(link.startswith('https://') for link in links))
+        self.assertIn('https://github.com/lode-global/hay-spec/blob/main/notes/backlog.md', links)
+
+    def test_release_document_metadata_preserves_attribution(self):
+        text = '\n'.join(self.metadata['document_metadata']['items'])
+        previous = next(s for section in self.previous['sections']
+                        if section['id'] == 'metadata' for s in section['subsections']
+                        if s['id'] == 'document_metadata')
+        for line in '\n'.join(previous['items']).splitlines():
+            if line.startswith(('Title:', 'Status:', 'Maintainer:', 'License:', 'Source:')):
+                self.assertIn(line, text)
 
 
 if __name__ == '__main__':
