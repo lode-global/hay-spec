@@ -3,7 +3,9 @@
 This read-only prototype offers an expandable outline and selected-field cards,
 with name/identifier search, documentation breadcrumbs, source definitions,
 declared values, examples, related-field links, and links to full reference anchors.
-Native disclosures and buttons support keyboard navigation. At narrow widths the
+Native disclosures and buttons support keyboard navigation. Field selection
+preserves browser Back/Forward history, and the detail region is named by the
+selected field. A related-field selection clears a search that would hide it. At narrow widths the
 outline stacks above the detail card. No record editing, submission, analytics,
 external scripts, fonts, or network requests are added.
 

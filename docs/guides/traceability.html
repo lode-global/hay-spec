@@ -355,7 +355,7 @@
           id="detail"
           class="card"
           tabindex="-1"
-          aria-label="Selected field details"
+          aria-labelledby="field-title"
         ></section>
       </div>
       <footer class="fine">
@@ -477,10 +477,20 @@
         detail.append(el("h3", title));
         detail.append(el("p", text, "definition"));
       }
-      function select(key, focus) {
+      function select(key, focus, historyMode = "push") {
         const node = nodes.get(key);
         if (!node) return;
         current = key;
+        // Related links may target a field excluded by the active search.
+        if (
+          focus &&
+          !Array.from(outline.querySelectorAll("[data-key]")).some(
+            (item) => item.dataset.key === key,
+          )
+        ) {
+          search.value = "";
+          renderOutline();
+        }
         detail.replaceChildren();
         const chain = [];
         let cursor = node;
@@ -500,9 +510,11 @@
             crumbs.append(b);
           }
         });
+        const heading = el("h2", node.title);
+        heading.id = "field-title";
         detail.append(
           crumbs,
-          el("h2", node.title),
+          heading,
           el("p", "Identifier: " + node.id, "identifier"),
         );
         const facts = el("div", undefined, "facts");
@@ -617,7 +629,10 @@
         a.href = "../fields/traceability/#" + node.anchor;
         detail.append(el("hr"), a);
         const hash = "#" + encodeURIComponent(key);
-        if (location.hash !== hash) history.replaceState(null, "", hash);
+        if (location.hash !== hash && historyMode !== "none") {
+          if (historyMode === "replace") history.replaceState(null, "", hash);
+          else history.pushState(null, "", hash);
+        }
         markCurrent();
         if (focus) {
           const selected = Array.from(
@@ -631,19 +646,29 @@
           detail.focus();
         }
       }
+      document.querySelector(".skip").addEventListener("click", (event) => {
+        // Move focus without creating a non-field entry in browser history.
+        event.preventDefault();
+        detail.focus();
+      });
       search.addEventListener("input", renderOutline);
       document.getElementById("reset").addEventListener("click", () => {
         search.value = "";
         renderOutline();
         search.focus();
       });
-      window.addEventListener("hashchange", () => {
+      function restoreLocation() {
+        // The skip link is an ordinary in-page destination, not a field key.
+        if (location.hash === "#detail") return;
+        let key = root.key;
         try {
-          select(decodeURIComponent(location.hash.slice(1)), false);
-        } catch {
-          select(root.key, false);
-        }
-      });
+          const requested = decodeURIComponent(location.hash.slice(1));
+          if (nodes.has(requested)) key = requested;
+        } catch {}
+        if (key !== current) select(key, true, "none");
+      }
+      window.addEventListener("popstate", restoreLocation);
+      window.addEventListener("hashchange", restoreLocation);
       document.getElementById("version").textContent =
         "Source " +
         data.version +
@@ -657,7 +682,7 @@
         const requested = decodeURIComponent(location.hash.slice(1));
         if (nodes.has(requested)) initial = requested;
       } catch {}
-      select(initial, false);
+      select(initial, false, "replace");
     </script>
   </body>
 </html>

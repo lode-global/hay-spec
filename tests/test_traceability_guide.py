@@ -34,11 +34,12 @@ class TraceabilityGuide(unittest.TestCase):
         data = self.payload(page)
         section = next(s for s in self.spec['sections'] if s['id'] == 'traceability')
         self.assertEqual(data['root']['source'], section)
+        reference = outputs(self.source)['fields/traceability.md']
         def walk(node):
             children = node['source'].get('fields', node['source'].get('components', []))
             self.assertEqual([n['source'] for n in node['children']], children)
             for child in node['children']:
-                self.assertIn(child['anchor'], outputs(self.source)['fields/traceability.md'])
+                self.assertIn(child['anchor'], reference)
                 walk(child)
         walk(data['root'])
         self.assertIn('traceability/lot_identifier_external/lot_identifier_external.value', page)
