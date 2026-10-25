@@ -6,7 +6,7 @@ Source version: **0.91.1**; status: **draft**.
 
 Generated from the current source tree; additions may be unreleased even when the source still carries the last release version.
 
-Source SHA-256: `d3640f7c16e9d0f8d38863d348f805d4b88c761dd190db0b05832506c3859efb`
+Source SHA-256: `cb9c0e1b5a8d49ef9c9dc9f8df8a4a7b6e011023363876f2de3725412c818c7e`
 
 [Canonical YAML copy](source/hay-spec.yaml) | [JSON transcription](source/hay-spec.json)
 

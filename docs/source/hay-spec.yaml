@@ -2554,14 +2554,14 @@ sections:
           All nutrient values are typically reported on a dry matter basis to eliminate dilution effects from water and
           ensure comparability across feed types.
 
-      # Index values
-
         guidance: >
           This is the single specification definition of the existing dry_matter
           record key. Consolidating duplicate definitions does not create a new key,
           change stored values, or require a record migration. See moisture_content
           for same-sample and measurement-basis requirements before deriving a
           missing complementary result. Existing reported values remain authoritative.
+
+      # Index values
 
       - id: relative_feed_value
         data_type: float

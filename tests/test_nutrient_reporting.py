@@ -47,6 +47,25 @@ class NutrientReporting(unittest.TestCase):
         self.assertEqual(moisture['data_type'], 'float')
         self.assertEqual(moisture['valid_range'], {'min': 0, 'max': 100})
 
+    def test_compatibility_normalization_does_not_hide_dry_matter_edits(self):
+        changed = copy.deepcopy(self.spec['sections'])
+        fields = next(s for s in changed if s['id'] == 'nutrient_analysis')['fields']
+        next(f for f in fields if f['id'] == 'dry_matter')['data_type'] = 'string'
+        with self.assertRaisesRegex(ValueError, 'retained dry-matter definition'):
+            restore_previous_nutrient_definitions(changed, self.previous['sections'])
+
+    def test_compatibility_normalization_rejects_duplicate_or_required_moisture(self):
+        for duplicate in (True, False):
+            changed = copy.deepcopy(self.spec['sections'])
+            fields = next(s for s in changed if s['id'] == 'nutrient_analysis')['fields']
+            moisture = next(f for f in fields if f['id'] == 'moisture_content')
+            if duplicate:
+                fields.append(copy.deepcopy(moisture))
+            else:
+                moisture['required'] = True
+            with self.subTest(duplicate=duplicate), self.assertRaises(ValueError):
+                restore_previous_nutrient_definitions(changed, self.previous['sections'])
+
     def test_legacy_and_new_record_examples_keep_numeric_types(self):
         notes = (ROOT / 'notes/nutrient-reporting-consistency.md').read_text()
         records = [load_spec(s) for s in re.findall(r'```yaml\n(.*?)```', notes, re.S)]
