@@ -54,7 +54,8 @@ introduction: >
 
 field_naming_conventions:
   summary: >
-    All field names in this specification follow these conventions:
+    New field identifiers follow these conventions. Existing identifiers are preserved
+    for compatibility, including documented legacy exceptions:
   rules:
     - All lowercase letters (a-z)
     - Words separated by a single underscore (_)
@@ -64,6 +65,44 @@ field_naming_conventions:
     - Units of measure placed at the end, separated by underscores (e.g., mcal_lb, percent_dm)
     - No trailing or double underscores
   example: digestible_energy_1x_mcal_lb
+
+field_validation_conventions:
+  identity: >
+    Use id as the canonical identifier. Accept name when reading legacy definitions
+    without id. When both exist, they identify one field and must match exactly.
+    Resolve fields within their section and parent component, not by flattening all
+    identifiers into one global dictionary. Preserve existing spelling, punctuation,
+    case, enum values, data types, and nesting when reading or writing this draft.
+    Do not silently rename legacy identifiers or strip punctuation from enum values.
+  presentation: >
+    Titles are display labels, not identifiers. Read definition for meaning;
+    legacy description and details remain supporting documentation. A title or
+    numeric identifier is not required to interpret an existing field. New enum
+    entries should be plain YAML scalars without Markdown backticks or pipe-delimited
+    alternatives. Existing malformed enum lists require explicit migration review;
+    do not automatically split or clean them in stored records.
+  constraints: >
+    Distinguish a declared constraint from typical or advisory values in prose.
+    Typical ranges and cross-field consistency comments are not hard rejection
+    limits. A structured valid_range, when present, uses inclusive finite numeric
+    min and/or max bounds; min must not exceed max. Use it only with int or float.
+    Missing bounds do not imply zero or an arbitrary maximum. Do not create a
+    valid_range by extracting a typical range from a narrative definition.
+    If structured constraints and prose disagree, report a specification defect
+    for review rather than guessing precedence or silently altering the record.
+  optionality: >
+    Absence of required does not itself introduce a new mandatory field.
+    Existing explicit requirements in field or section guidance still apply.
+    Omission means not reported; it is not equivalent to false, zero, unknown,
+    an empty string, or an empty list. Do not introduce defaults when migrating
+    records. Future conditional requirements must distinguish a true value from
+    mere presence; a populated false boolean is not true.
+  validation_scope: >
+    YAML parsing and structural checks validate the specification document.
+    They do not certify hay records, analytical results, scientific plausibility,
+    reference registry membership, or implementations. Existing partial-date
+    conventions and multi-select declarations remain unchanged in this proposal.
+    Known legacy naming and enum defects are tracked explicitly for later migration.
 
 # ----------------------------------------------------------------------------------
 # Cross-field consistency guidance
