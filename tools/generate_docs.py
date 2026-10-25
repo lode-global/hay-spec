@@ -194,6 +194,13 @@ def outputs(source, display=None):
     intro += ['\n## Source front matter\n', '```yaml\n' + yaml.safe_dump(
         front, sort_keys=False, allow_unicode=True, width=90) + '```\n']
     pages['index.md'] = '\n'.join(intro)
+    if any(s['id'] == 'metadata' for s in spec['sections']):
+        notes = Path(__file__).resolve().parents[1] / 'notes'
+        pages['history/reconciliation.md'] = (
+            '<!-- Generated from notes/version-history-reconciliation.md. -->\n\n' +
+            (notes / 'version-history-reconciliation.md').read_text(encoding='utf-8'))
+        pages['history/archive/version-history-original.txt'] = (
+            notes / 'archive/version-history-original.txt').read_text(encoding='utf-8')
     pages['guides/index.html'] = guide_index(spec)
     for section_id in (section['id'] for section in spec['sections']):
         prototype = guide(spec, display, section_id)

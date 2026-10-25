@@ -24,6 +24,9 @@ superseded. Its remaining useful ideas are recorded below. Do not merge the old 
 - Optional source-field provenance is implemented as `source_fields`; see
   [compatibility and examples](source-field-provenance.md). Field-level allocation,
   completeness declarations, and bale-to-field relationships remain separate work.
+- All-section field guides are implemented through PRs #11-#13; see
+  [guide coverage and review notes](all-section-field-guides.md). Deployment and
+  further presentation refinement remain separate work.
 - Display titles and nutrient-reference navigation are implemented in the
   presentation configuration; see [configuration notes](reference-display.md).
   Form integration remains a consumer decision. Numeric IDs still need a specific
@@ -36,7 +39,9 @@ superseded. Its remaining useful ideas are recorded below. Do not merge the old 
 
 ## Maintenance and release
 
-- Reconcile historical version-history claims with actual field definitions.
+- Historical version-history claims are audited in
+  [the reconciliation](version-history-reconciliation.md), with original notes
+  archived verbatim. No record migration is inferred from the old refactor text.
 - v0.92.0 records the completed publication preparation. For future releases,
   update version, publication metadata, release notes, and generated docs together.
 - Decide whether and where to deploy the documentation site.

@@ -1,0 +1,36 @@
+      - id: version_history
+        title: Version History
+        description: >
+          This section documents changes across published versions.
+          Historical notes are retained as originally recorded, not as a verified field inventory.
+        items:
+          - |
+            v0.92.0 (2026-10-25) - Compatible reporting and documentation improvements.
+            - Added packaging id aliases and explicit round-bale axis, preserving legacy measurements.
+            - Added optional laboratory provenance and laboratory moisture reporting.
+            - Consolidated duplicate dry_matter definitions without changing the record key.
+            - Added optional handling-event definitions and explicit field interpretation conventions.
+            - Added structural checks, regression tests, generated Markdown/JSON reference, and strict site build.
+            - Superseded PR #1 through reviewed PRs #4-#7; remaining ideas are recorded in the backlog.
+            - Protein keys, existing enum spellings, stored values, and data types remain unchanged.
+          - |
+            v0.91.1 (2025-08-31) — Metadata corrections and YAML validation/style fixes.
+            - Added top-level published_on and normalized document metadata.
+            - Removed spaces inside {}, [] and fixed indentation per linter rules.
+            - Added document-start marker (---) and resolved minor parsing warnings.
+            - No schema changes to fields compared to v0.91.0.
+          - |
+            v0.91.0 (2025-08-31) — Start of the v0.91 series.
+            - Initiated DRY refactor; clarified section/group structure and naming.
+            - Enforced ASCII-only content; added/clarified unit handling and encoding policies.
+            - Introduced human-readable version history and document metadata conventions.
+            - Refactored fertilizer inputs to fertilizer_application (object[]) replacing prior timing/rates groups.
+            - Refactored organic_amendments to object[] structure for consistency.
+            - Reworked stand section structure and composition fields for clarity and validation.
+            - Converted harvest_date_start and harvest_date_end to datetime precision.
+            - Began dual reporting patterns for nutrient analysis (dry matter and as-fed object fields).
+            - Added lab processing fields (lab_sample_id, lab_report_reference, lab_quality_code, etc.).
+            - Standardized use of valid_range for numeric fields and enum_select_mode for multi-select behavior.
+          - |
+            v0.90.0 (2025-05-05) — Initial draft of the hay specification prepared by the Lode Standards Team.
+
