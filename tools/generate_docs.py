@@ -202,6 +202,9 @@ def outputs(source, display=None):
             (notes / 'version-history-reconciliation.md').read_text(encoding='utf-8'))
         pages['history/archive/version-history-original.txt'] = (
             notes / 'archive/version-history-original.txt').read_text(encoding='utf-8')
+    pages['guidance/reference-data.md'] = (
+        '<!-- Generated from notes/reference-data-policy.md. -->\n\n' +
+        (Path(__file__).resolve().parents[1] / 'notes/reference-data-policy.md').read_text(encoding='utf-8'))
     pages['guides/index.html'] = guide_index(spec)
     for section_id in (section['id'] for section in spec['sections']):
         prototype = guide(spec, display, section_id)

@@ -129,6 +129,9 @@ def guide(spec, display=None, section_id='traceability'):
             'anchor': anchor, 'source': item,
             'example': examples.get(identity),
             'documentary': section_id == 'metadata',
+            'referenceDataGuidance': key in (
+                'stand/forage_variety_components/forage_variety',
+                'nutrient_analysis/hay_testing_laboratory'),
             'related': [section_id + '/' + value for value in related.get(identity, [])],
             'children': [],
         }
