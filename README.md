@@ -53,6 +53,9 @@ hay-spec/
 [Read the reconciled version history](./notes/version-history-reconciliation.md)
 and its verbatim archive before interpreting historical schema-change claims.
 
+[Legacy storage-enum guidance](./notes/legacy-storage-enums.md) explains the
+retained pipe-delimited lists and requirements for a future compatible correction.
+
 [Optional source-field completeness](./notes/source-field-completeness.md)
 adds a source-reported coverage assertion without requiring existing records to change.
 

@@ -15,7 +15,9 @@ superseded. Its remaining useful ideas are recorded below. Do not merge the old 
   Preserve original keys and define handling of simultaneous old/new keys and
   conflicting values before adopting `_pct_cp` names.
 - Resolve the five pipe-delimited enum lists without silently splitting stored
-  strings. Document read/write behavior and conversion of historical records.
+  strings. [Legacy storage-enum guidance](legacy-storage-enums.md) now explains
+  the retained representation and preservation rules. A versioned correction,
+  read/write policy, and conversion of historical records remain undecided.
 - Decide whether dotted external-lot component identifiers should remain or gain
   explicitly documented aliases; never flatten nested identifiers automatically.
 

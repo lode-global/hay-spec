@@ -132,6 +132,9 @@ def guide(spec, display=None, section_id='traceability'):
             'anchor': anchor, 'source': item,
             'example': examples.get(identity),
             'documentary': section_id == 'metadata',
+            'legacyStorageEnumGuidance': section_id == 'physical_characteristics' and identity in (
+                'final_storage_structure', 'final_surface_type', 'final_airflow_condition',
+                'restacked_since_baling', 'visible_moisture_damage'),
             'referenceDataGuidance': key in (
                 'stand/forage_variety_components/forage_variety',
                 'nutrient_analysis/hay_testing_laboratory'),
