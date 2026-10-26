@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Traceability field guide · Lode</title>
+    <link rel="stylesheet" href="../assets/stylesheets/reader-header.css" />
     <style>
       :root {
         color-scheme: light;
@@ -51,26 +52,6 @@
       }
       .skip:focus {
         top: 8px;
-      }
-      header {
-        background: #19352c;
-        color: #fafcf4;
-        padding: 22px max(24px, calc((100vw - 1240px) / 2));
-      }
-      header a {
-        color: #e3eddf;
-      }
-      header .brand {
-        letter-spacing: 0.18em;
-        font-size: 13px;
-        font-weight: 750;
-      }
-      header nav {
-        display: flex;
-        gap: 24px;
-        flex-wrap: wrap;
-        margin-top: 12px;
-        font-size: 14px;
       }
       .wrap {
         max-width: 1240px;
@@ -312,8 +293,8 @@
   </head>
   <body>
     <a class="skip" href="#detail">Skip to field details</a>
-    <header>
-      <div class="brand">LODE / HAY DESCRIPTION SPECIFICATION</div>
+    <header class="lode-reader-header">
+      <div class="lode-reader-brand">LODE / HAY DESCRIPTION SPECIFICATION</div>
       <nav aria-label="Documentation">
         <a href="../index.html">Field guides</a>
         <a href="../guidance/index.html">Guidance and history</a>

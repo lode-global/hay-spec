@@ -1,0 +1,22 @@
+/* Shared by the home, supporting pages, and standalone field guides. */
+.lode-reader-header {
+  background: #19352c;
+  color: #fbfcf8;
+  padding: 24px;
+  font-family: system-ui, sans-serif;
+}
+.lode-reader-brand {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  line-height: 1.6;
+}
+.lode-reader-header nav {
+  display: flex;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.lode-reader-header a { color: #fbfcf8; text-decoration: underline; }
