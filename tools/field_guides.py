@@ -12,6 +12,8 @@ EXAMPLES = {
                                 '  lot_identifier_external.value: "00017-A"\n'
                                 '  lot_identifier_external.issuer: USDA'),
     'lot_mapping_field_to_bale_supported': 'lot_mapping_field_to_bale_supported: false',
+    'source_fields_completeness': ('source_fields:\n  - field_name: North meadow\n'
+                                   'source_fields_completeness: complete'),
     'source_fields': ('source_fields:\n  - field_name: North meadow\n'
                       '    field_identifier: "00017"\n'
                       '    field_identifier_scope: Example Farm / field register\n'
@@ -22,7 +24,8 @@ RELATED = {
     'lot_identifier_internal': ['lot_identifier_external'],
     'lot_identifier_external': ['lot_identifier_internal'],
     'lot_mapping_field_to_bale_supported': ['source_fields'],
-    'source_fields': ['hay_single_lot_traceable', 'lot_mapping_field_to_bale_supported'],
+    'source_fields': ['hay_single_lot_traceable', 'lot_mapping_field_to_bale_supported', 'source_fields_completeness'],
+    'source_fields_completeness': ['source_fields'],
     'field_identifier': ['source_fields/field_identifier_scope', 'source_fields'],
     'field_identifier_scope': ['source_fields/field_identifier', 'source_fields'],
     'field_name': ['source_fields'],

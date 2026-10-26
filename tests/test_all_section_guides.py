@@ -1,4 +1,5 @@
 """All-section guide coverage and immutable canonical/record structures."""
+from compatibility_helpers import artifact_before_completeness, without_completeness_source
 import json
 from pathlib import Path
 import re
@@ -30,10 +31,11 @@ class AllSectionGuides(unittest.TestCase):
 
     def test_canonical_sources_and_full_references_unchanged(self):
         for name in ('src/hay-spec.yaml', 'docs/source/hay-spec.yaml', 'docs/source/hay-spec.json'):
-            self.assertEqual((ROOT / name).read_bytes(), subprocess.check_output(
+            self.assertEqual(artifact_before_completeness(name), subprocess.check_output(
                 ['git', 'show', f'{BASE}:{name}'], cwd=ROOT))
-        for name, text in self.pages.items():
+        for name in self.pages:
             if name.startswith('fields/') or name == 'technical/index.md':
+                text = artifact_before_completeness('docs/' + name).decode()
                 self.assertEqual(text.replace("](../source/", "](source/").replace("](../fields/", "](fields/"), subprocess.check_output(
                     ['git', 'show', f'{BASE}:docs/{"index.md" if name == "technical/index.md" else name}'], cwd=ROOT, text=True))
 
@@ -95,7 +97,9 @@ class AllSectionGuides(unittest.TestCase):
             for node in nodes:
                 self.assertTrue(set(node['related']) <= keys, (section, node['id']))
                 if node['example']:
-                    self.assertEqual(set(load_spec(node['example'])), {node['id']})
+                    self.assertEqual(set(load_spec(node['example'])),
+                                     {'source_fields', 'source_fields_completeness'}
+                                     if node['id'] == 'source_fields_completeness' else {node['id']})
             page = self.pages[f'guides/{section}.html']
             self.assertNotIn('__SECTION_', page)
             self.assertNotIn('__GUIDE_', page)

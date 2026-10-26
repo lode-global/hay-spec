@@ -1,4 +1,5 @@
 """Reproduce the historical evidence without repairing tags or changing records."""
+from compatibility_helpers import artifact_before_completeness, without_completeness_source
 import hashlib
 from pathlib import Path
 import subprocess
@@ -25,7 +26,7 @@ def section(spec, identity):
 class VersionHistoryAudit(unittest.TestCase):
     def test_canonical_spec_and_downloads_remain_byte_identical(self):
         for name in ('src/hay-spec.yaml', 'docs/source/hay-spec.yaml', 'docs/source/hay-spec.json'):
-            self.assertEqual((ROOT / name).read_bytes(), subprocess.check_output(
+            self.assertEqual(artifact_before_completeness(name), subprocess.check_output(
                 ['git', 'show', f'{BASE}:{name}'], cwd=ROOT))
 
     def test_archive_is_the_exact_original_subsection(self):

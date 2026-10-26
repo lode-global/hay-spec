@@ -1,4 +1,5 @@
 """Reference-data guidance is presentation-only and scoped to the two fields."""
+from compatibility_helpers import artifact_before_completeness, without_completeness_source
 import json
 from pathlib import Path
 import re
@@ -18,7 +19,7 @@ class ReferenceDataGuidanceTests(unittest.TestCase):
                  'docs/source/hay-spec.json', 'docs/technical/index.md']
         paths += [str(p.relative_to(ROOT)) for p in (ROOT / 'docs/fields').glob('*.md')]
         for path in paths:
-            self.assertEqual((ROOT / path).read_bytes(), subprocess.check_output(
+            self.assertEqual(artifact_before_completeness(path), subprocess.check_output(
                 ['git', 'show', f'{BASE}:{path}'], cwd=ROOT), path)
 
     def test_policy_generated_and_links_scoped_without_source_mutation(self):

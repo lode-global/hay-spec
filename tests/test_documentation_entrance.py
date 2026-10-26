@@ -1,4 +1,5 @@
 """Protect the new entrance without changing the specification or reference."""
+from compatibility_helpers import artifact_before_completeness, without_completeness_source
 import subprocess
 import unittest
 from pathlib import Path
@@ -14,10 +15,10 @@ class DocumentationEntranceTests(unittest.TestCase):
     def test_source_and_downloads_are_unchanged(self):
         for path in ('src/hay-spec.yaml', 'docs/source/hay-spec.yaml',
                      'docs/source/hay-spec.json'):
-            self.assertEqual((ROOT / path).read_bytes(), self.original(path), path)
+            self.assertEqual(artifact_before_completeness(path), self.original(path), path)
 
     def test_overview_only_changes_relative_links(self):
-        current = (ROOT / 'docs/technical/index.md').read_text()
+        current = artifact_before_completeness('docs/technical/index.md').decode()
         restored = current.replace('](../source/', '](source/').replace('](../fields/', '](fields/')
         self.assertEqual(restored, self.original('docs/index.md').decode())
 

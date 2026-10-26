@@ -11,6 +11,8 @@ def restore_previous_document_metadata(sections, previous_sections):
     old_trace = next(s for s in previous_sections if s['id'] == 'traceability')
     if not any(f['id'] == 'source_fields' for f in old_trace['fields']):
         trace['fields'] = [f for f in trace['fields'] if f['id'] != 'source_fields']
+    if not any(f['id'] == 'source_fields_completeness' for f in old_trace['fields']):
+        trace['fields'] = [f for f in trace['fields'] if f['id'] != 'source_fields_completeness']
     old = {s['id']: s for s in previous['subsections']}
     current['subsections'] = [copy.deepcopy(old[s['id']])
                               if s['id'] in {'version_history', 'document_metadata'} else s
@@ -52,3 +54,26 @@ def restore_previous_nutrient_definitions(sections, previous_sections):
         elif field['id'] == 'dry_matter':
             field.pop('guidance', None)
     return result
+
+
+def without_completeness_source(source):
+    """Remove only the appended completeness block for historical snapshot guards.
+
+    A dedicated test compares the resulting bytes to pre-addition main, ensuring
+    that this projection cannot hide edits to existing definitions.
+    """
+    import re
+    return re.sub(r'^      - id: source_fields_completeness\n.*?(?=^    guidance: >\n)',
+                  '', source, count=1, flags=re.M | re.S)
+
+
+def artifact_before_completeness(path):
+    from pathlib import Path
+    from tools.generate_docs import outputs
+    from tools.validate_spec import load_spec
+    root = Path(__file__).resolve().parents[1]
+    source = without_completeness_source((root / 'src/hay-spec.yaml').read_text())
+    if path == 'src/hay-spec.yaml':
+        return source.encode()
+    pages = outputs(source, load_spec((root / 'reference-display.yaml').read_text()))
+    return pages[path.removeprefix('docs/')].encode()

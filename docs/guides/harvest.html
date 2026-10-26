@@ -594,6 +594,13 @@
           );
         if (node === root) detail.append(el("p", data.introCard, "callout"));
         if (data.notice) detail.append(el("p", data.notice, "callout"));
+        if (node.key === "traceability/source_fields_completeness") {
+          const note = el("p", "Source-reported list coverage only. ", "callout");
+          const guidance = el("a", "Read completeness examples and conflict handling");
+          guidance.href = "../guidance/source-field-completeness/";
+          note.append(guidance);
+          detail.append(note);
+        }
         if (node.referenceDataGuidance) {
           const note = el("p", "No versioned reference dataset is adopted here. Optional lookups must preserve reported values. ", "callout");
           const policy = el("a", "Read reference-data policy and lookup guidance");
