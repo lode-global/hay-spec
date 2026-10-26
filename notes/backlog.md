@@ -22,8 +22,10 @@ superseded. Its remaining useful ideas are recorded below. Do not merge the old 
 ## Useful additions
 
 - Optional source-field provenance is implemented as `source_fields`; see
-  [compatibility and examples](source-field-provenance.md). Field-level allocation,
-  completeness declarations, and bale-to-field relationships remain separate work.
+  [compatibility and examples](source-field-provenance.md). Field-level allocation
+  and bale-to-field relationships remain separate work. Optional list-completeness
+  reporting is implemented as `source_fields_completeness`; see
+  [semantics and examples](source-field-completeness.md).
 - All-section field guides are implemented through PRs #11-#13; see
   [guide coverage and review notes](all-section-field-guides.md). Deployment and
   further presentation refinement remain separate work. PR #15 makes the guides

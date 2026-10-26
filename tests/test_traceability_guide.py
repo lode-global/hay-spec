@@ -1,4 +1,5 @@
 """Lossless source projection and safe, deterministic guide generation."""
+from compatibility_helpers import artifact_before_completeness, without_completeness_source
 import json
 from pathlib import Path
 import re
@@ -26,7 +27,7 @@ class TraceabilityGuide(unittest.TestCase):
 
     def test_source_and_download_bytes_are_unchanged(self):
         for name in ('src/hay-spec.yaml', 'docs/source/hay-spec.yaml', 'docs/source/hay-spec.json'):
-            self.assertEqual((ROOT / name).read_bytes(), subprocess.check_output(
+            self.assertEqual(artifact_before_completeness(name), subprocess.check_output(
                 ['git', 'show', f'{BASE}:{name}'], cwd=ROOT))
 
     def test_projection_preserves_every_definition_and_literal_identifier(self):

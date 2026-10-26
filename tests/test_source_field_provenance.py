@@ -24,6 +24,7 @@ class SourceFieldProvenance(unittest.TestCase):
     def test_only_new_collection_and_publication_notice_change(self):
         current = copy.deepcopy(self.spec)
         trace = next(s for s in current['sections'] if s['id'] == 'traceability')
+        trace['fields'] = [f for f in trace['fields'] if f['id'] != 'source_fields_completeness']
         self.assertEqual(trace['fields'].pop(), self.field)
         current['publication_status'] = self.previous['publication_status']
         metadata = next(s for s in current['sections'] if s['id'] == 'metadata')

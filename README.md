@@ -53,6 +53,9 @@ hay-spec/
 [Read the reconciled version history](./notes/version-history-reconciliation.md)
 and its verbatim archive before interpreting historical schema-change claims.
 
+[Optional source-field completeness](./notes/source-field-completeness.md)
+adds a source-reported coverage assertion without requiring existing records to change.
+
 [Reference-data policy and lookup guidance](./notes/reference-data-policy.md)
 explains the unresolved forage-variety and laboratory lists and requirements
 for future optional datasets. Existing records are unchanged.

@@ -226,3 +226,27 @@ data_type: string
 required: false
 valid_values: Nonblank string, preserved as reported
 ```
+
+<a id="node-sections-0-fields-5"></a>
+
+## Source-field list completeness
+
+Identifier: `source_fields_completeness`
+
+**Definition**
+
+Optional source-reported assertion about whether source_fields lists all production fields contributing to the hay described by this record. complete means every contributing production field is represented; partial means at least one contributing production field is omitted. This describes list coverage, not contribution quantities, identifier verification, or bale-level traceability.
+
+
+**Guidance**
+
+Omit this field when completeness is not asserted or is unknown. Omission never means complete or partial and does not change existing records. Supply a nonempty source_fields list with either value. A declaration alongside an omitted or empty list is inconsistent; retain the reported values and flag them for review rather than filling, discarding, or rewriting either field. null, blank strings, and unknown are not declared values. Do not infer completeness from list length, names, identifier scope, lot flags, or mapping capability. A complete list can contain one or multiple fields and does not establish unique or verified identities. Reassess the assertion if the list or the hay represented by the record changes; do not copy it automatically to a blend, split, or new lot. Do not infer or overwrite hay_single_lot_traceable, lot identifiers, lot_mapping_field_to_bale_supported, or location summaries. This adds no allocation percentages or bale-to-field relationships. Older consumers must tolerate unknown optional fields to accept enriched records.
+
+
+```yaml
+data_type: enum
+required: false
+valid_values:
+- complete
+- partial
+```

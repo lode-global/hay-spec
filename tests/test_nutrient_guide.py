@@ -1,4 +1,5 @@
 """Ensure nutrient navigation never becomes a record hierarchy or rewrites source."""
+from compatibility_helpers import artifact_before_completeness, without_completeness_source
 import copy
 import json
 from pathlib import Path
@@ -28,11 +29,11 @@ class NutrientGuide(unittest.TestCase):
 
     def test_specification_downloads_and_existing_references_are_unchanged(self):
         for name in ('src/hay-spec.yaml', 'docs/source/hay-spec.yaml', 'docs/source/hay-spec.json'):
-            self.assertEqual((ROOT / name).read_bytes(), subprocess.check_output(
+            self.assertEqual(artifact_before_completeness(name), subprocess.check_output(
                 ['git', 'show', f'{BASE}:{name}'], cwd=ROOT))
         for name in self.pages:
             if name.startswith('fields/') or name == 'technical/index.md':
-                self.assertEqual(self.pages[name].replace("](../source/", "](source/").replace("](../fields/", "](fields/"), subprocess.check_output(
+                self.assertEqual(artifact_before_completeness("docs/" + name).decode().replace("](../source/", "](source/").replace("](../fields/", "](fields/"), subprocess.check_output(
                     ['git', 'show', f'{BASE}:docs/{"index.md" if name == "technical/index.md" else name}'], cwd=ROOT, text=True))
 
     def test_visual_groups_preserve_flat_fields_and_source_order(self):
@@ -69,7 +70,9 @@ class NutrientGuide(unittest.TestCase):
         for node in flat:
             self.assertTrue(set(node['related']) <= keys)
             if node['example']:
-                self.assertEqual(set(load_spec(node['example'])), {node['id']})
+                self.assertEqual(set(load_spec(node['example'])),
+                                     {'source_fields', 'source_fields_completeness'}
+                                     if node['id'] == 'source_fields_completeness' else {node['id']})
 
     def test_nutrient_payload_is_safe_when_definition_contains_html(self):
         spec = copy.deepcopy(self.spec)
