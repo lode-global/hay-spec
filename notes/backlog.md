@@ -26,13 +26,16 @@ superseded. Its remaining useful ideas are recorded below. Do not merge the old 
   completeness declarations, and bale-to-field relationships remain separate work.
 - All-section field guides are implemented through PRs #11-#13; see
   [guide coverage and review notes](all-section-field-guides.md). Deployment and
-  further presentation refinement remain separate work.
+  further presentation refinement remain separate work. PR #15 makes the guides
+  the main entrance and unifies the technical-reference design and downloads.
 - Display titles and nutrient-reference navigation are implemented in the
   presentation configuration; see [configuration notes](reference-display.md).
   Form integration remains a consumer decision. Numeric IDs still need a specific
   stable-identity use case and allocation policy before adoption.
-- Forage-variety and laboratory reference datasets: define ownership, versioning,
-  identifier policy, availability, and fallback behavior before requiring them.
+- Forage-variety and laboratory reference-data guidance is documented in
+  [the reference-data policy](reference-data-policy.md). No dataset is adopted.
+  Selecting maintainers/catalogues, coverage, licensing, snapshot hosting, and
+  any future optional exchange metadata remain separate reviewed decisions.
 - Consider glyphosate-specific production disclosure only after a separate domain
   review of need, terminology, overlapping categories, and relationship to existing
   herbicide fields. Do not infer compliance or feeding suitability from disclosure.
