@@ -36,6 +36,8 @@ superseded. Its remaining useful ideas are recorded below. Do not merge the old 
   [guide coverage and review notes](all-section-field-guides.md). Deployment and
   further presentation refinement remain separate work. PR #15 makes the guides
   the main entrance and unifies the technical-reference design and downloads.
+  [One reading experience](single-reading-experience.md) now consolidates navigation,
+  source details, guidance, and history around the guides; deployment remains open.
 - Display titles and nutrient-reference navigation are implemented in the
   presentation configuration; see [configuration notes](reference-display.md).
   Form integration remains a consumer decision. Numeric IDs still need a specific

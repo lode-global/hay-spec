@@ -4,12 +4,12 @@ hide:
   - toc
 ---
 
-<div class="lode-home" data-technical-overview="technical/">
+<div class="lode-home" data-technical-overview="guidance/specification/">
 <p class="eyebrow">LODE / HAY DESCRIPTION SPECIFICATION</p>
 <h1>Explore the specification</h1>
-<p>Choose a field guide to understand each field and its relationships. Use the technical reference for the complete source definitions and metadata.</p>
+<p>Choose a field guide to understand each field and its relationships. Open a field’s complete source definition for every detail, or read about the specification.</p>
 <p class="publication">Current working specification · includes unreleased changes · source version 0.92.0 · status: draft.</p>
-<div class="downloads"><a href="source/hay-spec.yaml" download="hay-spec.yaml">Download YAML</a><a href="source/hay-spec.json" download="hay-spec.json">Download JSON</a><a href="technical/">Technical reference</a></div>
+<div class="downloads"><a href="source/hay-spec.yaml" download="hay-spec.yaml">Download YAML</a><a href="source/hay-spec.json" download="hay-spec.json">Download JSON</a><a href="guidance/specification/">About the specification</a><a href="guidance/index.html">Guidance and history</a></div>
 <p class="publication">Downloads reflect the current source. JSON is a transcription, not JSON Schema or a hay-record validator. For immutable snapshots, visit <a href="https://github.com/lode-global/hay-spec/releases">published releases</a>.</p>
 <div class="lode-guide-grid"><a class="lode-guide-card" href="guides/traceability.html"><h2>Traceability</h2><p>This section captures whether the hay can be traced to a clearly defined production lot and whether formal identifiers exist that facilitate lot-level tracking, recall, or certification.</p></a>
 <a class="lode-guide-card" href="guides/stand.html"><h2>Stand Composition and Agronomic Characteristics</h2><p>This section describes the planted forage stand-the biological and agronomic foundation of the hay crop.</p></a>

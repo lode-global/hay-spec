@@ -35,3 +35,12 @@ body { font-family: system-ui, sans-serif; }
 a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid #98621b; outline-offset: 3px; }
 @media(max-width:760px) { .md-content__inner { padding: 20px; } }
 @media(max-width:400px) { .lode-guide-grid { grid-template-columns: 1fr; } }
+/* The guides and supporting pages share one reading shell. */
+.lode-reader-header { background: #19352c; color: #fbfcf8; padding: 24px; }
+.lode-reader-brand { font-size: 13px; font-weight: 700; letter-spacing: .12em; }
+.lode-reader-header nav { display: flex; gap: 12px 24px; flex-wrap: wrap; margin-top: 12px; }
+.lode-reader-header a { color: #fbfcf8; text-decoration: underline; font-size: 14px; }
+.md-main__inner { display: block; margin: 32px auto; padding: 0 24px; }
+.md-content { max-width: 1192px; margin: auto; }
+.md-content__inner { margin: 0; padding: 28px; }
+.md-typeset h1 { font-size: clamp(30px, 4vw, 42px); }

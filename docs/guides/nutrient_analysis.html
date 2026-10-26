@@ -315,9 +315,9 @@
     <header>
       <div class="brand">LODE / HAY DESCRIPTION SPECIFICATION</div>
       <nav aria-label="Documentation">
-        <a href="index.html">All field guides</a>
-        <a href="../technical/">Technical overview</a
-        ><a href="../fields/nutrient_analysis/">Nutrient analysis technical reference</a>
+        <a href="../index.html">Field guides</a>
+        <a href="../guidance/index.html">Guidance and history</a>
+        <a href="../guidance/specification/">About the specification</a>
         <a href="../source/hay-spec.yaml" download="hay-spec.yaml">Download YAML</a>
         <a href="../source/hay-spec.json" download="hay-spec.json">Download JSON</a>
       </nav>
@@ -367,7 +367,7 @@
     <noscript
       ><p class="wrap">
         This interactive prototype needs JavaScript.
-        <a href="../fields/nutrient_analysis/">Read the complete Nutrient analysis reference</a
+        <a href="../fields/nutrient_analysis/">Read the complete Nutrient analysis reference without JavaScript</a
         >.
       </p></noscript
     >
@@ -823,9 +823,12 @@
             detail.append(p);
           });
         }
-        const a = el("a", "Read this definition in the full reference");
-        a.href = data.reference + "#" + node.anchor;
-        detail.append(el("hr"), a);
+        const sourceDetails = el("details");
+        sourceDetails.append(el("summary", "Complete source definition"));
+        const sourceCode = el("pre");
+        sourceCode.append(el("code", JSON.stringify(node.source, null, 2)));
+        sourceDetails.append(sourceCode);
+        detail.append(el("hr"), sourceDetails);
         const hash = "#" + encodeURIComponent(key);
         if (location.hash !== hash && historyMode !== "none") {
           if (historyMode === "replace") history.replaceState(null, "", hash);

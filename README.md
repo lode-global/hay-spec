@@ -70,8 +70,8 @@ for future optional datasets. Existing records are unchanged.
 
 ### Current-source reference documentation
 
-[Explore the field guides](./docs/index.md) or browse the
-[technical reference](./docs/technical/index.md). It describes the current
+[Explore the field guides](./docs/index.md), the single reading entrance, or
+[guidance and history](./docs/guidance/index.md). These describe the current
 source tree, including unreleased additions; use the tagged releases above for
 published snapshots. YAML remains canonical. The generated JSON is a transcription,
 not a JSON Schema or a hay-record validator.
@@ -95,6 +95,11 @@ python tools/generate_docs.py
 python tools/generate_docs.py --check
 mkdocs build --strict
 ```
+
+Every field card exposes its complete parsed source definition. MkDocs remains
+the publishing machinery for supporting pages; old technical-reference URLs
+forward to the corresponding guide locations. See the
+[reading-experience notes](./notes/single-reading-experience.md).
 
 The build creates a local site only. It does not publish or deploy documentation.
 

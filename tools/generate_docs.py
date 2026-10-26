@@ -194,6 +194,33 @@ def outputs(source, display=None):
     intro += ['\n## Source front matter\n', '```yaml\n' + yaml.safe_dump(
         front, sort_keys=False, allow_unicode=True, width=90) + '```\n']
     pages['technical/index.md'] = '\n'.join(intro).replace('](source/', '](../source/').replace('](fields/', '](../fields/')
+    pages['guidance/specification.md'] = pages['technical/index.md']
+    for section in spec['sections']:
+        pages['guidance/specification.md'] = pages['guidance/specification.md'].replace(
+            f'(../fields/{section["id"]}.md)', f'(../guides/{section["id"]}.html)')
+    pages['guidance/index.md'] = ("# Guidance and history\n\n"
+        "Supporting explanations for the field guides. These pages do not change record structures.\n\n"
+        "- [About the specification, conventions, and source metadata](specification.md)\n"
+        "- [Legacy identifier examples](legacy-identifiers.md)\n"
+        "- [Legacy storage enums](legacy-storage-enums.md)\n"
+        "- [Source-field completeness](source-field-completeness.md)\n"
+        "- [Reference-data policy](reference-data.md)\n"
+        "- [Reconciled history and original archive](../history/reconciliation.md)\n")
+    routes = {}
+    for i, section in enumerate(spec['sections']):
+        anchors = {}
+        def legacy_routes(item, scope, anchor):
+            key = '/'.join([*scope, item.get('id', item.get('name'))])
+            anchors[anchor] = key
+            for collection in CHILDREN:
+                for j, child in enumerate(item.get(collection, [])):
+                    legacy_routes(child, key.split('/'), f'{anchor}-{collection}-{j}')
+        legacy_routes(section, [], f'node-sections-{i}')
+        routes[f'fields/{section["id"]}/'] = {
+            'root': section['id'], 'guide': f'guides/{section["id"]}.html', 'anchors': anchors}
+    reader_template = (Path(__file__).parent / 'templates/reader-navigation.js').read_text()
+    pages['assets/javascripts/reader-navigation.js'] = reader_template.replace(
+        '__GUIDE_ROUTES__', json.dumps(routes, ensure_ascii=True).replace('<', '\\u003c'))
     pages['index.md'] = home_page(spec)
     if any(s['id'] == 'metadata' for s in spec['sections']):
         notes = Path(__file__).resolve().parents[1] / 'notes'

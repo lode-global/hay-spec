@@ -43,7 +43,7 @@ class DocumentationEntranceTests(unittest.TestCase):
             content = guide.read_text()
             for suffix in ('yaml', 'json'):
                 self.assertIn(f'href="../source/hay-spec.{suffix}"', content, guide.name)
-            self.assertIn('href="../technical/"', content, guide.name)
+            self.assertIn('href="../guidance/specification/"', content, guide.name)
 
 
 if __name__ == '__main__':
