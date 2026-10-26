@@ -15,6 +15,7 @@ nav:
       - Physical Characteristics and Condition: guides/physical_characteristics.html
       - Nutrient analysis: guides/nutrient_analysis.html
       - Metadata and Supplemental Information: guides/metadata.html
+  - Legacy identifiers: guidance/legacy-identifiers.md
   - Legacy storage enums: guidance/legacy-storage-enums.md
   - Source-field completeness: guidance/source-field-completeness.md
   - Reference-data guidance: guidance/reference-data.md

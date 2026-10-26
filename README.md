@@ -53,6 +53,9 @@ hay-spec/
 [Read the reconciled version history](./notes/version-history-reconciliation.md)
 and its verbatim archive before interpreting historical schema-change claims.
 
+[Legacy-identifier interoperability examples](./notes/legacy-identifier-interoperability.md)
+show literal dotted and percent-sign keys in paired YAML/JSON fragments.
+
 [Legacy storage-enum guidance](./notes/legacy-storage-enums.md) explains the
 retained pipe-delimited lists and requirements for a future compatible correction.
 

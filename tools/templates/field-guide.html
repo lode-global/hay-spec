@@ -608,6 +608,13 @@
           note.append(guidance);
           detail.append(note);
         }
+        if (node.legacyIdentifierGuidance) {
+          const note = el("p", "Preserve literal identifier spelling and existing nesting. ", "callout");
+          const guidance = el("a", "See paired YAML/JSON interoperability examples");
+          guidance.href = "../guidance/legacy-identifiers/";
+          note.append(guidance);
+          detail.append(note);
+        }
         if (node.referenceDataGuidance) {
           const note = el("p", "No versioned reference dataset is adopted here. Optional lookups must preserve reported values. ", "callout");
           const policy = el("a", "Read reference-data policy and lookup guidance");
