@@ -82,7 +82,8 @@
   <body>
     <header>
       LODE / HAY DESCRIPTION SPECIFICATION ·
-      <a href="../technical/">Technical reference</a>
+      <a href="../guidance/index.html">Guidance and history</a>
+      · <a href="../guidance/specification/">About the specification</a>
       · <a href="../index.html">Home</a>
       · <a href="../source/hay-spec.yaml" download="hay-spec.yaml">Download YAML</a>
       · <a href="../source/hay-spec.json" download="hay-spec.json">Download JSON</a>
@@ -119,5 +120,10 @@
         not edit or validate records.
       </p>
     </main>
+    <script>
+      // Keep the former index address working with one canonical entrance.
+      const destination = new URL('../', location.href);
+      location.replace(destination.href);
+    </script>
   </body>
 </html>

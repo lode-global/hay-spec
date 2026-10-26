@@ -235,16 +235,16 @@ def home_page(spec):
     state = ('Published snapshot' if spec.get('publication_status') == 'published'
              else 'Current working specification · includes unreleased changes')
     return ("---\nhide:\n  - navigation\n  - toc\n---\n\n"
-            '<div class="lode-home" data-technical-overview="technical/">\n'
+            '<div class="lode-home" data-technical-overview="guidance/specification/">\n'
             '<p class="eyebrow">LODE / HAY DESCRIPTION SPECIFICATION</p>\n'
             '<h1>Explore the specification</h1>\n'
             '<p>Choose a field guide to understand each field and its relationships. '
-            'Use the technical reference for the complete source definitions and metadata.</p>\n'
+            'Open a field’s complete source definition for every detail, or read about the specification.</p>\n'
             '<p class="publication">' + escape(state) + ' · source version ' + escape(spec['version']) +
             ' · status: ' + escape(spec['status']) + '.</p>\n'
             '<div class="downloads"><a href="source/hay-spec.yaml" download="hay-spec.yaml">Download YAML</a>'
             '<a href="source/hay-spec.json" download="hay-spec.json">Download JSON</a>'
-            '<a href="technical/">Technical reference</a></div>\n'
+            '<a href="guidance/specification/">About the specification</a><a href="guidance/index.html">Guidance and history</a></div>\n'
             '<p class="publication">Downloads reflect the current source. JSON is a transcription, '
             'not JSON Schema or a hay-record validator. For immutable snapshots, visit '
             '<a href="https://github.com/lode-global/hay-spec/releases">published releases</a>.</p>\n'

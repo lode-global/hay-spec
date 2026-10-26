@@ -15,24 +15,14 @@ nav:
       - Physical Characteristics and Condition: guides/physical_characteristics.html
       - Nutrient analysis: guides/nutrient_analysis.html
       - Metadata and Supplemental Information: guides/metadata.html
+  - Guidance and history: guidance/index.md
+  - About the specification: guidance/specification.md
   - Legacy identifiers: guidance/legacy-identifiers.md
   - Legacy storage enums: guidance/legacy-storage-enums.md
   - Source-field completeness: guidance/source-field-completeness.md
   - Reference-data guidance: guidance/reference-data.md
   - Reconciled history: history/reconciliation.md
-  - Technical reference:
-      - Overview: technical/index.md
-      - Traceability: fields/traceability.md
-      - Stand: fields/stand.md
-      - Location: fields/location.md
-      - Soil: fields/soil.md
-      - Intended use: fields/intended_use.md
-      - Crop management: fields/crop_management.md
-      - Harvest: fields/harvest.md
-      - Packaging: fields/packaging.md
-      - Physical characteristics: fields/physical_characteristics.md
-      - Nutrient analysis: fields/nutrient_analysis.md
-      - Metadata: fields/metadata.md
+
 theme:
   name: material
   custom_dir: overrides
@@ -55,4 +45,4 @@ markdown_extensions:
 extra_css:
   - assets/stylesheets/lode.css
 extra_javascript:
-  - assets/javascripts/legacy-overview.js
+  - assets/javascripts/reader-navigation.js
