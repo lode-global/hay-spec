@@ -601,6 +601,13 @@
           note.append(guidance);
           detail.append(note);
         }
+        if (node.legacyStorageEnumGuidance) {
+          const note = el("p", "Legacy enum: the source list contains one pipe-delimited string, not separate choices. Preserve reported values and types. ", "callout");
+          const guidance = el("a", "Read legacy storage-enum guidance");
+          guidance.href = "../guidance/legacy-storage-enums/";
+          note.append(guidance);
+          detail.append(note);
+        }
         if (node.referenceDataGuidance) {
           const note = el("p", "No versioned reference dataset is adopted here. Optional lookups must preserve reported values. ", "callout");
           const policy = el("a", "Read reference-data policy and lookup guidance");
