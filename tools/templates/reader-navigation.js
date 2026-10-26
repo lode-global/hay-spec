@@ -19,7 +19,10 @@
     if (!route) return;
     let anchor;
     try { anchor = decodeURIComponent(location.hash.slice(1)); } catch { return; }
-    let key = route.anchors[anchor];
+    // Unknown fragments must not resolve through Object.prototype properties.
+    const sourceKey = (id) => Object.prototype.hasOwnProperty.call(route.anchors, id)
+      ? route.anchors[id] : undefined;
+    let key = sourceKey(anchor);
     if (anchor && !key) {
       // MkDocs also creates automatic heading IDs. Find the preceding stable
       // explicit source anchor, preserving bookmarks copied from those headings.
@@ -27,7 +30,7 @@
       if (!target) return; // Unknown bookmarks retain the original fallback page.
       for (const source of document.querySelectorAll('a[id^="node-sections-"]')) {
         if (source === target || source.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING)
-          key = route.anchors[source.id] || key;
+          key = sourceKey(source.id) || key;
       }
     }
     if (!key) key = route.root;
