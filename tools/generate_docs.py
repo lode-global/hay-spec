@@ -208,6 +208,13 @@ def outputs(source, display=None):
     pages['guidance/legacy-storage-enums.md'] = (
         '<!-- Generated from notes/legacy-storage-enums.md. -->\n\n' +
         (Path(__file__).resolve().parents[1] / 'notes/legacy-storage-enums.md').read_text(encoding='utf-8'))
+    pages['guidance/legacy-identifiers.md'] = (
+        '<!-- Generated from notes/legacy-identifier-interoperability.md. -->\n\n' +
+        (Path(__file__).resolve().parents[1] / 'notes/legacy-identifier-interoperability.md').read_text(encoding='utf-8'))
+    for stem in ('external-lot', 'protein'):
+        for extension in ('yaml', 'json'):
+            fixture = f'examples/legacy-identifiers/{stem}.{extension}'
+            pages[fixture] = (Path(__file__).resolve().parents[1] / fixture).read_text(encoding='utf-8')
     pages['guidance/reference-data.md'] = (
         '<!-- Generated from notes/reference-data-policy.md. -->\n\n' +
         (Path(__file__).resolve().parents[1] / 'notes/reference-data-policy.md').read_text(encoding='utf-8'))

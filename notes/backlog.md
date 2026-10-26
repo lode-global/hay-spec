@@ -13,13 +13,17 @@ superseded. Its remaining useful ideas are recorded below. Do not merge the old 
 
 - Decide a versioned migration for the two protein identifiers containing `%`.
   Preserve original keys and define handling of simultaneous old/new keys and
-  conflicting values before adopting `_pct_cp` names.
+  conflicting values before adopting `_pct_cp` names. Current literal keys are
+  demonstrated in [interoperability examples](legacy-identifier-interoperability.md);
+  those examples do not adopt a rename or alias policy.
 - Resolve the five pipe-delimited enum lists without silently splitting stored
   strings. [Legacy storage-enum guidance](legacy-storage-enums.md) now explains
   the retained representation and preservation rules. A versioned correction,
   read/write policy, and conversion of historical records remain undecided.
 - Decide whether dotted external-lot component identifiers should remain or gain
   explicitly documented aliases; never flatten nested identifiers automatically.
+  [Paired YAML/JSON examples](legacy-identifier-interoperability.md) and round-trip
+  checks now document current nesting and spelling; alias decisions remain open.
 
 ## Useful additions
 

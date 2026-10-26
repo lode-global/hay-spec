@@ -135,6 +135,12 @@ def guide(spec, display=None, section_id='traceability'):
             'legacyStorageEnumGuidance': section_id == 'physical_characteristics' and identity in (
                 'final_storage_structure', 'final_surface_type', 'final_airflow_condition',
                 'restacked_since_baling', 'visible_moisture_damage'),
+            'legacyIdentifierGuidance': key in (
+                'traceability/lot_identifier_external',
+                'traceability/lot_identifier_external/lot_identifier_external.value',
+                'traceability/lot_identifier_external/lot_identifier_external.issuer',
+                'nutrient_analysis/soluble_protein_%_cp',
+                'nutrient_analysis/degradable_protein_%_cp'),
             'referenceDataGuidance': key in (
                 'stand/forage_variety_components/forage_variety',
                 'nutrient_analysis/hay_testing_laboratory'),
